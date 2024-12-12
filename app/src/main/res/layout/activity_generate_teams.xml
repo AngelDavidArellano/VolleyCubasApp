@@ -1,0 +1,187 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/bg"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generar equipos"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/tvNEquipos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nº Equipos"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Contador de Equipos -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/teamCountContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvNEquipos"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp">
+
+        <ImageView
+            android:id="@+id/btnDecreaseTeams"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_remove_square"
+            app:tint="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTeamCount"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textSize="35sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:fontFamily="@font/tripsans"
+            app:layout_constraintStart_toEndOf="@id/btnDecreaseTeams"
+            app:layout_constraintEnd_toStartOf="@id/btnIncreaseTeams"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/btnIncreaseTeams"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_add_square"
+            app:tint="@color/white"
+            app:layout_constraintStart_toEndOf="@id/tvTeamCount"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Botón Generar -->
+    <Button
+        android:id="@+id/btnSaveAssistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/gold"
+        android:text="Generar equipos"
+        android:textColor="@color/black"
+        android:fontFamily="@font/tripsans"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvNEquipos"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <View
+        android:id="@+id/line_division1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#434343"
+        app:layout_constraintTop_toBottomOf="@id/teamCountContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="30dp"/>
+
+    <!-- Jugadores -->
+    <TextView
+        android:id="@+id/tvPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jugadores"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/line_division1"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <ImageView
+        android:id="@+id/btn_addPlayer"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintTop_toTopOf="@id/tvPlayers"
+        app:layout_constraintBottom_toBottomOf="@id/tvPlayers"
+        app:layout_constraintStart_toEndOf="@id/tvPlayers"
+        android:layout_marginStart="15dp"
+        app:tint="#FFFFFF" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlayers"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/tvPlayers"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_player_randomizer"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical"
+        />
+
+    <View
+        android:id="@+id/line_division2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#434343"
+        app:layout_constraintTop_toBottomOf="@id/rvPlayers"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="30dp"/>
+
+    <!-- Equipos -->
+    <TextView
+        android:id="@+id/tvTeams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Equipos"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/line_division2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTeams"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTeams"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_team_randomizer"
+        android:layout_marginTop="8dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

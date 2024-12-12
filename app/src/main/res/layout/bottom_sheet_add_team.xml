@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/createTeamOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crear un nuevo equipo"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/joinTeamOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Unirse a un equipo existente"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="#000000" />
+</LinearLayout>

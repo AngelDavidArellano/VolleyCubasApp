@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "218339570160",
+    "project_id": "volley-cubas-app",
+    "storage_bucket": "volley-cubas-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218339570160:android:070285b1070c8d73a1ed35",
+        "android_client_info": {
+          "package_name": "com.volleycubas.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA42dGEXvPL2joUE_fdvu52LrS47Hr9_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

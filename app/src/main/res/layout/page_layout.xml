@@ -1,0 +1,31 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <TextView
+        android:id="@+id/ganador_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ganador set"
+        android:textSize="18sp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="35dp"
+        android:textAlignment="textStart"
+        android:textColor="@color/white" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/color_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:alignItems="center" />
+
+
+</LinearLayout>

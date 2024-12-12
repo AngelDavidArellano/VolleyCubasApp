@@ -1,0 +1,205 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Include del CardView -->
+        <include
+            android:id="@+id/team_card"
+            layout="@layout/layout_team_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <!-- Estadísticas -->
+        <TextView
+            android:id="@+id/tvTitleTraining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estadísticas"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/tripsans"
+            android:layout_marginTop="8dp" />
+
+        <!-- Barra de estadísticas: Victorias -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Victorias"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvVictories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="4/5"
+                android:textColor="#FFFFFF"
+                android:gravity="end" />
+
+            <ProgressBar
+                android:id="@+id/progressVictories"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="80"
+                android:max="100"
+                android:progressTint="@color/gold"
+                android:backgroundTint="@color/grey"
+                style="@android:style/Widget.ProgressBar.Horizontal" />
+        </LinearLayout>
+
+        <!-- Barra de estadísticas: Sets Ganados -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sets ganados"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSetsWon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="6/9"
+                android:textColor="#FFFFFF"
+                android:gravity="end" />
+
+            <ProgressBar
+                android:id="@+id/progressSetsWon"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="66"
+                android:max="100"
+                android:progressTint="@color/green"
+                android:backgroundTint="@color/grey"
+                style="@android:style/Widget.ProgressBar.Horizontal" />
+        </LinearLayout>
+
+        <!-- Barra de estadísticas: Porcentaje de Asistencia -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Porcentaje asistencia"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvAttendancePercentage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="95%"
+                android:textColor="#FFFFFF"
+                android:gravity="end" />
+
+            <ProgressBar
+                android:id="@+id/progressAttendance"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="95"
+                android:max="100"
+                android:progressTint="@color/blue"
+                android:backgroundTint="@color/grey"
+                style="@android:style/Widget.ProgressBar.Horizontal" />
+        </LinearLayout>
+
+        <!-- Barra de estadísticas: Puntos Anotados -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Puntos anotados"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvPointsScored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="150/189"
+                android:textColor="#FFFFFF"
+                android:gravity="end" />
+
+            <ProgressBar
+                android:id="@+id/progressPointsScored"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="79"
+                android:max="100"
+                android:progressTint="@color/purple"
+                android:backgroundTint="@color/grey"
+                style="@android:style/Widget.ProgressBar.Horizontal" />
+        </LinearLayout>
+
+        <!-- Barra de estadísticas: Mayor Racha de Puntos -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mayor racha de puntos"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvMaxStreak"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="15"
+                android:textColor="#FFFFFF"
+                android:gravity="end" />
+
+            <ProgressBar
+                android:id="@+id/progressMaxStreak"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="100"
+                android:max="100"
+                android:progressTint="@color/red"
+                android:backgroundTint="@color/grey"
+                style="@android:style/Widget.ProgressBar.Horizontal" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/empty_space"
+            layout="@layout/empty_space"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

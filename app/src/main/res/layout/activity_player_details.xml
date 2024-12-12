@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Datos del jugador"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <!-- Nombre -->
+    <TextView
+        android:id="@+id/tvNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="25dp" />
+
+    <EditText
+        android:id="@+id/etPlayerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bg"
+        android:background="@drawable/edittext_background"
+        app:layout_constraintTop_toBottomOf="@id/tvNombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_default="spread" />
+
+    <!-- Número -->
+    <TextView
+        android:id="@+id/tvNumero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Número:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/etPlayerName"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etPlayerNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textColor="@color/bg"
+        android:background="@drawable/edittext_background"
+        app:layout_constraintTop_toBottomOf="@id/tvNumero"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_default="spread" />
+
+    <!-- Posición -->
+    <TextView
+        android:id="@+id/tvPosicion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Posición:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/etPlayerNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etPlayerPosition"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bg"
+        android:background="@drawable/edittext_background"
+        app:layout_constraintTop_toBottomOf="@id/tvPosicion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_default="spread" />
+
+    <!-- Notas -->
+    <TextView
+        android:id="@+id/tvNotas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notas:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/etPlayerPosition"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etPlayerNotes"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:background="@drawable/edittext_background"
+        android:gravity="top"
+        android:textColor="@color/bg"
+        app:layout_constraintTop_toBottomOf="@id/tvNotas"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_default="spread" />
+
+    <!-- Botones -->
+    <Button
+        android:id="@+id/btnEditPlayer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Editar"
+        android:backgroundTint="#91C192"
+        app:layout_constraintTop_toBottomOf="@id/etPlayerNotes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnDeletePlayer"
+        android:layout_marginTop="16dp"
+        app:layout_constraintWidth_percent="0.48" />
+
+    <Button
+        android:id="@+id/btnDeletePlayer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Eliminar"
+        android:backgroundTint="#C19191"
+        app:layout_constraintTop_toBottomOf="@id/etPlayerNotes"
+        app:layout_constraintStart_toEndOf="@id/btnEditPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintWidth_percent="0.48" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

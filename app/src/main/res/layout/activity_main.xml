@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0C0C0C"
+    tools:context=".MainActivity">
+
+    <!-- Logo del Club (arriba a la derecha) -->
+    <ImageView
+        android:id="@+id/logoCubasVoley"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/logo_cubas_voley"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
+
+    <!-- Icono de perfil (arriba a la izquierda) -->
+    <ImageView
+        android:id="@+id/profileBg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/circle_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profilePhoto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/trainer_default_img"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp"
+        app:shapeAppearanceOverlay="@style/RoundedCornerTeamImage" />
+
+    <!-- Texto de bienvenida -->
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bienvenido Carlos!"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/profilePhoto"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp" />
+
+    <!-- Texto del club -->
+    <TextView
+        android:id="@+id/clubText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Club Voleibol Cubas"
+        android:textColor="#FFFFFF"
+        android:textSize="27sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/welcomeText"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"/>
+
+    <!-- Fondo amarillo -->
+    <View
+        android:id="@+id/announcementBackground"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:background="@drawable/bg_announcements_card"
+        app:layout_constraintTop_toBottomOf="@id/clubText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="15dp"/>
+
+    <!-- LinearLayout para textos -->
+    <LinearLayout
+        android:id="@+id/announcementTextLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="@id/announcementBackground"
+        app:layout_constraintStart_toStartOf="@id/announcementBackground"
+        app:layout_constraintEnd_toStartOf="@id/mascotImage"
+        app:layout_constraintBottom_toBottomOf="@id/announcementBackground"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp">
+
+        <!-- Texto del título -->
+        <TextView
+            android:id="@+id/announcementTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¡Nuevos horarios publicados!"
+            android:textColor="#000000"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:fontFamily="@font/tripsans"
+            android:layout_marginBottom="5dp"/>
+
+        <!-- Texto del contenido -->
+        <TextView
+            android:id="@+id/announcementContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Consulta los próximos partidos de tus equipos en el apartado 'Próximo partido'"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:fontFamily="@font/tripsans" />
+    </LinearLayout>
+
+    <!-- Imagen de la mascota -->
+    <ImageView
+        android:id="@+id/mascotImage"
+        android:layout_width="185dp"
+        android:layout_height="185dp"
+        android:layout_marginBottom="-5dp"
+        android:layout_marginEnd="-10dp"
+        android:src="@drawable/owl_mascot"
+        app:layout_constraintBottom_toBottomOf="@id/announcementBackground"
+        app:layout_constraintEnd_toEndOf="@id/announcementBackground" />
+
+    <!-- Texto "Mis equipos" -->
+    <TextView
+        android:id="@+id/teamsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mis equipos"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/announcementBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp" />
+
+    <!-- Botón flotante para añadir equipo -->
+    <ImageView
+        android:id="@+id/fabAddTeam"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintTop_toTopOf="@id/teamsText"
+        app:layout_constraintBottom_toBottomOf="@id/teamsText"
+        app:layout_constraintStart_toEndOf="@id/teamsText"
+        android:layout_marginStart="15dp"
+        app:tint="#FFFFFF" />
+
+    <!-- RecyclerView para mostrar equipos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/teamsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:listitem="@layout/item_team"
+        app:layout_constraintTop_toBottomOf="@id/teamsText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="12dp" />
+
+    <!-- ANIMACION CARGANDO DATOS -->
+    <View
+        android:id="@+id/loadingOverlay_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/bg"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/teamsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@id/teamsRecyclerView"
+        app:layout_constraintTop_toTopOf="@id/teamsRecyclerView"
+        app:layout_constraintBottom_toBottomOf="@id/teamsRecyclerView" />
+
+    <!-- indicador de carga -->
+    <ImageView
+        android:id="@+id/loadingGif_main"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/teamsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@id/teamsRecyclerView"
+        app:layout_constraintTop_toTopOf="@id/teamsRecyclerView"
+        android:layout_marginTop="75dp"
+        android:src="@drawable/ic_start_match"
+        app:tint="@color/white" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

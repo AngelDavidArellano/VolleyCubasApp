@@ -1,0 +1,157 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/bg">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="25dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/teamImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_image_placeholder"
+            app:shapeAppearanceOverlay="@style/RoundedCornerTeamImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Nombre del equipo -->
+        <TextView
+            android:id="@+id/teamName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Senior Oro"
+            android:textColor="@color/white"
+            android:fontFamily="@font/tripsans"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/teamImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Temporada -->
+        <TextView
+            android:id="@+id/teamSeason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Creado en la temporada 24/25"
+            android:textColor="@color/white"
+            android:fontFamily="@font/tripsans"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/teamName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Información adicional -->
+        <TextView
+            android:id="@+id/teamLeagueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="Liga"
+            android:fontFamily="@font/tripsans"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/teamSeason"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/teamLeague"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Liga Municipal de Móstoles"
+            android:fontFamily="@font/tripsans"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/teamLeagueLabel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/teamPlayersCountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jugadores"
+            android:fontFamily="@font/tripsans"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/teamLeagueLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="150dp"/>
+
+        <TextView
+            android:id="@+id/teamPlayersCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:fontFamily="@font/tripsans"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/teamPlayersCountLabel"
+            app:layout_constraintStart_toStartOf="@id/teamPlayersCountLabel" />
+
+        <TextView
+            android:id="@+id/teamCaptainLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capitán"
+            android:fontFamily="@font/tripsans"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/teamLeague"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:id="@+id/teamCaptain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jesús Navas"
+            android:fontFamily="@font/tripsans"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/teamCaptainLabel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/teamCoachLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Entrenador"
+            android:fontFamily="@font/tripsans"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/teamCaptainLabel"
+            app:layout_constraintStart_toStartOf="@id/teamPlayersCount"/>
+
+        <TextView
+            android:id="@+id/teamCoach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pablo"
+            android:fontFamily="@font/tripsans"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/teamCoachLabel"
+            app:layout_constraintStart_toStartOf="@id/teamCoachLabel" />
+
+        <View
+            android:id="@+id/line_division2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#434343"
+            app:layout_constraintTop_toBottomOf="@id/teamCoach"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="45dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

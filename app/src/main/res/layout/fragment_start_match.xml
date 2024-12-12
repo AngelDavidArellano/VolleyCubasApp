@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:padding="16dp">
+
+    <!-- Logo Izquierdo -->
+    <ImageView
+        android:id="@+id/teamLogoLeft"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/logo_cubas_voley"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Nombre del Equipo -->
+    <TextView
+        android:id="@+id/tvTeamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre del equipo"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintStart_toEndOf="@id/teamLogoLeft"
+        app:layout_constraintEnd_toStartOf="@id/teamLogoRight"
+        app:layout_constraintTop_toTopOf="@id/teamLogoLeft"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <!-- Logo Derecho -->
+    <ImageView
+        android:id="@+id/teamLogoRight"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/logo_cubas_voley"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nuevo Partido"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/teamLogoLeft"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Campo Rival -->
+    <TextView
+        android:id="@+id/tvRival"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rival:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etRival"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvRival"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Campo Fase -->
+    <TextView
+        android:id="@+id/tvFase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fase:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/etRival"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etFase"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvFase"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Texto Sets -->
+    <TextView
+        android:id="@+id/tvSets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sets:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/etFase"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Opciones Sets -->
+    <RadioGroup
+        android:id="@+id/radioGroupSets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tvSets"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/rbBestOf3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mejor de 3"
+            android:textColor="#FFFFFF" />
+
+        <RadioButton
+            android:id="@+id/rbBestOf5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mejor de 5"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="16dp" />
+    </RadioGroup>
+
+    <!-- Botón Comenzar Partido -->
+    <Button
+        android:id="@+id/btnStartMatch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Comenzar Partido"
+        app:layout_constraintTop_toBottomOf="@id/radioGroupSets"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

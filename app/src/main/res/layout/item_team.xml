@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="10dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardCornerRadius="15dp"
+    app:cardBackgroundColor="#E0E0E0">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Imagen del equipo con border radius -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/teamImage"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_image_placeholder"
+            app:shapeAppearanceOverlay="@style/RoundedCornerTeamImage" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/teamName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre equipo"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/tripsans" />
+
+            <TextView
+                android:id="@+id/teamPlayersCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 jugadores"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:fontFamily="@font/tripsans" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
+    <!-- CardView equipo 1 -->
+    <!--<androidx.cardview.widget.CardView
+        android:id="@+id/teamCard1"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:cardBackgroundColor="#E0E0E0"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintTop_toBottomOf="@id/teamsText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/team_photo1"
+                android:contentDescription="Foto equipo 1"
+                android:layout_marginEnd="16dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/teamName1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Junior Negro"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/tripsans" />
+
+                <TextView
+                    android:id="@+id/teamPlayersCount1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15 jugadores"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/tripsans" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>-->
+
+    <!-- CardView equipo 2 -->
+    <!--<androidx.cardview.widget.CardView
+    android:id="@+id/teamCard2"
+    android:layout_width="0dp"
+    android:layout_height="100dp"
+    app:cardBackgroundColor="#E0E0E0"
+    app:cardCornerRadius="12dp"
+    app:layout_constraintTop_toBottomOf="@id/teamsText"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="24dp"
+    android:layout_marginTop="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/team_photo2"
+            android:contentDescription="Foto equipo 2"
+            android:layout_marginEnd="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/teamName2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Senior Oro"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:fontFamily="@font/tripsans" />
+
+            <TextView
+                android:id="@+id/teamPlayersCount2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12 jugadores"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:fontFamily="@font/tripsans" />
+        </LinearLayout>
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>-->

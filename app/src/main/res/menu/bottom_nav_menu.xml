@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/navigation_players"
+        android:icon="@drawable/ic_players"
+        android:title="Jugadores"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/ic_history"
+        android:title="Historial"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/navigation_start_match"
+        android:title="Comenzar"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/navigation_lineup"
+        android:icon="@drawable/ic_whistle"
+        android:title="Alineaciones"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/navigation_preparation"
+        android:icon="@drawable/ic_team_info"
+        android:title="Preparación"
+        app:showAsAction="ifRoom"/>
+</menu>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.VolleyCubasApp"
+        tools:targetApi="31">
+        <activity
+            android:name=".AddAssistanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AssistanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LineupDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LineupsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GenerateTeamsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlayerDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MatchDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.VolleyCubasApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CreateTeamActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TeamMenuActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.VolleyCubasApp" />
+    </application>
+
+</manifest>

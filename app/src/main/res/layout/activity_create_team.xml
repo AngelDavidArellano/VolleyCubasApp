@@ -1,0 +1,217 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#0C0C0C">
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear equipo"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <!-- Texto de vista previa -->
+    <TextView
+        android:id="@+id/previewTextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vista previa"
+        android:fontFamily="@font/tripsans"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Vista previa del equipo -->
+    <include
+        android:id="@+id/teamPreview"
+        layout="@layout/item_team"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/previewTextLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Línea separadora -->
+    <View
+        android:id="@+id/previewDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/teamPreview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- Texto Datos del equipo -->
+    <TextView
+        android:id="@+id/teamDataLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Datos del equipo"
+        android:fontFamily="@font/tripsans"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/previewDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="50dp" />
+
+    <!-- Campo para el nombre del equipo -->
+    <TextView
+        android:id="@+id/teamNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Cómo se llama tu equipo?"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/teamDataLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="26dp" />
+
+    <EditText
+        android:id="@+id/teamNameEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nombre del equipo"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#BDBDBD"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="@font/tripsans"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/teamNameLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Botón para subir imagen -->
+    <TextView
+        android:id="@+id/uploadImageLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Quieres subir una imagen?"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/teamNameEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <Button
+        android:id="@+id/uploadImageButton"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:text="Subir imagen"
+        android:textAlignment="textEnd"
+        android:textColor="#000000"
+        android:backgroundTint="#BD900E"
+        android:drawablePadding="8dp"
+    android:drawableTint="@color/black"
+        android:drawableLeft="@drawable/ic_upload"
+        app:layout_constraintTop_toBottomOf="@id/uploadImageLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Botón para crear el equipo -->
+    <Button
+        android:id="@+id/createTeamButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Crear equipo"
+        android:textColor="#000000"
+        android:backgroundTint="#BD900E"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Animación cargando datos -->
+    <View
+        android:id="@+id/loadingOverlay_historial"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#E60C0C0C"
+        android:elevation="2dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Indicador de carga -->
+    <ImageView
+        android:id="@+id/loadingGif_create_team"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_start_match"
+        app:tint="@color/white"
+        android:elevation="2dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/loadingBar_create_team"
+        android:layout_width="175dp"
+        android:layout_height="10dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:elevation="2dp"
+        android:visibility="gone"
+        android:progress="0"
+        android:progressTint="#BD900E"
+        android:backgroundTint="#444444"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="70dp"
+        />
+
+
+    <TextView
+        android:id="@+id/progress_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subiendo imagen..."
+        android:elevation="2dp"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loadingBar_create_team"
+        android:layout_marginTop="8dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,87 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg"
+    android:padding="8dp">
+
+    <!-- Nombre del jugador -->
+    <TextView
+        android:id="@+id/tvPlayerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Nombre del jugador"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/radio_group"
+        android:layout_marginEnd="16dp" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radio_present"
+            android:background="@drawable/custom_radio_selector_present"
+            android:button="@color/transparent"
+            android:drawableStart="@drawable/ic_check_person"
+            android:textAlignment="textEnd"
+            android:text="Si"
+            android:drawableTint="@color/white"
+            android:textColor="@color/white"
+            android:layout_width="75dp"
+            android:layout_height="45dp" />
+
+        <RadioButton
+            android:id="@+id/radio_absent"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/custom_radio_selector_absent"
+            android:button="@color/transparent"
+            android:drawableStart="@drawable/ic_cross_person"
+            android:textAlignment="textEnd"
+            android:text="No"
+            android:drawableTint="@color/white"
+            android:textColor="@color/white"
+            android:layout_width="75dp"
+            android:layout_height="45dp" />
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Botón Presente -->
+    <!--<Button
+        android:id="@+id/btnPresent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Presente"
+        android:background="@drawable/btn_background_present"
+        android:textColor="@color/white"
+        android:paddingVertical="4dp"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintEnd_toStartOf="@id/btnAbsent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp" />
+
+    &lt;!&ndash; Botón Ausente &ndash;&gt;
+    <Button
+        android:id="@+id/btnAbsent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ausente"
+        android:background="@drawable/btn_background_absent"
+        android:textColor="@color/white"
+        android:paddingVertical="4dp"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />-->
