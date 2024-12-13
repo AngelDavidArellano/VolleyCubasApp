@@ -13,13 +13,16 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/teamImage"
-            android:layout_width="120dp"
+            android:layout_width="175dp"
             android:layout_height="120dp"
             android:src="@drawable/ic_image_placeholder"
+            android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/RoundedCornerTeamImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="2dp"/>
 
         <!-- Nombre del equipo -->
         <TextView
@@ -137,6 +140,7 @@
             android:id="@+id/teamCoach"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="115dp"
             android:text="Pablo"
             android:fontFamily="@font/tripsans"
             android:textColor="@color/white"
