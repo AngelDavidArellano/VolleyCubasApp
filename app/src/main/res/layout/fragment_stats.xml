@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg">
 
     <LinearLayout
@@ -16,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
         <!-- Estadísticas -->
         <TextView
             android:id="@+id/tvTitleTraining"
@@ -28,171 +28,451 @@
             android:fontFamily="@font/tripsans"
             android:layout_marginTop="8dp" />
 
-        <!-- Barra de estadísticas: Victorias -->
-        <LinearLayout
+        <!-- Grid con estadísticas -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="match_parent"
+            <!-- Tarjeta 1: Victorias -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_victories"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Victorias"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintWidth_percent="0.4675"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tvVictories"
-                android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Trophy Icon -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_hashtag"
+                            app:tint="@color/blue" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:text="Sets"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/tripsans"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <!-- Victory Count -->
+                    <TextView
+                        android:id="@+id/tvSetsWon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="45"
+                        android:textSize="32sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/tripsans"
+                        android:textStyle="bold"/>
+
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressSetsWon"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:max="100"
+                        android:progress="70"
+                        android:progressTint="@color/blue"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Progress Description -->
+                    <TextView
+                        android:id="@+id/tvSetsWon_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="de 65 jugados"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/tripsans"
+                        android:textColor="@color/grey"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Tarjeta 2: Sets Ganados -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_setsWon"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="4/5"
-                android:textColor="#FFFFFF"
-                android:gravity="end" />
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintWidth_percent="0.4675"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ProgressBar
-                android:id="@+id/progressVictories"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:progress="80"
-                android:max="100"
-                android:progressTint="@color/gold"
-                android:backgroundTint="@color/grey"
-                style="@android:style/Widget.ProgressBar.Horizontal" />
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        <!-- Barra de estadísticas: Sets Ganados -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+                    <!-- Trophy Icon -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_trophy"
+                            app:tint="@color/yellow" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:text="Victorias"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/tripsans"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <!-- Victory Count -->
+                    <TextView
+                        android:id="@+id/tvVictories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15"
+                        android:textSize="32sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/tripsans"
+                        android:textStyle="bold"/>
+
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressVictories"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:max="100"
+                        android:progress="75"
+                        android:progressTint="@color/yellow"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Progress Description -->
+                    <TextView
+                        android:id="@+id/tvVictories_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="de 20 partidos"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/tripsans"
+                        android:textColor="@color/grey"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Tarjeta 3: Puntos anotados -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_pointsScored"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Sets ganados"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintWidth_percent="0.4675"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_victories">
 
-            <TextView
-                android:id="@+id/tvSetsWon"
-                android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Trophy Icon -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_alignment"
+                            app:tint="@color/green" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:text="Puntos"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/tripsans"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <!-- Victory Count -->
+                    <TextView
+                        android:id="@+id/tvPointsScored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="45"
+                        android:textSize="32sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/tripsans"
+                        android:textStyle="bold"/>
+
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressPointsScored"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:max="100"
+                        android:progress="75"
+                        android:progressTint="@color/green"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Progress Description -->
+                    <TextView
+                        android:id="@+id/tvPointsScored_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="de 65 jugados"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/tripsans"
+                        android:textColor="@color/grey"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Tarjeta 4: Asistencia -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_MVPPlayer"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="6/9"
-                android:textColor="#FFFFFF"
-                android:gravity="end" />
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintWidth_percent="0.4675"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_attendancePercentage">
 
-            <ProgressBar
-                android:id="@+id/progressSetsWon"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:progress="66"
-                android:max="100"
-                android:progressTint="@color/green"
-                android:backgroundTint="@color/grey"
-                style="@android:style/Widget.ProgressBar.Horizontal" />
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        <!-- Barra de estadísticas: Porcentaje de Asistencia -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+                    <!-- Trophy Icon -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_medal"
+                            app:tint="@color/red" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:text="MVP"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/tripsans"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <!-- Victory Count -->
+                    <TextView
+                        android:id="@+id/tvMVPPlayerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ángela Gómez"
+                        android:textSize="28sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/tripsans"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Tarjeta 5: Mejor Racha de puntos -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_bestPointStreak"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintWidth_percent="0.4675"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_pointsScored"
+                app:layout_constraintBottom_toBottomOf="@id/card_MVPPlayer">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Trophy Icon -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_lightning"
+                            app:tint="@color/gold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:text="Mejor racha"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/tripsans"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <!-- Victory Count -->
+                    <TextView
+                        android:id="@+id/tvMaxStreak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12"
+                        android:textSize="28sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/tripsans"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¡Sigue asi!"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/tripsans"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Tarjeta 6: MVP del equipo -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_attendancePercentage"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Porcentaje asistencia"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintWidth_percent="0.4675"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_setsWon">
 
-            <TextView
-                android:id="@+id/tvAttendancePercentage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="95%"
-                android:textColor="#FFFFFF"
-                android:gravity="end" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <ProgressBar
-                android:id="@+id/progressAttendance"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:progress="95"
-                android:max="100"
-                android:progressTint="@color/blue"
-                android:backgroundTint="@color/grey"
-                style="@android:style/Widget.ProgressBar.Horizontal" />
-        </LinearLayout>
+                    <!-- Trophy Icon -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-        <!-- Barra de estadísticas: Puntos Anotados -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_people"
+                            app:tint="@color/purple" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Puntos anotados"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:text="% Asistencia"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/tripsans"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvPointsScored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="150/189"
-                android:textColor="#FFFFFF"
-                android:gravity="end" />
+                    <!-- Victory Count -->
+                    <TextView
+                        android:id="@+id/tvAttendancePercentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="92"
+                        android:textSize="32sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/tripsans"
+                        android:textStyle="bold"/>
 
-            <ProgressBar
-                android:id="@+id/progressPointsScored"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:progress="79"
-                android:max="100"
-                android:progressTint="@color/purple"
-                android:backgroundTint="@color/grey"
-                style="@android:style/Widget.ProgressBar.Horizontal" />
-        </LinearLayout>
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressAttendance"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:max="100"
+                        android:progress="75"
+                        android:progressTint="@color/purple"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_marginTop="8dp" />
 
-        <!-- Barra de estadísticas: Mayor Racha de Puntos -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+                    <!-- Progress Description -->
+                    <TextView
+                        android:id="@+id/tvAttendancePercentage_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="sobre 100"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/tripsans"
+                        android:textColor="@color/grey"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mayor racha de puntos"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tvMaxStreak"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="15"
-                android:textColor="#FFFFFF"
-                android:gravity="end" />
-
-            <ProgressBar
-                android:id="@+id/progressMaxStreak"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:progress="100"
-                android:max="100"
-                android:progressTint="@color/red"
-                android:backgroundTint="@color/grey"
-                style="@android:style/Widget.ProgressBar.Horizontal" />
-        </LinearLayout>
-
+        <!-- Espacio vacío -->
         <include
             android:id="@+id/empty_space"
             layout="@layout/empty_space"
@@ -201,5 +481,4 @@
             android:layout_marginTop="16dp" />
 
     </LinearLayout>
-
 </ScrollView>

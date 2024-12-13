@@ -24,7 +24,8 @@ public class StatsFragment extends Fragment {
     private String teamId;
 
     private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak;
-    private ProgressBar progressVictories, progressSetsWon, progressAttendance, progressPointsScored, progressMaxStreak;
+    private TextView tvVictories_amount, tvSetsWon_amount, tvPointsScored_amount;
+    private ProgressBar progressVictories, progressSetsWon, progressAttendance, progressPointsScored;
 
     public static StatsFragment newInstance(String teamId) {
         StatsFragment fragment = new StatsFragment();
@@ -49,16 +50,18 @@ public class StatsFragment extends Fragment {
 
         // Inicializar vistas
         tvVictories = view.findViewById(R.id.tvVictories);
+        tvVictories_amount = view.findViewById(R.id.tvVictories_amount);
         tvSetsWon = view.findViewById(R.id.tvSetsWon);
+        tvSetsWon_amount = view.findViewById(R.id.tvSetsWon_amount);
         tvAttendancePercentage = view.findViewById(R.id.tvAttendancePercentage);
         tvPointsScored = view.findViewById(R.id.tvPointsScored);
+        tvPointsScored_amount = view.findViewById(R.id.tvPointsScored_amount);
         tvMaxStreak = view.findViewById(R.id.tvMaxStreak);
 
         progressVictories = view.findViewById(R.id.progressVictories);
         progressSetsWon = view.findViewById(R.id.progressSetsWon);
         progressAttendance = view.findViewById(R.id.progressAttendance);
         progressPointsScored = view.findViewById(R.id.progressPointsScored);
-        progressMaxStreak = view.findViewById(R.id.progressMaxStreak);
 
         // Cargar datos del equipo
         loadTeamStats();
@@ -102,19 +105,21 @@ public class StatsFragment extends Fragment {
                         }
 
                         // Actualizar estadísticas
-                        tvSetsWon.setText(String.format("%d/%d", setsAFavor, setsTotales));
+                        tvSetsWon.setText(String.valueOf(setsAFavor));
+                        tvSetsWon_amount.setText("de " + setsTotales + " jugados");
                         progressSetsWon.setProgress(setsTotales == 0 ? 0 : (setsAFavor * 100) / setsTotales);
 
-                        tvPointsScored.setText(String.format("%d/%d", puntosAFavor, puntosTotales));
+                        tvPointsScored.setText(String.valueOf(puntosAFavor));
+                        tvPointsScored_amount.setText("de " + puntosTotales + " jugados");
                         progressPointsScored.setProgress(puntosTotales == 0 ? 0 : (puntosAFavor * 100) / puntosTotales);
 
                         tvMaxStreak.setText(String.valueOf(mejorRacha));
-                        progressMaxStreak.setProgress(100);
 
-                        tvVictories.setText(String.format("%d/%d", partidosGanados, partidosJugados));
+                        tvVictories.setText(String.valueOf(partidosGanados));
+                        tvVictories_amount.setText("de " + partidosJugados + " partidos");
                         progressVictories.setProgress(partidosJugados == 0 ? 0 : (partidosGanados * 100) / partidosJugados);
 
-                        tvAttendancePercentage.setText("95%");
+                        tvAttendancePercentage.setText("95");
                         progressAttendance.setProgress(95);
 
                         updateTeamCard(nombre, capitan, liga, numeroJugadores, entrenador, temporadaCreacion, urlImagen);
