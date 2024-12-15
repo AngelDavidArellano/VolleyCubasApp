@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class AddAssistanceActivity extends AppCompatActivity {
 
     private TextView etDate;
     private ImageView btnBack;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,13 +137,38 @@ public class AddAssistanceActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
     }
 
-
     private void saveRecordToFirebase(Spinner spinnerActivityType, EditText tvExtraInfo) {
-        String selectedActivity = spinnerActivityType.getSelectedItem().toString();
-        String extraInfo = tvExtraInfo.getText().toString().trim();
 
-        // Crear la lista de asistencia de jugadores
+        db.collection("registros").document(teamId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        double porcentajeAcumulado = documentSnapshot.contains("porcentaje_acumulado")
+                                ? documentSnapshot.getDouble("porcentaje_acumulado") : 0.0;
+                        long totalDias = documentSnapshot.contains("total_dias")
+                                ? documentSnapshot.getLong("total_dias") : 0;
+
+                        // Continuar con el cálculo y guardado
+                        calcularYGuardarAsistencia(porcentajeAcumulado, totalDias, spinnerActivityType, tvExtraInfo);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al obtener datos del equipo.", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                });
+
+    }
+
+
+
+    private void guardarEnFirebase(double nuevaMedia, int nuevoTotalDias, String selectedActivity, String extraInfo, double porcentajeDia) {
         List<Map<String, Object>> asistenciaJugadores = new ArrayList<>();
+        Log.e("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dias: "+nuevoTotalDias);
+
+        int diasNuevoData = (nuevoTotalDias + 1);
+        Log.e("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dias: "+diasNuevoData);
+
+
         for (Jugador jugador : jugadoresList) {
             Map<String, Object> jugadorMap = new HashMap<>();
             jugadorMap.put("id", jugador.getId());
@@ -149,7 +177,6 @@ public class AddAssistanceActivity extends AppCompatActivity {
             asistenciaJugadores.add(jugadorMap);
         }
 
-        // Crear el mapa del registro
         Map<String, Object> registroData = new HashMap<>();
         registroData.put("fecha", selectedDate);
         registroData.put("tipo", selectedActivity);
@@ -157,21 +184,25 @@ public class AddAssistanceActivity extends AppCompatActivity {
             registroData.put("extraInfo", extraInfo);
         }
         registroData.put("jugadores", asistenciaJugadores);
+        registroData.put("porcentaje_dia", porcentajeDia);
 
-        // Guardar en Firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String selectedDateTitles = formatFirestoreDate(selectedDate);
-
+        // Guardar el registro del día
         db.collection("registros")
                 .document(teamId)
-                .collection(selectedDateTitles) // Subcolección con la fecha
+                .collection(formatFirestoreDate(selectedDate))
                 .add(registroData)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(AddAssistanceActivity.this, "Registro guardado correctamente.", Toast.LENGTH_SHORT).show();
-                    finish(); // Cerrar la actividad
+
+
+                    db.collection("registros").document(teamId)
+                            .update("fechas", FieldValue.arrayUnion(selectedDate),
+                                    "porcentaje_acumulado", nuevaMedia,
+                                    "total_dias", diasNuevoData);
+
+                    finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(AddAssistanceActivity.this, "Error al guardar el registro.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error al guardar el registro.", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 });
     }
@@ -204,4 +235,37 @@ public class AddAssistanceActivity extends AppCompatActivity {
         // Mostrar el selector de fecha
         datePickerDialog.show();
     }
+
+    private void calcularYGuardarAsistencia(double porcentajeAcumulado, long totalDias, Spinner spinnerActivityType, EditText tvExtraInfo) {
+        String selectedActivity = spinnerActivityType.getSelectedItem().toString();
+        String extraInfo = tvExtraInfo.getText().toString().trim();
+
+        int totalJugadores = jugadoresList.size();
+        int asistenciasDia = 0;
+
+        // Contar asistencias del día
+        for (Jugador jugador : jugadoresList) {
+            Log.d("Jugador Info", "ID: " + jugador.getId() + ", Nombre: " + jugador.getNombre() + ", Asistencia: " + jugador.isAsistencia());
+            Boolean asistencia = jugador.isAsistencia();
+            if (asistencia != null && asistencia) {
+                asistenciasDia++;
+            }
+        }
+
+        // Calcular el porcentaje del día
+        double porcentajeDia = ((double) asistenciasDia / totalJugadores) * 100;
+
+        // Calcular la nueva media acumulada
+        double nuevaMedia = ((porcentajeAcumulado * totalDias) + porcentajeDia) / (totalDias + 1);
+        Log.d("porcentajeAcumulado", String.valueOf(porcentajeAcumulado));
+        Log.d("(porcentajeAcumulado * totalDias)", String.valueOf((porcentajeAcumulado * totalDias)));
+        Log.d("porcentajeDia", String.valueOf(porcentajeDia));
+        Log.d("(porcentajeAcumulado * totalDias) + porcentajeDia)", String.valueOf((porcentajeAcumulado * totalDias) + porcentajeDia));
+        Log.d("(totalDias + 1)", String.valueOf((totalDias + 1)));
+        Log.d("nuevaMedia", String.valueOf(nuevaMedia));
+
+        // Actualizar los datos en Firebase
+        guardarEnFirebase(nuevaMedia, Math.toIntExact(totalDias), selectedActivity, extraInfo, porcentajeDia);
+    }
+
 }

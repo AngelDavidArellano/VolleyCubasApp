@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +46,8 @@ public class PlayersFragment extends Fragment {
     private PlayerAdapter playerAdapter;
     private List<Jugador> jugadoresList = new ArrayList<>();
     private List<Jugador> filteredJugadoresList = new ArrayList<>();
+
+    private List<String> fechas = new ArrayList<>();
 
     private EditText searchEditText;
 
@@ -110,6 +118,8 @@ public class PlayersFragment extends Fragment {
 
         // Cargar jugadores
         loadPlayers();
+
+        obtenerFechasDeRegistros(teamId);
 
         return view;
     }
@@ -274,4 +284,85 @@ public class PlayersFragment extends Fragment {
                         Toast.makeText(getContext(), "Error al actualizar número de jugadores: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
+
+    private void obtenerFechasDeRegistros(String teamId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Obtener la referencia al documento del equipo
+        db.collection("registros").document(teamId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Obtener el campo "fechas" como lista
+                        List<String> fechas = (List<String>) documentSnapshot.get("fechas");
+
+                        if (fechas != null && !fechas.isEmpty()) {
+                            // Llamar al método para cargar los datos
+                            cargarDatosDeFechas(fechas, teamId);
+                        } else {
+                            Toast.makeText(getContext(), "No hay fechas disponibles.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firebase", "Error al acceder al documento", e);
+                    Toast.makeText(getContext(), "Error al cargar registros.", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void cargarDatosDeFechas(List<String> fechas, String teamId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, List<Asistencia>> asistenciasPorJugador = new HashMap<>();
+
+        for (String fecha : fechas) {
+            db.collection("registros").document(teamId)
+                    .collection(fecha) // Accede a la subcolección que corresponde a la fecha
+                    .get()
+                    .addOnSuccessListener(querySnapshot -> {
+                        for (QueryDocumentSnapshot document : querySnapshot) {
+                            String tipo = (String) document.get("tipo");
+
+                            // Extraer la lista de jugadores con sus asistencias
+                            List<Map<String, Object>> jugadoresAsistencia =
+                                    (List<Map<String, Object>>) document.get("jugadores");
+
+                            if (jugadoresAsistencia != null) {
+                                for (Map<String, Object> jugadorData : jugadoresAsistencia) {
+                                    String jugadorId = (String) jugadorData.get("id");
+                                    Boolean asistencia = (Boolean) jugadorData.get("asistencia");
+
+                                    // Crear objeto Asistencia
+                                    Asistencia registroAsistencia = new Asistencia(fecha, asistencia, tipo);
+
+                                    // Organizar en el mapa por jugador
+                                    if (!asistenciasPorJugador.containsKey(jugadorId)) {
+                                        asistenciasPorJugador.put(jugadorId, new ArrayList<>());
+                                    }
+                                    asistenciasPorJugador.get(jugadorId).add(registroAsistencia);
+                                }
+                            }
+                        }
+                        // Procesar los datos después de cargar todas las fechas
+                        procesarAsistencias(asistenciasPorJugador);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("Firebase", "Error al cargar datos de fecha: " + fecha, e);
+                        Toast.makeText(getContext(), "Error al cargar fecha " + fecha, Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
+    private void procesarAsistencias(Map<String, List<Asistencia>> asistenciasPorJugador) {
+        for (Map.Entry<String, List<Asistencia>> entry : asistenciasPorJugador.entrySet()) {
+            String jugadorId = entry.getKey();
+            List<Asistencia> registros = entry.getValue();
+
+            Log.d("Asistencias", "Jugador ID: " + jugadorId);
+            for (Asistencia asistencia : registros) {
+                Log.d("Asistencias", "Fecha: " + asistencia.getFecha() + ", Asistencia: " + asistencia.getAsistencia() + ", Tipo: " + asistencia.getTipo());
+            }
+        }
+    }
+
 }

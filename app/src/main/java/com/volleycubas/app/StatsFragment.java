@@ -119,15 +119,23 @@ public class StatsFragment extends Fragment {
                         tvVictories_amount.setText("de " + partidosJugados + " partidos");
                         progressVictories.setProgress(partidosJugados == 0 ? 0 : (partidosGanados * 100) / partidosJugados);
 
-                        tvAttendancePercentage.setText("95");
-                        progressAttendance.setProgress(95);
-
                         updateTeamCard(nombre, capitan, liga, numeroJugadores, entrenador, temporadaCreacion, urlImagen);
                     } else {
                         Log.e("StatsFragment", "No se encontró el documento del equipo.");
                     }
+
                 })
                 .addOnFailureListener(e -> Log.e("StatsFragment", "Error al cargar datos del equipo.", e));
+
+        db.collection("registros").document(teamId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    double porcentajeAcumulado = documentSnapshot.getDouble("porcentaje_acumulado");
+                    tvAttendancePercentage.setText(String.format("%.1f", porcentajeAcumulado));
+
+                    Log.d("porcentajeAcumulado", String.valueOf(porcentajeAcumulado));
+
+                    progressAttendance.setProgress((int) porcentajeAcumulado);
+                }).addOnFailureListener(e -> Log.e("StatsFragment", "Error al cargar porcentaje de asistencias del equipo.", e));
     }
 
     private void updateTeamCard(String nombre, String capitan, String liga, int numeroJugadores, String entrenador, String temporadaCreacion, String urlImagen) {
