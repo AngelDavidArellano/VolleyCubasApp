@@ -19,7 +19,6 @@ public class Partido implements Serializable {
     private String fecha; // Fecha del partido
     private String notas; // Notas del partido
 
-
     // Constructor
     public Partido(String id, String rival, String fase, int sets) {
         this.id = id;
@@ -77,6 +76,31 @@ public class Partido implements Serializable {
     public void agregarTimeoutEnContra() {
         puntosSecuencia.append("P");
     }
+
+    public void eliminarUltimoPunto() {
+        if (puntosSecuencia.length() > 0) {
+            char ultimoCaracter = puntosSecuencia.charAt(puntosSecuencia.length() - 1);
+            puntosSecuencia.deleteCharAt(puntosSecuencia.length() - 1); // Eliminar último carácter
+            Log.d("Partido", "Eliminado el último punto: " + ultimoCaracter);
+        } else {
+            Log.d("Partido", "No hay acciones para eliminar.");
+        }
+    }
+
+    public void eliminarUltimoTimeout() {
+        if (puntosSecuencia.length() > 0) {
+            char ultimoCaracter = puntosSecuencia.charAt(puntosSecuencia.length() - 1);
+            if (ultimoCaracter == 'T' || ultimoCaracter == 'P') { // Verificar si es un timeout
+                puntosSecuencia.deleteCharAt(puntosSecuencia.length() - 1);
+                Log.d("Partido", "Eliminado el último timeout: " + ultimoCaracter);
+            } else {
+                Log.d("Partido", "El último carácter no es un timeout.");
+            }
+        } else {
+            Log.d("Partido", "No hay acciones para eliminar.");
+        }
+    }
+
 
     public void finalizarSet() {
         puntosSecuencia.append("X"); // Delimitador de sets

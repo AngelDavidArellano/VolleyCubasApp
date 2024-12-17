@@ -1,5 +1,7 @@
 package com.volleycubas.app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,12 +20,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,22 +39,17 @@ public class PartidoEnCursoFragment extends Fragment {
     private static final String ARG_TEAM_ID = "teamId";
     private static final String ARG_PARTIDO = "partido";
 
-    private String teamId;
-    private String teamName;
+    private String teamId, teamName;
     private Partido partido;
 
-    private TextView nameTeamA;
-    private TextView nameTeamB;
+    private ImageView undoButton, posesionTeamA, posesionTeamB;
 
-    private TextView scoreTeamA;
-    private TextView scoreTeamB;
+    private TextView nameTeamA, nameTeamB, scoreTeamA, scoreTeamB,
+            timeoutButtonA, timeoutButtonB, setsScoreTeamA, setsScoreTeamB;
 
+    private TextView player1, player1_name, player2, player2_name, player3, player3_name,
+            player4, player4_name, player5, player5_name, player6, player6_name;
 
-    private TextView timeoutButtonA;
-    private TextView timeoutButtonB;
-
-    private TextView setsScoreTeamA;
-    private TextView setsScoreTeamB;
     private EditText notas;
 
     private int pointsTeamA = 0;
@@ -56,6 +59,16 @@ public class PartidoEnCursoFragment extends Fragment {
 
     private int timeoutsTeamA = 0;
     private int timeoutsTeamB = 0;
+
+    private boolean posesionSaque = true;
+
+    private List<Jugador> jugadoresList = new ArrayList<>();
+
+    private ArrayList<TextView> playerList = new ArrayList<>();
+    private ArrayList<TextView> playerNameList = new ArrayList<>();
+    private HashMap<TextView, Float[]> posicionesIniciales = new HashMap<>();
+
+    private ArrayList<Accion> historialAcciones = new ArrayList<>();
 
 
     public static PartidoEnCursoFragment newInstance(String teamId, Partido partido) {
@@ -79,6 +92,11 @@ public class PartidoEnCursoFragment extends Fragment {
         Button buttonFinishSet = view.findViewById(R.id.btn_finish_set);
         Button buttonFinishMatch = view.findViewById(R.id.btn_finish_match);
 
+        undoButton = view.findViewById(R.id.undo_button);
+
+        posesionTeamA = view.findViewById(R.id.posesionTeamA);
+        posesionTeamB = view.findViewById(R.id.posesionTeamB);
+
         timeoutButtonA = view.findViewById(R.id.timeout_button_team_a);
         timeoutButtonB = view.findViewById(R.id.timeout_button_team_b);
 
@@ -91,43 +109,89 @@ public class PartidoEnCursoFragment extends Fragment {
         scoreTeamA = view.findViewById(R.id.score_team_a);
         scoreTeamB = view.findViewById(R.id.score_team_b);
 
+        player1 = view.findViewById(R.id.player1);
+        player1_name = view.findViewById(R.id.player1_name);
+
+        player2 = view.findViewById(R.id.player2);
+        player2_name = view.findViewById(R.id.player2_name);
+
+        player3 = view.findViewById(R.id.player3);
+        player3_name = view.findViewById(R.id.player3_name);
+
+        player4 = view.findViewById(R.id.player4);
+        player4_name = view.findViewById(R.id.player4_name);
+
+        player5 = view.findViewById(R.id.player5);
+        player5_name = view.findViewById(R.id.player5_name);
+
+        player6 = view.findViewById(R.id.player6);
+        player6_name = view.findViewById(R.id.player6_name);
+
+        llenarArrayListJugadoresView();
+        guardarPosicionesIniciales();
+
+        cargarHistorialDesdeSharedPreferences();
+        cargarJugadoresDesdeSharedPreferences();
+
         notas = view.findViewById(R.id.tv_notas);
 
         if (teamId != null) {
-            cargarNombreEquipo();
+            cargarNombreEquipoDesdeFirestore();
+            cargarJugadoresDesdeFirestore();
             cargarPartidoDesdeFirestore();
         }
 
         // Configurar clic en el marcador del equipo A
         scoreTeamA.setOnClickListener(v -> {
             pointsTeamA++;
-            partido.agregarPuntoAFavor(); // Añadir punto a favor
+            if (!posesionSaque) {
+                posesionSaque = true;
+                historialAcciones.add(Accion.ROTACION);
+                rotarJugadores();
+            } else {
+                historialAcciones.add(Accion.PUNTO_A);
+            }
+            actualizarIndicadorSaque();
+            partido.agregarPuntoAFavor();
             scoreTeamA.setText(String.format("%02d", pointsTeamA));
             verificarCondicionesDeSet();
-            guardarPartido(); // Guardar el estado actualizado
+            guardarPartido();
+            guardarHistorialEnSharedPreferences();
         });
 
         // Configurar clic en el marcador del equipo B
         scoreTeamB.setOnClickListener(v -> {
+            historialAcciones.add(Accion.PUNTO_B);
+
             pointsTeamB++;
-            partido.agregarPuntoEnContra(); // Añadir punto en contra
+            posesionSaque = false;
+
+            actualizarIndicadorSaque();
+            partido.agregarPuntoEnContra();
             scoreTeamB.setText(String.format("%02d", pointsTeamB));
             verificarCondicionesDeSet();
-            guardarPartido(); // Guardar el estado actualizado
+            guardarPartido();
+            guardarHistorialEnSharedPreferences();
         });
 
         timeoutButtonA.setOnClickListener(v -> {
+            historialAcciones.add(Accion.TIMEOUT_A);
+
             timeoutsTeamA++;
             partido.agregarTimeoutAFavor(); // Usa el método encapsulado
             guardarPartido(); // Guardar cambios en Firestore
             actualizarTimeoutsUI();
+            guardarHistorialEnSharedPreferences();
         });
 
         timeoutButtonB.setOnClickListener(v -> {
+            historialAcciones.add(Accion.TIMEOUT_B);
+
             timeoutsTeamB++;
             partido.agregarTimeoutEnContra(); // Usa el método encapsulado
             guardarPartido(); // Guardar cambios en Firestore
             actualizarTimeoutsUI();
+            guardarHistorialEnSharedPreferences();
         });
 
         buttonFinishMatch.setOnClickListener(v -> {
@@ -156,6 +220,52 @@ public class PartidoEnCursoFragment extends Fragment {
                     .show();
         });
 
+        undoButton.setOnClickListener(v -> {
+            if (!historialAcciones.isEmpty()) {
+                Accion ultimaAccion = historialAcciones.remove(historialAcciones.size() - 1);
+
+                switch (ultimaAccion) {
+                    case PUNTO_A:
+                        partido.eliminarUltimoPunto();
+                        pointsTeamA--;
+                        scoreTeamA.setText(String.format("%02d", pointsTeamA));
+                        break;
+
+                    case PUNTO_B:
+                        partido.eliminarUltimoPunto();
+                        pointsTeamB--;
+                        scoreTeamB.setText(String.format("%02d", pointsTeamB));
+                        break;
+
+                    case ROTACION:
+                        rotarJugadoresInvertdo();
+                        pointsTeamA--;
+                        partido.eliminarUltimoPunto();
+                        posesionSaque = false;
+                        scoreTeamA.setText(String.format("%02d", pointsTeamA));
+                        break;
+
+                    case TIMEOUT_A:
+                        timeoutsTeamA--;
+                        timeoutButtonA.setText(timeoutsTeamA);
+                        partido.eliminarUltimoTimeout();
+                        break;
+
+                    case TIMEOUT_B:
+                        timeoutsTeamB--;
+                        timeoutButtonB.setText(timeoutsTeamB);
+                        partido.eliminarUltimoTimeout();
+                        break;
+                }
+
+                actualizarIndicadorSaque();
+                guardarPartido();
+                guardarHistorialEnSharedPreferences();
+            } else {
+                Log.d("Undo", "No hay acciones para deshacer");
+            }
+        });
+
         notas.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -175,12 +285,128 @@ public class PartidoEnCursoFragment extends Fragment {
             }
         });
 
+        player1.setOnLongClickListener(v -> {
+            mostrarSeleccionJugador(player1, player1_name);
+            return true;
+        });
+
+        player2.setOnLongClickListener(v -> {
+            mostrarSeleccionJugador(player2, player2_name);
+            return true;
+        });
+
+        player3.setOnLongClickListener(v -> {
+            mostrarSeleccionJugador(player3, player3_name);
+            return true;
+        });
+
+        player4.setOnLongClickListener(v -> {
+            mostrarSeleccionJugador(player4, player4_name);
+            return true;
+        });
+
+        player5.setOnLongClickListener(v -> {
+            mostrarSeleccionJugador(player5, player5_name);
+            return true;
+        });
+
+        player6.setOnLongClickListener(v -> {
+            mostrarSeleccionJugador(player6, player6_name);
+            return true;
+        });
     }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_partido_en_curso, container, false);
+    }
+
+    private void rotarJugadores() {
+        float offsetX = 275f; // Ajusta el desplazamiento horizontal (positivo para derecha)
+        float offsetX_null = 0f;  // Sin desplazamiento horizontal
+        float offsetY = 275f;  // Ajusta el desplazamiento vertical
+        float offsetY_null = 0f;  // Sin desplazamiento vertical
+
+        // Simula movimiento con animación y actualiza el texto al finalizar
+        animarYActualizar(playerList.get(0), playerList.get(5).getText().toString(),
+                playerNameList.get(0), playerNameList.get(5).getText().toString(),
+                -offsetX, offsetY_null, null);
+        animarYActualizar(playerList.get(1), playerList.get(0).getText().toString(),
+                playerNameList.get(1), playerNameList.get(0).getText().toString(),
+                -offsetX, offsetY_null, null);
+        animarYActualizar(playerList.get(2), playerList.get(1).getText().toString(),
+                playerNameList.get(2), playerNameList.get(1).getText().toString(),
+                offsetX_null, -offsetY, null);
+        animarYActualizar(playerList.get(3), playerList.get(2).getText().toString(),
+                playerNameList.get(3), playerNameList.get(2).getText().toString(),
+                offsetX, offsetY_null, null);
+        animarYActualizar(playerList.get(4), playerList.get(3).getText().toString(),
+                playerNameList.get(4), playerNameList.get(3).getText().toString(),
+                offsetX, offsetY_null, null);
+        animarYActualizar(playerList.get(5), playerList.get(4).getText().toString(),
+                playerNameList.get(5), playerNameList.get(4).getText().toString(),
+                offsetX_null, offsetY, this::guardarJugadoresEnSharedPreferences);
+
+        guardarJugadoresEnSharedPreferences();
+    }
+
+    private void rotarJugadoresInvertdo() {
+        float offsetX = 275f; // Ajusta el desplazamiento horizontal (positivo para derecha)
+        float offsetX_null = 0f;  // Sin desplazamiento horizontal
+        float offsetY = 275f;  // Ajusta el desplazamiento vertical
+        float offsetY_null = 0f;  // Sin desplazamiento vertical
+
+        // Simula movimiento con animación y actualiza el texto al finalizar
+        animarYActualizar(playerList.get(0), playerList.get(1).getText().toString(),
+                playerNameList.get(0), playerNameList.get(1).getText().toString(),
+                offsetX_null, -offsetY, null);
+        animarYActualizar(playerList.get(1), playerList.get(2).getText().toString(),
+                playerNameList.get(1), playerNameList.get(2).getText().toString(),
+                offsetX, offsetY_null, null);
+        animarYActualizar(playerList.get(2), playerList.get(3).getText().toString(),
+                playerNameList.get(2), playerNameList.get(3).getText().toString(),
+                offsetX, offsetY_null, null);
+        animarYActualizar(playerList.get(3), playerList.get(4).getText().toString(),
+                playerNameList.get(3), playerNameList.get(4).getText().toString(),
+                offsetX_null, offsetY, null);
+        animarYActualizar(playerList.get(4), playerList.get(5).getText().toString(),
+                playerNameList.get(4), playerNameList.get(5).getText().toString(),
+                -offsetX, offsetY_null, null);
+        animarYActualizar(playerList.get(5), playerList.get(0).getText().toString(),
+                playerNameList.get(5), playerNameList.get(0).getText().toString(),
+                -offsetX, offsetY_null, this::guardarJugadoresEnSharedPreferences);
+
+    }
+
+    private void animarYActualizar(TextView textView, String nuevoTexto,
+                                   TextView nameTextView, String nuevoNombre,
+                                   float offsetX, float offsetY, Runnable onAnimationEnd) {
+        textView.animate()
+                .translationXBy(offsetX)
+                .translationYBy(offsetY)
+                .setDuration(300)
+                .withEndAction(() -> {
+                    textView.setText(nuevoTexto); // Actualizar número
+                    textView.setTranslationX(0);
+                    textView.setTranslationY(0);
+                    if (onAnimationEnd != null) {
+                        onAnimationEnd.run();
+                    }
+                })
+                .start();
+
+        nameTextView.animate()
+                .translationXBy(offsetX)
+                .translationYBy(offsetY)
+                .setDuration(300)
+                .withEndAction(() -> {
+                    nameTextView.setText(nuevoNombre); // Actualizar nombre
+                    nameTextView.setTranslationX(0);
+                    nameTextView.setTranslationY(0);
+                })
+                .start();
     }
 
     private void verificarCondicionesDeSet() {
@@ -200,6 +426,47 @@ public class PartidoEnCursoFragment extends Fragment {
         }
     }
 
+    private void actualizarIndicadorSaque() {
+        if (posesionSaque) {
+            posesionTeamA.setColorFilter(getResources().getColor(R.color.white));
+            posesionTeamB.setColorFilter(getResources().getColor(R.color.grey));
+        } else {
+            posesionTeamA.setColorFilter(getResources().getColor(R.color.grey));
+            posesionTeamB.setColorFilter(getResources().getColor(R.color.white));
+        }
+    }
+
+    private void mostrarSeleccionJugador(TextView numeroJugadorView, TextView nombreJugadorView) {
+        if (jugadoresList.isEmpty()) {
+            Log.d("mostrarSeleccionJugador", "No hay jugadores disponibles en la lista.");
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Error")
+                    .setMessage("No hay jugadores disponibles en este equipo.")
+                    .setPositiveButton("Aceptar", null)
+                    .show();
+            return;
+        }
+
+        // Crear una lista de nombres para mostrar en el Dialog
+        String[] nombresJugadores = new String[jugadoresList.size()];
+        for (int i = 0; i < jugadoresList.size(); i++) {
+            nombresJugadores[i] = jugadoresList.get(i).getNumero() + " - " + jugadoresList.get(i).getNombre();
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Seleccionar Jugador")
+                .setItems(nombresJugadores, (dialog, which) -> {
+                    // Al seleccionar un jugador, actualizar los TextViews
+                    Jugador jugadorSeleccionado = jugadoresList.get(which);
+                    Log.d("mostrarSeleccionJugador", "Jugador seleccionado: " + jugadorSeleccionado.getNombre());
+                    numeroJugadorView.setText(String.valueOf(jugadorSeleccionado.getNumero()));
+                    nombreJugadorView.setText(jugadorSeleccionado.getNombre());
+
+                    guardarJugadoresEnSharedPreferences();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
 
     private void finalizarSet(boolean equipoAGanador) {
         // Sumar el set al equipo correspondiente
@@ -304,9 +571,13 @@ public class PartidoEnCursoFragment extends Fragment {
 
                     // Navegar a pantalla de inicio de partidos
                     navigateToStartMatch();
+                    eliminarHistorialEnSharedPreferences();
+                    eliminarJugadoresEnSharedPreferences();
                 })
                 .addOnFailureListener(e -> Log.e("PartidoEnCursoFragment", "Error al finalizar partido: " + e.getMessage()));
+
     }
+
     private int calcularMejorRacha(String secuencia, char caracter) {
         int mejorRacha = 0;
         int rachaActual = 0;
@@ -324,16 +595,6 @@ public class PartidoEnCursoFragment extends Fragment {
 
         return mejorRacha;
     }
-
-
-
-    private void navigateToStartMatch() {
-        if (getActivity() instanceof TeamMenuActivity) {
-            TeamMenuActivity activity = (TeamMenuActivity) getActivity();
-            activity.resetToStartMatch();
-        }
-    }
-
 
     private void reiniciarPuntos() {
         pointsTeamA = 0;
@@ -353,8 +614,7 @@ public class PartidoEnCursoFragment extends Fragment {
         timeoutButtonB.setText(String.valueOf(timeoutsTeamB));
     }
 
-
-    private void cargarNombreEquipo() {
+    private void cargarNombreEquipoDesdeFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("equipos")
                 .document(teamId)
@@ -377,6 +637,35 @@ public class PartidoEnCursoFragment extends Fragment {
                     Log.e("PartidoEnCursoFragment", "Error al cargar el nombre del equipo: " + e.getMessage());
                 });
     }
+
+    private void cargarJugadoresDesdeFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("equipos")
+                .document(teamId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        List<Map<String, Object>> jugadoresFirestore = (List<Map<String, Object>>) documentSnapshot.get("jugadores");
+                        if (jugadoresFirestore != null) {
+                            jugadoresList.clear();
+                            for (Map<String, Object> jugadorMap : jugadoresFirestore) {
+                                String id = (String) jugadorMap.get("id");
+                                String nombre = (String) jugadorMap.get("nombre");
+                                String posicion = (String) jugadorMap.get("posicion");
+                                Long numero = (Long) jugadorMap.get("numero");
+                                jugadoresList.add(new Jugador(id, nombre, Math.toIntExact(numero), posicion));
+                            }
+                            Log.d("cargarJugadores", "Jugadores cargados: " + jugadoresList);
+                        }
+                    } else {
+                        Log.w("cargarJugadores", "No se encontraron jugadores en Firestore.");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("cargarJugadores", "Error al cargar jugadores: " + e.getMessage());
+                });
+    }
+
 
     private void cargarPartidoDesdeFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -443,6 +732,13 @@ public class PartidoEnCursoFragment extends Fragment {
                 });
     }
 
+    private void navigateToStartMatch() {
+        if (getActivity() instanceof TeamMenuActivity) {
+            TeamMenuActivity activity = (TeamMenuActivity) getActivity();
+            activity.resetToStartMatch();
+        }
+    }
+
     private int countOccurrences(String text, char character) {
         int count = 0;
         for (char c : text.toCharArray()) {
@@ -452,4 +748,132 @@ public class PartidoEnCursoFragment extends Fragment {
         }
         return count;
     }
+
+    private void llenarArrayListJugadoresView(){
+        playerList.add(player1);
+        playerList.add(player6);
+        playerList.add(player5);
+        playerList.add(player4);
+        playerList.add(player3);
+        playerList.add(player2);
+
+        playerNameList.add(player1_name);
+        playerNameList.add(player6_name);
+        playerNameList.add(player5_name);
+        playerNameList.add(player4_name);
+        playerNameList.add(player3_name);
+        playerNameList.add(player2_name);
+    }
+
+    private void guardarPosicionesIniciales() {
+        for (TextView player : playerList) {
+            posicionesIniciales.put(player, new Float[]{player.getX(), player.getY()});
+        }
+    }
+
+    private void guardarHistorialEnSharedPreferences() {
+        SharedPreferences prefs = requireContext().getSharedPreferences(teamId+"_historial_partido", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        Gson gson = new Gson();
+        String historialJson = gson.toJson(historialAcciones);
+
+        editor.putString(teamId + "_historial_partido", historialJson);
+        editor.putBoolean(teamId + "_posesion_saque", posesionSaque);
+        editor.apply();
+    }
+
+    private void cargarHistorialDesdeSharedPreferences() {
+        SharedPreferences prefs = requireContext().getSharedPreferences(teamId+"_historial_partido", Context.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String historialJson = prefs.getString(teamId + "_historial_partido", null);
+
+        if (historialJson != null) {
+            Type type = new TypeToken<ArrayList<Accion>>() {}.getType();
+            historialAcciones = gson.fromJson(historialJson, type);
+        }
+
+        // Cargar el estado de posesionSaque
+        posesionSaque = prefs.getBoolean(teamId + "_posesion_saque", true);
+        actualizarIndicadorSaque();
+    }
+
+    private void eliminarHistorialEnSharedPreferences() {
+        SharedPreferences prefs = requireContext().getSharedPreferences(teamId+"_historial_partido", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.remove(teamId + "_historial_partido");
+        editor.remove(teamId + "_posesion_saque");
+        editor.apply();
+    }
+
+    private void guardarJugadoresEnSharedPreferences() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("jugadores_partido", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString(teamId + "_player1", player1.getText().toString());
+        editor.putString(teamId + "_player1_name", player1_name.getText().toString());
+
+        editor.putString(teamId + "_player2", player2.getText().toString());
+        editor.putString(teamId + "_player2_name", player2_name.getText().toString());
+
+        editor.putString(teamId + "_player3", player3.getText().toString());
+        editor.putString(teamId + "_player3_name", player3_name.getText().toString());
+
+        editor.putString(teamId + "_player4", player4.getText().toString());
+        editor.putString(teamId + "_player4_name", player4_name.getText().toString());
+
+        editor.putString(teamId + "_player5", player5.getText().toString());
+        editor.putString(teamId + "_player5_name", player5_name.getText().toString());
+
+        editor.putString(teamId + "_player6", player6.getText().toString());
+        editor.putString(teamId + "_player6_name", player6_name.getText().toString());
+
+        editor.apply();
+    }
+
+    private void cargarJugadoresDesdeSharedPreferences() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("jugadores_partido", Context.MODE_PRIVATE);
+
+        // Cargar valores si existen, de lo contrario, mantener los actuales
+        player1.setText(prefs.getString(teamId + "_player1", player1.getText().toString()));
+        player1_name.setText(prefs.getString(teamId + "_player1_name", player1_name.getText().toString()));
+
+        player2.setText(prefs.getString(teamId + "_player2", player2.getText().toString()));
+        player2_name.setText(prefs.getString(teamId + "_player2_name", player2_name.getText().toString()));
+
+        player3.setText(prefs.getString(teamId + "_player3", player3.getText().toString()));
+        player3_name.setText(prefs.getString(teamId + "_player3_name", player3_name.getText().toString()));
+
+        player4.setText(prefs.getString(teamId + "_player4", player4.getText().toString()));
+        player4_name.setText(prefs.getString(teamId + "_player4_name", player4_name.getText().toString()));
+
+        player5.setText(prefs.getString(teamId + "_player5", player5.getText().toString()));
+        player5_name.setText(prefs.getString(teamId + "_player5_name", player5_name.getText().toString()));
+
+        player6.setText(prefs.getString(teamId + "_player6", player6.getText().toString()));
+        player6_name.setText(prefs.getString(teamId + "_player6_name", player6_name.getText().toString()));
+    }
+
+    private void eliminarJugadoresEnSharedPreferences() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("jugadores_partido", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.remove(teamId + "_player1");
+        editor.remove(teamId + "_player1_name");
+        editor.remove(teamId + "_player2");
+        editor.remove(teamId + "_player2_name");
+        editor.remove(teamId + "_player3");
+        editor.remove(teamId + "_player3_name");
+        editor.remove(teamId + "_player4");
+        editor.remove(teamId + "_player4_name");
+        editor.remove(teamId + "_player5");
+        editor.remove(teamId + "_player5_name");
+        editor.remove(teamId + "_player6");
+        editor.remove(teamId + "_player6_name");
+
+        editor.apply();
+    }
+
 }
