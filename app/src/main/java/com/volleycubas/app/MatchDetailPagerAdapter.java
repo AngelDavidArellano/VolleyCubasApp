@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -82,22 +84,70 @@ public class MatchDetailPagerAdapter extends RecyclerView.Adapter<MatchDetailPag
 
             // Crear una vista por cada carácter
             for (char c : detail.toCharArray()) {
+                // Crear un FrameLayout para combinar fondo de color e ícono
+                FrameLayout frameLayout = new FrameLayout(colorBarLayout.getContext());
+                frameLayout.setLayoutParams(new FlexboxLayout.LayoutParams(50, 50)); // Tamaño del bloque
+                ((FlexboxLayout.LayoutParams) frameLayout.getLayoutParams()).setMargins(4, 4, 4, 4); // Margen entre bloques
+
+                // Crear la vista de color
                 View colorView = new View(colorBarLayout.getContext());
-                float[] hsv_blue = {220, 0.69f, 0.80f};
-                float[] hsv_red = {0, 0.68f, 0.90f};
+                float[] hsv_blue = {220, 0.69f, 0.80f}; // Azul estándar
+                float[] hsv_red = {0, 0.68f, 0.90f}; // Rojo estándar
+                float[] hsv_light_blue = {220, 0.30f, 0.95f}; // Azul aún más claro para 'T'
+                float[] hsv_light_red = {0, 0.30f, 0.95f};   // Rojo aún más claro para 'P'
 
-                int color = (c == 'A') ? Color.HSVToColor(hsv_blue) :Color.HSVToColor(hsv_red); // Define colores
+                int color;
+                int iconResId = 0; // ID del recurso del ícono a usar
+
+                switch (c) {
+                    case 'A':
+                        color = Color.HSVToColor(hsv_blue);
+                        break;
+                    case 'B':
+                        color = Color.HSVToColor(hsv_red);
+                        break;
+                    case 'T':
+                        color = Color.HSVToColor(hsv_light_blue);
+                        iconResId = R.drawable.ic_timeout; // Ícono para tiempo (reemplaza con tu recurso)
+                        break;
+                    case 'P':
+                        color = Color.HSVToColor(hsv_light_red);
+                        iconResId = R.drawable.ic_timeout; // Ícono para pausa (reemplaza con tu recurso)
+                        break;
+                    default:
+                        continue; // Ignorar caracteres no reconocidos
+                }
+
+                // Establecer el color de fondo
                 colorView.setBackgroundColor(color);
+                colorView.setLayoutParams(new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                ));
 
-                // Establecer el tamaño de cada vista
-                FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(50, 50); // Tamaño de cada bloque
-                params.setMargins(4, 4, 4, 4); // Margen entre bloques
-                colorView.setLayoutParams(params);
+                // Añadir el colorView al FrameLayout
+                frameLayout.addView(colorView);
 
-                // Añadir la vista a la barra de colores
-                colorBarLayout.addView(colorView);
+                // Añadir el ícono si corresponde
+                if (iconResId != 0) {
+                    ImageView iconView = new ImageView(colorBarLayout.getContext());
+                    iconView.setImageResource(iconResId);
+                    iconView.setLayoutParams(new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.MATCH_PARENT
+                    ));
+                    iconView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+                    // Añadir el ícono al FrameLayout
+                    frameLayout.addView(iconView);
+                }
+
+                // Añadir el FrameLayout al FlexboxLayout
+                colorBarLayout.addView(frameLayout);
             }
         }
+
+
 
         private int[] countCharacters(String detail) {
             int countA = 0;

@@ -144,4 +144,18 @@ public class TeamMenuActivity extends AppCompatActivity {
         });
     }
 
+    public void resetToStartMatch() {
+        if (viewPager != null && viewPager.getAdapter() instanceof AdapterViewPager) {
+            AdapterViewPager adapter = (AdapterViewPager) viewPager.getAdapter();
+
+            // Reinicia el estado de partido en curso
+            adapter.setMatchInProgress(false, null);
+
+            // Notifica cambios al adaptador
+            adapter.notifyDataSetChanged();
+
+            // Vuelve al fragmento inicial
+            viewPager.setCurrentItem(1, false);
+        }
+    }
 }

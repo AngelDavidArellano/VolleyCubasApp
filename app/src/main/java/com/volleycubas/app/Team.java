@@ -15,6 +15,7 @@ public class Team {
     private List<String> entrenadores;       // Lista de IDs de entrenadores
     private String capitan;
     private String liga;
+    private String rival_fecha_mejor_racha;
     private int mejor_racha;
     private int puntos_a_favor;
     private int puntos_totales;
@@ -122,6 +123,14 @@ public class Team {
 
     public void setLiga(String liga) {
         this.liga = liga;
+    }
+
+    public String getRival_fecha_mejor_racha() {
+        return rival_fecha_mejor_racha;
+    }
+
+    public void setRival_fecha_mejor_racha(String rival_fecha_mejor_racha) {
+        this.rival_fecha_mejor_racha = rival_fecha_mejor_racha;
     }
 
     public int getMejor_racha() {

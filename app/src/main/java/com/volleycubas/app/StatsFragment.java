@@ -23,7 +23,7 @@ public class StatsFragment extends Fragment {
     private static final String ARG_TEAM_ID = "teamId";
     private String teamId;
 
-    private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak;
+    private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak, tvMaxStreak_data;
     private TextView tvVictories_amount, tvSetsWon_amount, tvPointsScored_amount;
     private ProgressBar progressVictories, progressSetsWon, progressAttendance, progressPointsScored;
 
@@ -57,6 +57,7 @@ public class StatsFragment extends Fragment {
         tvPointsScored = view.findViewById(R.id.tvPointsScored);
         tvPointsScored_amount = view.findViewById(R.id.tvPointsScored_amount);
         tvMaxStreak = view.findViewById(R.id.tvMaxStreak);
+        tvMaxStreak_data = view.findViewById(R.id.tvMaxStreak_data);
 
         progressVictories = view.findViewById(R.id.progressVictories);
         progressSetsWon = view.findViewById(R.id.progressSetsWon);
@@ -85,6 +86,7 @@ public class StatsFragment extends Fragment {
                         int puntosAFavor = documentSnapshot.getLong("puntos_a_favor").intValue();
                         int puntosTotales = documentSnapshot.getLong("puntos_totales").intValue();
                         int mejorRacha = documentSnapshot.getLong("mejor_racha").intValue();
+                        String mejorRachaData = documentSnapshot.getString("rival_fecha_mejor_racha");
                         int partidosJugados = documentSnapshot.getLong("partidos_jugados").intValue();
                         int partidosGanados = documentSnapshot.getLong("partidos_ganados").intValue();
 
@@ -114,6 +116,7 @@ public class StatsFragment extends Fragment {
                         progressPointsScored.setProgress(puntosTotales == 0 ? 0 : (puntosAFavor * 100) / puntosTotales);
 
                         tvMaxStreak.setText(String.valueOf(mejorRacha));
+                        tvMaxStreak_data.setText(mejorRachaData);
 
                         tvVictories.setText(String.valueOf(partidosGanados));
                         tvVictories_amount.setText("de " + partidosJugados + " partidos");

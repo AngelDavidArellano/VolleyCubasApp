@@ -13,18 +13,19 @@ public class Jugador implements Parcelable, Serializable {
     private String posicion;
     private int numero;
     private String notas;
-
+    private int numeroMVPs = 0;
     private Boolean asistencia;
 
     // Constructor vacío requerido por Firestore
     public Jugador() {}
 
-    public Jugador(String id, String nombre, String posicion, int numero, String notas) {
+    public Jugador(String id, String nombre, String posicion, int numero, String notas, int numeroMVPs) {
         this.id = id;
         this.nombre = nombre;
         this.posicion = posicion;
         this.numero = numero;
         this.notas = notas;
+        this.numeroMVPs = numeroMVPs;
     }
 
     public Jugador(String id, String nombre, int numero, String posicion) {
@@ -81,6 +82,14 @@ public class Jugador implements Parcelable, Serializable {
         this.notas = notas;
     }
 
+    public int getNumeroMVPs() {
+        return numeroMVPs;
+    }
+
+    public void setNumeroMVPs(int numeroMVPs) {
+        this.numeroMVPs = numeroMVPs;
+    }
+
     public Boolean isAsistencia() {
         return asistencia;
     }
@@ -97,6 +106,7 @@ public class Jugador implements Parcelable, Serializable {
         map.put("posicion", posicion);
         map.put("numero", numero);
         map.put("notas", notas);
+        map.put("numeroMVPs", numeroMVPs);
         return map;
     }
 
@@ -107,6 +117,7 @@ public class Jugador implements Parcelable, Serializable {
         numero = in.readInt();
         posicion = in.readString();
         notas = in.readString();
+        numeroMVPs = in.readInt();
         byte asistenciaByte = in.readByte();
         asistencia = asistenciaByte == -1 ? null : asistenciaByte == 1;    }
 
@@ -117,6 +128,7 @@ public class Jugador implements Parcelable, Serializable {
         dest.writeInt(numero);
         dest.writeString(posicion);
         dest.writeString(notas);
+        dest.writeInt(numeroMVPs);
         dest.writeByte(asistencia == null ? -1 : (byte) (asistencia ? 1 : 0));
     }
 

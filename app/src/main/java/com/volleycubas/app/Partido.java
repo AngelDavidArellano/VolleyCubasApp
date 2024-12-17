@@ -71,6 +71,13 @@ public class Partido implements Serializable {
         puntosSecuencia.append("B");
     }
 
+    public void agregarTimeoutAFavor() {
+        puntosSecuencia.append("T");
+    }
+    public void agregarTimeoutEnContra() {
+        puntosSecuencia.append("P");
+    }
+
     public void finalizarSet() {
         puntosSecuencia.append("X"); // Delimitador de sets
     }

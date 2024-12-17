@@ -157,6 +157,7 @@ public class PlayersFragment extends Fragment {
                                 String nombre = (String) jugadorData.get("nombre");
                                 String posicion = (String) jugadorData.get("posicion");
                                 Long numero = (Long) jugadorData.get("numero");
+                                Long numeroMVPs = (Long) jugadorData.get("numeroMVPs");
                                 String notas = (String) jugadorData.get("notas");
 
                                 Jugador jugador = new Jugador(
@@ -164,8 +165,9 @@ public class PlayersFragment extends Fragment {
                                         nombre != null ? nombre : "Sin nombre",
                                         posicion != null ? posicion : "Sin posición",
                                         numero != null ? numero.intValue() : 0,
-                                        notas != null ? notas : "No hay notas"
-                                );
+                                        notas != null ? notas : "No hay notas",
+                                        numeroMVPs != null ? numeroMVPs.intValue() : 0
+                                        );
 
                                 jugadoresList.add(jugador);
                             }
@@ -240,7 +242,7 @@ public class PlayersFragment extends Fragment {
 
             int numero = Integer.parseInt(numeroStr);
 
-            Jugador newJugador = new Jugador(id, nombre, posicion, numero, notas);
+            Jugador newJugador = new Jugador(id, nombre, posicion, numero, notas, 0);
 
             jugadoresList.add(newJugador);
 

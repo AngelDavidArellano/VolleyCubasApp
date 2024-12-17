@@ -294,6 +294,7 @@ public class CreateTeamActivity extends AppCompatActivity {
                     team.setSets_totales(0);
                     team.setPartidos_jugados(0);
                     team.setPartidos_ganados(0);
+                    team.setRival_fecha_mejor_racha("No hay registros");
 
                     firestore.collection("equipos").document(teamId)
                             .set(team)

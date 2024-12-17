@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -40,6 +41,10 @@ public class PartidoEnCursoFragment extends Fragment {
     private TextView scoreTeamA;
     private TextView scoreTeamB;
 
+
+    private TextView timeoutButtonA;
+    private TextView timeoutButtonB;
+
     private TextView setsScoreTeamA;
     private TextView setsScoreTeamB;
     private EditText notas;
@@ -48,6 +53,10 @@ public class PartidoEnCursoFragment extends Fragment {
     private int pointsTeamB = 0;
     private int setsTeamA = 0;
     private int setsTeamB = 0;
+
+    private int timeoutsTeamA = 0;
+    private int timeoutsTeamB = 0;
+
 
     public static PartidoEnCursoFragment newInstance(String teamId, Partido partido) {
         PartidoEnCursoFragment fragment = new PartidoEnCursoFragment();
@@ -69,6 +78,9 @@ public class PartidoEnCursoFragment extends Fragment {
 
         Button buttonFinishSet = view.findViewById(R.id.btn_finish_set);
         Button buttonFinishMatch = view.findViewById(R.id.btn_finish_match);
+
+        timeoutButtonA = view.findViewById(R.id.timeout_button_team_a);
+        timeoutButtonB = view.findViewById(R.id.timeout_button_team_b);
 
         nameTeamA = view.findViewById(R.id.team_a_name);
         nameTeamB = view.findViewById(R.id.team_b_name);
@@ -104,11 +116,28 @@ public class PartidoEnCursoFragment extends Fragment {
             guardarPartido(); // Guardar el estado actualizado
         });
 
+        timeoutButtonA.setOnClickListener(v -> {
+            timeoutsTeamA++;
+            partido.agregarTimeoutAFavor(); // Usa el método encapsulado
+            guardarPartido(); // Guardar cambios en Firestore
+            actualizarTimeoutsUI();
+        });
+
+        timeoutButtonB.setOnClickListener(v -> {
+            timeoutsTeamB++;
+            partido.agregarTimeoutEnContra(); // Usa el método encapsulado
+            guardarPartido(); // Guardar cambios en Firestore
+            actualizarTimeoutsUI();
+        });
+
         buttonFinishMatch.setOnClickListener(v -> {
             new AlertDialog.Builder(requireContext())
                     .setTitle("Terminar Partido")
                     .setMessage("¿Estás seguro de que quieres terminar el partido? Esto moverá el partido al historial.")
-                    .setPositiveButton("Terminar", (dialog, which) -> finalizarPartido())
+                    .setPositiveButton("Terminar", (dialog, which) -> {
+                        finalizarPartido();
+                        navigateToStartMatch();
+                    })
                     .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
                     .show();
         });
@@ -205,32 +234,103 @@ public class PartidoEnCursoFragment extends Fragment {
         String fechaActual = dateFormat.format(new Date());
         partido.setFecha(fechaActual);
 
+        // Cálculo de estadísticas
+        String puntosSecuencia = partido.getPuntosSecuencia();
+        int puntosAFavor = countOccurrences(puntosSecuencia, 'A');
+        int puntosEnContra = countOccurrences(puntosSecuencia, 'B');
+        int mejorRacha = calcularMejorRacha(puntosSecuencia, 'A');
+        int setsTotales = partido.getSets();
+        int setsAFavor = partido.getSetsAFavor();
+        int setsEnContra = partido.getSetsEnContra();
+        boolean esVictoria = setsAFavor > setsEnContra;
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Agregar el partido a historial_partidos y eliminar partidoEnCurso
+        // Actualizar Firestore
         db.collection("equipos")
                 .document(teamId)
                 .update(
                         "historial_partidos", FieldValue.arrayUnion(partido.toMap()), // Agregar a historial
-                        "partidoEnCurso", FieldValue.delete() // Eliminar completamente partidoEnCurso
+                        "partidoEnCurso", FieldValue.delete() // Eliminar partido en curso
                 )
                 .addOnSuccessListener(aVoid -> {
                     Log.d("PartidoEnCursoFragment", "Partido finalizado y movido a historial_partidos.");
-                    navigateToStartMatch(); // Volver al inicio
+
+                    // Actualizar estadísticas del equipo
+                    db.collection("equipos")
+                            .document(teamId)
+                            .get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    // Obtener estadísticas actuales
+                                    long partidosJugados = documentSnapshot.contains("partidos_jugados") ?
+                                            documentSnapshot.getLong("partidos_jugados") : 0;
+                                    long partidosGanados = documentSnapshot.contains("partidos_ganados") ?
+                                            documentSnapshot.getLong("partidos_ganados") : 0;
+                                    long puntosTotales = documentSnapshot.contains("puntos_totales") ?
+                                            documentSnapshot.getLong("puntos_totales") : 0;
+                                    long puntosAFavorActuales = documentSnapshot.contains("puntos_a_favor") ?
+                                            documentSnapshot.getLong("puntos_a_favor") : 0;
+                                    long setsTotalesActuales = documentSnapshot.contains("sets_totales") ?
+                                            documentSnapshot.getLong("sets_totales") : 0;
+                                    long setsAFavorActuales = documentSnapshot.contains("sets_a_favor") ?
+                                            documentSnapshot.getLong("sets_a_favor") : 0;
+                                    long mejorRachaActual = documentSnapshot.contains("mejor_racha") ?
+                                            documentSnapshot.getLong("mejor_racha") : 0;
+
+                                    // Actualizar estadísticas
+                                    Map<String, Object> updates = new HashMap<>();
+                                    updates.put("partidos_jugados", partidosJugados + 1);
+                                    updates.put("partidos_ganados", partidosGanados + (esVictoria ? 1 : 0));
+                                    updates.put("puntos_totales", puntosTotales + puntosAFavor + puntosEnContra);
+                                    updates.put("puntos_a_favor", puntosAFavorActuales + puntosAFavor);
+                                    updates.put("sets_totales", setsTotalesActuales + setsTotales);
+                                    updates.put("sets_a_favor", setsAFavorActuales + setsAFavor);
+
+                                    if (mejorRacha > mejorRachaActual) {
+                                        updates.put("mejor_racha", mejorRacha);
+                                        updates.put("rival_fecha_mejor_racha", partido.getRival() + " - " + partido.getFecha());
+                                    }
+
+                                    // Guardar estadísticas actualizadas
+                                    db.collection("equipos")
+                                            .document(teamId)
+                                            .update(updates)
+                                            .addOnSuccessListener(aVoid2 -> Log.d("PartidoEnCursoFragment", "Estadísticas del equipo actualizadas correctamente."))
+                                            .addOnFailureListener(e -> Log.e("PartidoEnCursoFragment", "Error al actualizar estadísticas: " + e.getMessage()));
+                                }
+                            })
+                            .addOnFailureListener(e -> Log.e("PartidoEnCursoFragment", "Error al obtener documento del equipo: " + e.getMessage()));
+
+                    // Navegar a pantalla de inicio de partidos
+                    navigateToStartMatch();
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("PartidoEnCursoFragment", "Error al finalizar partido: " + e.getMessage());
-                });
+                .addOnFailureListener(e -> Log.e("PartidoEnCursoFragment", "Error al finalizar partido: " + e.getMessage()));
+    }
+    private int calcularMejorRacha(String secuencia, char caracter) {
+        int mejorRacha = 0;
+        int rachaActual = 0;
+
+        for (char c : secuencia.toCharArray()) {
+            if (c == caracter) {
+                rachaActual++;
+                if (rachaActual > mejorRacha) {
+                    mejorRacha = rachaActual;
+                }
+            } else {
+                rachaActual = 0;
+            }
+        }
+
+        return mejorRacha;
     }
 
 
+
     private void navigateToStartMatch() {
-        StartMatchFragment startMatchFragment = StartMatchFragment.newInstance(teamId);
-        if (getActivity() != null) {
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, startMatchFragment); // Cambia 'R.id.fragment_container' al ID de tu contenedor de fragmentos
-            transaction.addToBackStack(null);
-            transaction.commit();
+        if (getActivity() instanceof TeamMenuActivity) {
+            TeamMenuActivity activity = (TeamMenuActivity) getActivity();
+            activity.resetToStartMatch();
         }
     }
 
@@ -238,9 +338,21 @@ public class PartidoEnCursoFragment extends Fragment {
     private void reiniciarPuntos() {
         pointsTeamA = 0;
         pointsTeamB = 0;
+
+        timeoutsTeamA = 0;
+        timeoutsTeamB = 0;
+
         scoreTeamA.setText(String.format("%02d", pointsTeamA));
         scoreTeamB.setText(String.format("%02d", pointsTeamB));
+
+        actualizarTimeoutsUI();
     }
+
+    private void actualizarTimeoutsUI() {
+        timeoutButtonA.setText(String.valueOf(timeoutsTeamA));
+        timeoutButtonB.setText(String.valueOf(timeoutsTeamB));
+    }
+
 
     private void cargarNombreEquipo() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
