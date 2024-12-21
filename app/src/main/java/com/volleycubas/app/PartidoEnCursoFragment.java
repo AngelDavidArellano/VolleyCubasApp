@@ -133,12 +133,18 @@ public class PartidoEnCursoFragment extends Fragment {
         cargarHistorialDesdeSharedPreferences();
         cargarJugadoresDesdeSharedPreferences();
 
+        actualizarIndicadorSaque();
+
         notas = view.findViewById(R.id.tv_notas);
 
         if (teamId != null) {
             cargarNombreEquipoDesdeFirestore();
             cargarJugadoresDesdeFirestore();
             cargarPartidoDesdeFirestore();
+        }
+
+        if (!esSaqueConfigurado()) {
+            mostrarDialogoInicioSet();
         }
 
         // Configurar clic en el marcador del equipo A
@@ -426,6 +432,27 @@ public class PartidoEnCursoFragment extends Fragment {
         }
     }
 
+    private void mostrarDialogoInicioSet() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Inicio de Set")
+                .setMessage("¿Qué equipo tiene el saque a favor?")
+                .setPositiveButton(teamName, (dialog, which) -> {
+                    posesionSaque = true; // Equipo A tiene el saque
+                    actualizarIndicadorSaque(); // Actualizar la interfaz
+                    guardarEstadoSaque(); // Guardar que el saque ya fue configurado
+                    Log.d("InicioSet", "Saque a favor del Equipo A");
+                })
+                .setNegativeButton(partido.getRival(), (dialog, which) -> {
+                    posesionSaque = false; // Equipo B tiene el saque
+                    actualizarIndicadorSaque(); // Actualizar la interfaz
+                    guardarEstadoSaque(); // Guardar que el saque ya fue configurado
+                    Log.d("InicioSet", "Saque a favor del Equipo B");
+                })
+                .setCancelable(false) // No permitir cerrar el diálogo sin elegir
+                .show();
+    }
+
+
     private void actualizarIndicadorSaque() {
         if (posesionSaque) {
             posesionTeamA.setColorFilter(getResources().getColor(R.color.white));
@@ -435,6 +462,27 @@ public class PartidoEnCursoFragment extends Fragment {
             posesionTeamB.setColorFilter(getResources().getColor(R.color.white));
         }
     }
+
+    private void guardarEstadoSaque() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("partido_estado", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(teamId + "_saque_configurado", true); // Indica que el saque ya fue configurado
+        editor.apply();
+    }
+
+    private boolean esSaqueConfigurado() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("partido_estado", Context.MODE_PRIVATE);
+        return prefs.getBoolean(teamId + "_saque_configurado", false);
+    }
+
+    private void resetearEstadoSaque() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("partido_estado", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(teamId + "_saque_configurado"); // Eliminar el estado
+        editor.apply();
+    }
+
+
 
     private void mostrarSeleccionJugador(TextView numeroJugadorView, TextView nombreJugadorView) {
         if (jugadoresList.isEmpty()) {
@@ -573,6 +621,7 @@ public class PartidoEnCursoFragment extends Fragment {
                     navigateToStartMatch();
                     eliminarHistorialEnSharedPreferences();
                     eliminarJugadoresEnSharedPreferences();
+                    resetearEstadoSaque();
                 })
                 .addOnFailureListener(e -> Log.e("PartidoEnCursoFragment", "Error al finalizar partido: " + e.getMessage()));
 
@@ -607,6 +656,10 @@ public class PartidoEnCursoFragment extends Fragment {
         scoreTeamB.setText(String.format("%02d", pointsTeamB));
 
         actualizarTimeoutsUI();
+
+        mostrarDialogoInicioSet();
+        actualizarIndicadorSaque();
+
     }
 
     private void actualizarTimeoutsUI() {

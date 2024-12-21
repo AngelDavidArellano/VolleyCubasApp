@@ -1,5 +1,6 @@
 package com.volleycubas.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class StatsFragment extends Fragment {
     private static final String ARG_TEAM_ID = "teamId";
     private String teamId;
 
+    private ImageView settingsBtn;
     private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak, tvMaxStreak_data;
     private TextView tvVictories_amount, tvSetsWon_amount, tvPointsScored_amount;
     private ProgressBar progressVictories, progressSetsWon, progressAttendance, progressPointsScored;
@@ -64,8 +66,16 @@ public class StatsFragment extends Fragment {
         progressAttendance = view.findViewById(R.id.progressAttendance);
         progressPointsScored = view.findViewById(R.id.progressPointsScored);
 
+        settingsBtn = view.findViewById(R.id.ivSettings);
+
         // Cargar datos del equipo
         loadTeamStats();
+
+        settingsBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), TeamSettingsActivity.class);
+            intent.putExtra("teamId", teamId);
+            startActivity(intent);
+        });
 
         return view;
     }
