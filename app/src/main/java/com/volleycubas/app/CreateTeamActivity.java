@@ -214,6 +214,60 @@ public class CreateTeamActivity extends AppCompatActivity {
         return Uri.parse(path);
     }
 
+    private Bitmap resizeAndCompressImage(Uri imageUri) throws IOException {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        // Leer dimensiones iniciales
+        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+        Bitmap originalBitmap = BitmapFactory.decodeStream(inputStream);
+        inputStream.close();
+
+        // Recortar la imagen al cuadrado
+        int width = originalBitmap.getWidth();
+        int height = originalBitmap.getHeight();
+        int newDimension = Math.min(width, height); // Selecciona el lado más corto
+        int xOffset = (width - newDimension) / 2;
+        int yOffset = (height - newDimension) / 2;
+
+        Bitmap croppedBitmap = Bitmap.createBitmap(originalBitmap, xOffset, yOffset, newDimension, newDimension);
+
+        // Redimensionar la imagen recortada
+        options.inJustDecodeBounds = false;
+        int maxWidth = 1024;
+        int maxHeight = 1024;
+
+        int originalWidth = croppedBitmap.getWidth();
+        int originalHeight = croppedBitmap.getHeight();
+
+        int inSampleSize = 1;
+
+        if (originalHeight > maxHeight || originalWidth > maxWidth) {
+            final int halfHeight = originalHeight / 2;
+            final int halfWidth = originalWidth / 2;
+
+            while ((halfHeight / inSampleSize) > maxHeight && (halfWidth / inSampleSize) > maxWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        // Escalar la imagen al tamaño deseado
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(croppedBitmap, maxWidth, maxHeight, true);
+
+        // Comprimir la imagen si supera 1 MB
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int quality = 100; // Comenzar con máxima calidad
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+
+        while (baos.toByteArray().length > 1_000_000 && quality > 5) {
+            baos.reset();
+            quality -= 5; // Reducir calidad en 5%
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        }
+
+        return resizedBitmap;
+    }
+
     private void uploadImageToFirebase(String teamId, byte[] imageData, OnCompleteListener<Uri> onCompleteListener) {
         if (imageData == null) {
             TaskCompletionSource<Uri> taskCompletionSource = new TaskCompletionSource<>();
@@ -232,7 +286,6 @@ public class CreateTeamActivity extends AppCompatActivity {
             return storageRef.getDownloadUrl();
         }).addOnCompleteListener(onCompleteListener);
     }
-
 
     private void createTeam() {
         String teamName = teamNameEditText.getText().toString().trim();
@@ -351,59 +404,6 @@ public class CreateTeamActivity extends AppCompatActivity {
         loadingText.setText(message);
     }
 
-    private Bitmap resizeAndCompressImage(Uri imageUri) throws IOException {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-
-        // Leer dimensiones iniciales
-        InputStream inputStream = getContentResolver().openInputStream(imageUri);
-        Bitmap originalBitmap = BitmapFactory.decodeStream(inputStream);
-        inputStream.close();
-
-        // Recortar la imagen al cuadrado
-        int width = originalBitmap.getWidth();
-        int height = originalBitmap.getHeight();
-        int newDimension = Math.min(width, height); // Selecciona el lado más corto
-        int xOffset = (width - newDimension) / 2;
-        int yOffset = (height - newDimension) / 2;
-
-        Bitmap croppedBitmap = Bitmap.createBitmap(originalBitmap, xOffset, yOffset, newDimension, newDimension);
-
-        // Redimensionar la imagen recortada
-        options.inJustDecodeBounds = false;
-        int maxWidth = 1024;
-        int maxHeight = 1024;
-
-        int originalWidth = croppedBitmap.getWidth();
-        int originalHeight = croppedBitmap.getHeight();
-
-        int inSampleSize = 1;
-
-        if (originalHeight > maxHeight || originalWidth > maxWidth) {
-            final int halfHeight = originalHeight / 2;
-            final int halfWidth = originalWidth / 2;
-
-            while ((halfHeight / inSampleSize) > maxHeight && (halfWidth / inSampleSize) > maxWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        // Escalar la imagen al tamaño deseado
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(croppedBitmap, maxWidth, maxHeight, true);
-
-        // Comprimir la imagen si supera 1 MB
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int quality = 100; // Comenzar con máxima calidad
-        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-
-        while (baos.toByteArray().length > 1_000_000 && quality > 5) {
-            baos.reset();
-            quality -= 5; // Reducir calidad en 5%
-            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-        }
-
-        return resizedBitmap;
-    }
 
     private String getTrainerId() {
         // Devuelve el UID del usuario autenticado actualmente

@@ -1,20 +1,42 @@
 package com.volleycubas.app;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import org.apache.poi.ss.usermodel.*;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,13 +47,26 @@ import java.util.concurrent.Executors;
 
 public class TeamSettingsActivity extends AppCompatActivity {
 
+    private static final String TAG = "TeamSettingsActivity";
+    private static final int REQUEST_CODE_SELECT_IMAGE = 1;
     private String teamId;
+
+    private Button changeTeamImageButton;
+    private Button changeTeamNameButton;
+    private Button changeLeagueButton;
+    private Button changeCaptainButton;
+    private Button changeCoachButton;
+    private Button changeCreationSeasonButton;
     private Button exportTeamDataButton;
+    private Button shareTeamCodeButton;
+
+    private Team team = new Team();
+    private ArrayList<String> nombresJugadores = new ArrayList<>();
+
     private FirebaseFirestore db;
     private boolean isWorkbookSaved = false;
 
-
-    private ExecutorService executorService = Executors.newSingleThreadExecutor(); // Hilo único para sincronizar tareas
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onDestroy() {
@@ -59,8 +94,349 @@ public class TeamSettingsActivity extends AppCompatActivity {
             }
         }
 
+        changeTeamImageButton = findViewById(R.id.change_team_image_button);
+        changeTeamNameButton = findViewById(R.id.change_team_name_button);
+        changeLeagueButton = findViewById(R.id.change_league_button);
+        changeCaptainButton = findViewById(R.id.change_captain_button);
+        changeCoachButton = findViewById(R.id.change_coach_button);
+        changeCreationSeasonButton = findViewById(R.id.change_creation_season_button);
         exportTeamDataButton = findViewById(R.id.export_team_data_button);
+        shareTeamCodeButton = findViewById(R.id.share_team_code_button);
+
+        loadTeamData(teamId);
+
+
+        changeTeamImageButton.setOnClickListener(v -> seleccionarImagen());
+
+        changeTeamNameButton.setOnClickListener(v -> {
+            showEditDialog("Cambiar Nombre del Equipo", team.getNombre(), newValue -> {
+                team.setNombre(newValue);
+                updateTeamData("nombre", newValue); // Actualiza en Firebase
+            });
+        });
+
+        changeLeagueButton.setOnClickListener(v -> {
+            showEditDialog("Cambiar Liga", team.getLiga(), newValue -> {
+                team.setLiga(newValue);
+                updateTeamData("liga", newValue); // Actualiza en Firebase
+            });
+        });
+
+        changeCaptainButton.setOnClickListener(v -> {
+            showPlayerSelectionDialog(nombresJugadores);
+        });
+
+        changeCoachButton.setOnClickListener(v -> {
+            if (team.getEntrenadores() == null) {
+                team.setEntrenadores(new ArrayList<>()); // Inicializar si está vacío
+            }
+
+            // Mostrar el diálogo para gestionar entrenadores
+            showManageCoachesDialog();
+        });
+
+        changeCreationSeasonButton.setOnClickListener(v -> {
+            showEditDialog("Cambiar Temporada de Creación", team.getTemporada_creacion(), newValue -> {
+                team.setTemporada_creacion(newValue);
+                updateTeamData("temporada_creacion", newValue); // Actualiza en Firebase
+            });
+        });
+
         exportTeamDataButton.setOnClickListener(v -> exportTeamAndAsistances());
+
+        shareTeamCodeButton.setOnClickListener(v -> {
+            // Texto predeterminado que incluirá el teamId
+            String mensaje = "\uD83C\uDF89 ¡Únete a mi equipo en VolleyCubasApp! \uD83C\uDFD0\n\uD83D\uDC49 Código de equipo: ⚡️" + teamId + "⚡️\n";
+
+            // Crear un Intent para compartir
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, mensaje);
+
+            // Iniciar el selector de aplicaciones para compartir
+            startActivity(Intent.createChooser(intent, "Compartir código del equipo"));
+        });
+    }
+
+    private void loadTeamData(String teamId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference teamRef = db.collection("equipos").document(teamId);
+
+        teamRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.d(TAG, "Datos del equipo: " + document.getData());
+
+                    // Crear el objeto Team con los datos descargados
+                    team = document.toObject(Team.class);
+
+                    // Obtener la lista de jugadores desde el documento
+                    List<Map<String, Object>> jugadoresFirestore = (List<Map<String, Object>>) document.get("jugadores");
+                    if (jugadoresFirestore != null) {
+                        for (Map<String, Object> jugadorMap : jugadoresFirestore) {
+                            String nombre = (String) jugadorMap.get("nombre");
+                            if (nombre != null) {
+                                nombresJugadores.add(nombre);
+                            }
+                        }
+                    }
+
+                    Log.d(TAG, "Nombres de jugadores cargados: " + nombresJugadores);
+                } else {
+                    Log.d(TAG, "No se encontró el documento");
+                }
+            } else {
+                Log.e(TAG, "Error obteniendo documento", task.getException());
+            }
+        });
+    }
+
+    private void showEditDialog(String title, String currentValue, OnDataChangedListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+
+        // Crear un EditText para mostrar/modificar el valor actual
+        final EditText input = new EditText(this);
+        input.setText(currentValue);
+        input.setSelection(currentValue.length()); // Coloca el cursor al final
+        builder.setView(input);
+
+        // Botón para confirmar los cambios
+        builder.setPositiveButton("Guardar", (dialog, which) -> {
+            String newValue = input.getText().toString().trim();
+            if (!newValue.isEmpty()) {
+                listener.onDataChanged(newValue);
+            } else {
+                Toast.makeText(this, "El valor no puede estar vacío", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Botón para cancelar
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+        // Mostrar el diálogo
+        builder.show();
+    }
+
+    private void showPlayerSelectionDialog(ArrayList<String> nombresJugadores) {
+        if (nombresJugadores.isEmpty()) {
+            Toast.makeText(this, "No hay jugadores disponibles", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] jugadoresArray = nombresJugadores.toArray(new String[0]);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Seleccionar Capitán");
+        builder.setItems(jugadoresArray, (dialog, which) -> {
+            String seleccionado = jugadoresArray[which];
+            showConfirmationDialog("Cambiar Capitán", "¿Estás seguro de que deseas cambiar el capitán a " + seleccionado + "?", () -> {
+                // Aquí puedes actualizar el capitán en Firebase o el objeto local
+                updateTeamData("capitan", seleccionado);
+                Toast.makeText(this, "El capitán ha sido cambiado a: " + seleccionado, Toast.LENGTH_SHORT).show();
+            });
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    private void showConfirmationDialog(String title, String message, Runnable onConfirm) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        builder.setPositiveButton("Confirmar", (dialog, which) -> onConfirm.run());
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+        builder.show();
+    }
+
+    private void updateTeamData(String field, Object newValue) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("equipos").document(teamId)
+                .update(field, newValue)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error actualizando los datos", e);
+                    Toast.makeText(this, "Error al actualizar los datos", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void showManageCoachesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Gestionar Entrenadores");
+
+        // Crear una copia de la lista de entrenadores para manipular localmente
+        List<String> entrenadoresTemp = new ArrayList<>(team.getEntrenadores());
+
+        // Crear un layout dinámico para la lista de entrenadores
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        // Añadir entrenadores actuales con opción de eliminación
+        for (int i = 0; i < entrenadoresTemp.size(); i++) {
+            String entrenador = entrenadoresTemp.get(i);
+
+            LinearLayout entrenadorLayout = new LinearLayout(this);
+            entrenadorLayout.setOrientation(LinearLayout.HORIZONTAL);
+            entrenadorLayout.setPadding(10, 10, 10, 10);
+
+            TextView entrenadorText = new TextView(this);
+            entrenadorText.setText(entrenador);
+            entrenadorText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            entrenadorLayout.addView(entrenadorText);
+
+            Button deleteButton = new Button(this);
+            deleteButton.setText("-");
+            deleteButton.setOnClickListener(v -> {
+                entrenadoresTemp.remove(entrenador);
+                layout.removeView(entrenadorLayout); // Eliminar el entrenador visualmente
+                Toast.makeText(this, entrenador + " eliminado", Toast.LENGTH_SHORT).show();
+            });
+            entrenadorLayout.addView(deleteButton);
+
+            layout.addView(entrenadorLayout);
+        }
+
+        // Botón para añadir un nuevo entrenador
+        Button addButton = new Button(this);
+        addButton.setText("+ Añadir Entrenador");
+        addButton.setOnClickListener(v -> showAddCoachDialog(entrenadoresTemp, layout));
+        layout.addView(addButton);
+
+        // Mostrar el diálogo
+        builder.setView(layout);
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            // Guardar los cambios en Firebase y actualizar el objeto `team`
+            team.setEntrenadores(entrenadoresTemp);
+            updateTeamData("entrenadores", entrenadoresTemp);
+            Toast.makeText(this, "Cambios guardados correctamente", Toast.LENGTH_SHORT).show();
+        });
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    private void showAddCoachDialog(List<String> entrenadoresTemp, LinearLayout layout) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Añadir Entrenador");
+
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        builder.setPositiveButton("Añadir", (dialog, which) -> {
+            String nuevoEntrenador = input.getText().toString().trim();
+            if (!nuevoEntrenador.isEmpty()) {
+                entrenadoresTemp.add(nuevoEntrenador);
+
+                // Añadir visualmente el nuevo entrenador
+                LinearLayout entrenadorLayout = new LinearLayout(this);
+                entrenadorLayout.setOrientation(LinearLayout.HORIZONTAL);
+                entrenadorLayout.setPadding(10, 10, 10, 10);
+
+                TextView entrenadorText = new TextView(this);
+                entrenadorText.setText(nuevoEntrenador);
+                entrenadorText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                entrenadorLayout.addView(entrenadorText);
+
+                Button deleteButton = new Button(this);
+                deleteButton.setText("-");
+                deleteButton.setOnClickListener(v1 -> {
+                    entrenadoresTemp.remove(nuevoEntrenador);
+                    layout.removeView(entrenadorLayout);
+                    Toast.makeText(this, nuevoEntrenador + " eliminado", Toast.LENGTH_SHORT).show();
+                });
+                entrenadorLayout.addView(deleteButton);
+
+                layout.addView(entrenadorLayout, layout.getChildCount() - 1); // Añadir antes del botón +
+            } else {
+                Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    private void seleccionarImagen() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK && data != null) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap resizedBitmap = resizeAndCompressImage(imageUri);
+
+                // Convertir a byte array para subirla
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageData = baos.toByteArray();
+
+                // Subir la imagen redimensionada a Firebase
+                uploadImageToFirebase(teamId, imageData, task -> {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        updateTeamData("url_imagen", downloadUri.toString());
+                        Toast.makeText(this, "Imagen actualizada correctamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (IOException e) {
+                Log.e("TeamSettingsActivity", "Error al cargar imagen", e);
+                Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private Bitmap resizeAndCompressImage(Uri imageUri) throws IOException {
+        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+        Bitmap originalBitmap = BitmapFactory.decodeStream(inputStream);
+        inputStream.close();
+
+        // Recortar la imagen al cuadrado
+        int width = originalBitmap.getWidth();
+        int height = originalBitmap.getHeight();
+        int newDimension = Math.min(width, height);
+        int xOffset = (width - newDimension) / 2;
+        int yOffset = (height - newDimension) / 2;
+
+        Bitmap croppedBitmap = Bitmap.createBitmap(originalBitmap, xOffset, yOffset, newDimension, newDimension);
+
+        // Redimensionar la imagen recortada
+        return Bitmap.createScaledBitmap(croppedBitmap, 1000, 1000, true);
+    }
+
+    private void uploadImageToFirebase(String teamId, byte[] imageData, OnCompleteListener<Uri> onCompleteListener) {
+        if (imageData == null) {
+            TaskCompletionSource<Uri> taskCompletionSource = new TaskCompletionSource<>();
+            taskCompletionSource.setResult(null);
+            taskCompletionSource.getTask().addOnCompleteListener(onCompleteListener);
+            return;
+        }
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("teams/" + teamId + "/team_image.jpg");
+
+        UploadTask uploadTask = storageRef.putBytes(imageData);
+        uploadTask.continueWithTask(task -> {
+            if (!task.isSuccessful()) {
+                throw task.getException();
+            }
+            return storageRef.getDownloadUrl();
+        }).addOnCompleteListener(onCompleteListener);
+    }
+
+
+    private interface OnDataChangedListener {
+        void onDataChanged(String newValue);
     }
 
     private void exportTeamAndAsistances() {

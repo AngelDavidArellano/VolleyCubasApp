@@ -70,7 +70,6 @@ public class PartidoEnCursoFragment extends Fragment {
 
     private ArrayList<Accion> historialAcciones = new ArrayList<>();
 
-
     public static PartidoEnCursoFragment newInstance(String teamId, Partido partido) {
         PartidoEnCursoFragment fragment = new PartidoEnCursoFragment();
         Bundle args = new Bundle();
@@ -482,8 +481,6 @@ public class PartidoEnCursoFragment extends Fragment {
         editor.apply();
     }
 
-
-
     private void mostrarSeleccionJugador(TextView numeroJugadorView, TextView nombreJugadorView) {
         if (jugadoresList.isEmpty()) {
             Log.d("mostrarSeleccionJugador", "No hay jugadores disponibles en la lista.");
@@ -718,7 +715,6 @@ public class PartidoEnCursoFragment extends Fragment {
                     Log.e("cargarJugadores", "Error al cargar jugadores: " + e.getMessage());
                 });
     }
-
 
     private void cargarPartidoDesdeFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
