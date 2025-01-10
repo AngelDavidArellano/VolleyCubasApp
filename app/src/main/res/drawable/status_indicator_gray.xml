@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fondo dorado -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/gray_status" />
+            <stroke android:width="5dp" />
+            <stroke android:color="@color/light_gray_status" />
+        </shape>
+    </item>
+
+
+</layer-list>

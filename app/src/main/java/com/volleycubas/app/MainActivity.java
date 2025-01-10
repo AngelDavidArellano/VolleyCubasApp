@@ -95,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("teamId", 000000);
             startActivity(intent);
         });
+
+        CardView cardHorarios = findViewById(R.id.card_horarios);
+        cardHorarios.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, NextGamesActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override

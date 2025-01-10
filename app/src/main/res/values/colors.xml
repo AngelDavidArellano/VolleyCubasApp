@@ -19,6 +19,14 @@
     <color name="yellow">#D5BE33</color>
     <color name="purple">#7F23A1</color>
 
+    <!-- Colores statu partidos -->
+    <color name="gray_status">#676767</color>
+    <color name="light_gray_status">#AAAAAA</color>
+    <color name="red_status">#E64A4A</color>
+    <color name="light_red_status">#C19191</color>
+    <color name="green_status">#54E64A</color>
+    <color name="light_green_status">#91C192</color>
+
     <!-- Colores textos -->
     <color name="dark_principal_text">#000000</color>
     <color name="dark_secondary_text">#666666</color>
