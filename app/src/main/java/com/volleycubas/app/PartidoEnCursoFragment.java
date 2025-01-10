@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.FieldValue;
@@ -140,10 +139,6 @@ public class PartidoEnCursoFragment extends Fragment {
             cargarNombreEquipoDesdeFirestore();
             cargarJugadoresDesdeFirestore();
             cargarPartidoDesdeFirestore();
-        }
-
-        if (!esSaqueConfigurado()) {
-            mostrarDialogoInicioSet();
         }
 
         // Configurar clic en el marcador del equipo A
@@ -455,9 +450,9 @@ public class PartidoEnCursoFragment extends Fragment {
     private void actualizarIndicadorSaque() {
         if (posesionSaque) {
             posesionTeamA.setColorFilter(getResources().getColor(R.color.white));
-            posesionTeamB.setColorFilter(getResources().getColor(R.color.grey));
+            posesionTeamB.setColorFilter(getResources().getColor(R.color.dark_grey));
         } else {
-            posesionTeamA.setColorFilter(getResources().getColor(R.color.grey));
+            posesionTeamA.setColorFilter(getResources().getColor(R.color.dark_grey));
             posesionTeamB.setColorFilter(getResources().getColor(R.color.white));
         }
     }
@@ -673,6 +668,9 @@ public class PartidoEnCursoFragment extends Fragment {
                     if (documentSnapshot.exists()) {
                         // Cargar el nombre del equipo propio directamente del campo "nombre"
                         teamName = documentSnapshot.getString("nombre");
+                        if (!esSaqueConfigurado()) {
+                            mostrarDialogoInicioSet();
+                        }
                         Log.d("PartidoEnCursoFragment", "Nombre recuperado: " + teamName);
                         if (teamName != null) {
                             nameTeamA.setText(teamName);

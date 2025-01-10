@@ -39,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +124,11 @@ public class TeamSettingsActivity extends AppCompatActivity {
         });
 
         changeCaptainButton.setOnClickListener(v -> {
-            showPlayerSelectionDialog(nombresJugadores);
+            if (team.getJugadores() == null || team.getJugadores().isEmpty()) {
+                Toast.makeText(this, "No hay jugadores disponibles. Añade jugadores antes de elegir un capitán.", Toast.LENGTH_SHORT).show();
+            } else {
+                showPlayerSelectionDialog(nombresJugadores);
+            }
         });
 
         changeCoachButton.setOnClickListener(v -> {
@@ -168,10 +173,13 @@ public class TeamSettingsActivity extends AppCompatActivity {
                 if (document.exists()) {
                     Log.d(TAG, "Datos del equipo: " + document.getData());
 
-                    // Crear el objeto Team con los datos descargados
-                    team = document.toObject(Team.class);
+                    // Validar y asignar valores con predeterminados
+                    String teamName = document.getString("nombre") != null ? document.getString("nombre") : "Nombre no disponible";
+                    String temporada_creacion = document.getString("temporada_creacion") != null ? document.getString("temporada_creacion") : "Temporada no definida";
+                    String league = document.getString("liga") != null ? document.getString("liga") : "Liga no definida";
+                    String captain = document.getString("capitan") != null ? document.getString("capitan") : "Sin capitán asignado";
 
-                    // Obtener la lista de jugadores desde el documento
+                    // Manejar lista de jugadores
                     List<Map<String, Object>> jugadoresFirestore = (List<Map<String, Object>>) document.get("jugadores");
                     if (jugadoresFirestore != null) {
                         for (Map<String, Object> jugadorMap : jugadoresFirestore) {
@@ -182,15 +190,23 @@ public class TeamSettingsActivity extends AppCompatActivity {
                         }
                     }
 
-                    Log.d(TAG, "Nombres de jugadores cargados: " + nombresJugadores);
+                    // Asignar valores al objeto `team`
+                    team.setNombre(teamName);
+                    team.setTemporada_creacion(temporada_creacion);
+                    team.setLiga(league);
+                    team.setCapitan(captain);
+                    team.setJugadores(Collections.singletonList(nombresJugadores));
+
+                    Log.d(TAG, "Datos procesados: " + team);
                 } else {
-                    Log.d(TAG, "No se encontró el documento");
+                    Log.w(TAG, "No se encontró el documento en Firestore");
                 }
             } else {
                 Log.e(TAG, "Error obteniendo documento", task.getException());
             }
         });
     }
+
 
     private void showEditDialog(String title, String currentValue, OnDataChangedListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -199,7 +215,9 @@ public class TeamSettingsActivity extends AppCompatActivity {
         // Crear un EditText para mostrar/modificar el valor actual
         final EditText input = new EditText(this);
         input.setText(currentValue);
-        input.setSelection(currentValue.length()); // Coloca el cursor al final
+        if (currentValue.length() != 0) {
+            input.setSelection(currentValue.length()); // Coloca el cursor al final
+        }
         builder.setView(input);
 
         // Botón para confirmar los cambios

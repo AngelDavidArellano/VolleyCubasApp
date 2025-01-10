@@ -152,7 +152,7 @@ public class CreateTeamActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
@@ -180,6 +180,10 @@ public class CreateTeamActivity extends AppCompatActivity {
                 Log.e("CreateTeamActivity", "Error al cargar imagen", e);
                 Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show();
+            // Opcional: establecer una imagen por defecto
+            teamImageView.setImageResource(R.drawable.ic_image_placeholder);
         }
     }
 
@@ -295,6 +299,11 @@ public class CreateTeamActivity extends AppCompatActivity {
             return;
         }
 
+        if (imageUri == null) {
+            Toast.makeText(this, "Por favor, selecciona una imagen para el equipo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Generar código único de seis caracteres (100000 a 999999)
         int uniqueCode = 100000 + (int) (Math.random() * 900000);
         String teamCode = String.valueOf(uniqueCode);
@@ -377,7 +386,8 @@ public class CreateTeamActivity extends AppCompatActivity {
                                     Toast.makeText(this, "Error al crear el equipo", Toast.LENGTH_SHORT).show();
                                 });
                             });
-                });
+                    });
+
             } catch (IOException e) {
                 Log.e("CreateTeamActivity", "Error al procesar la imagen", e);
                 runOnUiThread(() -> {

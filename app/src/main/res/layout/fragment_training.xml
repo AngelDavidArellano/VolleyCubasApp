@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@color/card_bg"
+        app:cardBackgroundColor="@color/components_bg"
         app:layout_constraintTop_toBottomOf="@id/tvTitleNextGame"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -185,7 +185,7 @@
                     android:layout_columnWeight="1"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/card_bg">
+                    app:cardBackgroundColor="@color/components_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -232,7 +232,7 @@
                     android:layout_columnWeight="1"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/card_bg">
+                    app:cardBackgroundColor="@color/components_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -280,7 +280,7 @@
                     android:layout_columnWeight="1"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/card_bg">
+                    app:cardBackgroundColor="@color/components_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -328,7 +328,7 @@
                     android:layout_columnWeight="1"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/card_bg">
+                    app:cardBackgroundColor="@color/components_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -374,7 +374,7 @@
                     android:layout_columnWeight="1"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/card_bg">
+                    app:cardBackgroundColor="@color/components_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"

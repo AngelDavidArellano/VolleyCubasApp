@@ -91,22 +91,32 @@ public class StatsFragment extends Fragment {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         // Estadísticas
-                        int setsAFavor = documentSnapshot.getLong("sets_a_favor").intValue();
-                        int setsTotales = documentSnapshot.getLong("sets_totales").intValue();
-                        int puntosAFavor = documentSnapshot.getLong("puntos_a_favor").intValue();
-                        int puntosTotales = documentSnapshot.getLong("puntos_totales").intValue();
-                        int mejorRacha = documentSnapshot.getLong("mejor_racha").intValue();
-                        String mejorRachaData = documentSnapshot.getString("rival_fecha_mejor_racha");
-                        int partidosJugados = documentSnapshot.getLong("partidos_jugados").intValue();
-                        int partidosGanados = documentSnapshot.getLong("partidos_ganados").intValue();
+                        int setsAFavor = documentSnapshot.contains("sets_a_favor") ?
+                                documentSnapshot.getLong("sets_a_favor").intValue() : 0;
+                        int setsTotales = documentSnapshot.contains("sets_totales") ?
+                                documentSnapshot.getLong("sets_totales").intValue() : 0;
+                        int puntosAFavor = documentSnapshot.contains("puntos_a_favor") ?
+                                documentSnapshot.getLong("puntos_a_favor").intValue() : 0;
+                        int puntosTotales = documentSnapshot.contains("puntos_totales") ?
+                                documentSnapshot.getLong("puntos_totales").intValue() : 0;
+                        int mejorRacha = documentSnapshot.contains("mejor_racha") ?
+                                documentSnapshot.getLong("mejor_racha").intValue() : 0;
+                        String mejorRachaData = documentSnapshot.contains("rival_fecha_mejor_racha") ?
+                                documentSnapshot.getString("rival_fecha_mejor_racha") : "";
+                        int partidosJugados = documentSnapshot.contains("partidos_jugados") ?
+                                documentSnapshot.getLong("partidos_jugados").intValue() : 0;
+                        int partidosGanados = documentSnapshot.contains("partidos_ganados") ?
+                                documentSnapshot.getLong("partidos_ganados").intValue() : 0;
 
                         // Datos del card
-                        String nombre = documentSnapshot.getString("nombre");
-                        String capitan = documentSnapshot.getString("capitan");
-                        String liga = documentSnapshot.getString("liga");
-                        int numeroJugadores = documentSnapshot.getLong("numero_jugadores").intValue();
-                        String temporadaCreacion = documentSnapshot.getString("temporada_creacion");
-                        String urlImagen = documentSnapshot.getString("url_imagen");
+                        String nombre = documentSnapshot.contains("nombre") ? documentSnapshot.getString("nombre") : "";
+                        String capitan = documentSnapshot.contains("capitan") ? documentSnapshot.getString("capitan") : "";
+                        String liga = documentSnapshot.contains("liga") ? documentSnapshot.getString("liga") : "";
+                        int numeroJugadores = documentSnapshot.contains("numero_jugadores") ?
+                                documentSnapshot.getLong("numero_jugadores").intValue() : 0;
+                        String temporadaCreacion = documentSnapshot.contains("temporada_creacion") ?
+                                documentSnapshot.getString("temporada_creacion") : "";
+                        String urlImagen = documentSnapshot.contains("url_imagen") ? documentSnapshot.getString("url_imagen") : "";
 
                         String entrenador = "Sin entrenador";
                         if (documentSnapshot.contains("entrenadores")) {
@@ -142,14 +152,13 @@ public class StatsFragment extends Fragment {
 
         db.collection("registros").document(teamId).get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    double porcentajeAcumulado = documentSnapshot.getDouble("porcentaje_acumulado");
+                    double porcentajeAcumulado = documentSnapshot.contains("porcentaje_acumulado") ?
+                            documentSnapshot.getDouble("porcentaje_acumulado") : 0.0;
                     tvAttendancePercentage.setText(String.format("%.1f", porcentajeAcumulado));
-
-                    Log.d("porcentajeAcumulado", String.valueOf(porcentajeAcumulado));
-
                     progressAttendance.setProgress((int) porcentajeAcumulado);
                 }).addOnFailureListener(e -> Log.e("StatsFragment", "Error al cargar porcentaje de asistencias del equipo.", e));
     }
+
 
     private void updateTeamCard(String nombre, String capitan, String liga, int numeroJugadores, String entrenador, String temporadaCreacion, String urlImagen) {
         Log.d("StatsFragment", "Intentando cargar team_card...");

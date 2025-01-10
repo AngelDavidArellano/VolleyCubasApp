@@ -1,6 +1,7 @@
 package com.volleycubas.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,8 +85,16 @@ public class MainActivity extends AppCompatActivity {
         cargarAnuncioPrincipal();
         isDataLoaded = true;
 
-        // Botón flotante para crear o unirse a un equipo
+        // Botón para crear o unirse a un equipo
         findViewById(R.id.fabAddTeam).setOnClickListener(v -> mostrarOpcionesEquipo());
+
+        CardView cardGenerateTeams = findViewById(R.id.card_crear_equipos);
+        cardGenerateTeams.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, GenerateTeamsActivity.class);
+            intent.putParcelableArrayListExtra("jugadores", new ArrayList<>());
+            intent.putExtra("teamId", 000000);
+            startActivity(intent);
+        });
     }
 
     @Override

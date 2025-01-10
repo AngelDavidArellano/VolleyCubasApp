@@ -5,12 +5,14 @@
         android:id="@+id/navigation_players"
         android:icon="@drawable/ic_players"
         android:title="Jugadores"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        app:iconTint="@color/icon_selector"/>
     <item
         android:id="@+id/navigation_history"
         android:icon="@drawable/ic_history"
         android:title="Historial"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        app:iconTint="@color/icon_selector"/>
     <item
         android:id="@+id/navigation_start_match"
         android:title="Comenzar"
@@ -20,10 +22,11 @@
         android:icon="@drawable/ic_whistle"
         android:title="Alineaciones"
         app:showAsAction="ifRoom"
-        />
+        app:iconTint="@color/icon_selector"/>
     <item
         android:id="@+id/navigation_preparation"
         android:icon="@drawable/ic_team_info"
         android:title="Preparación"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        app:iconTint="@color/icon_selector"/>
 </menu>

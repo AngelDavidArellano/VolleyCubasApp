@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5 - 1"
-        android:textColor="@color/white"
+        android:textColor="@color/light_principal_text"
         android:textSize="24sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Creador/a: Carlos"
-        android:textColor="@color/white"
+        android:textColor="@color/light_secondary_text"
         android:textSize="16sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,15 +61,6 @@
 
 
     <ImageView
-        android:id="@+id/saveButton"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/ic_save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvLineupName"
-        android:layout_marginTop="8dp" />
-
-    <ImageView
         android:id="@+id/copyCodeButton"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -79,7 +70,7 @@
         app:layout_constraintTop_toTopOf="@id/tvLineupName"
         app:layout_constraintBottom_toBottomOf="@id/tvLineupName"
         android:layout_marginStart="20dp"
-        app:tint="@color/white" />
+        app:tint="@color/light_icons_color" />
 
     <ImageView
         android:id="@+id/addRotationButton"
@@ -91,6 +82,16 @@
         app:layout_constraintTop_toBottomOf="@id/tvLineupName"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        app:tint="@color/white" />
+        app:tint="@color/light_icons_color" />
+
+    <ImageView
+        android:id="@+id/saveButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/ic_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvLineupName"
+        android:layout_marginTop="8dp"
+        app:tint="@color/light_icons_color" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

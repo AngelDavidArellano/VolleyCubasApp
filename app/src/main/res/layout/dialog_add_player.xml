@@ -9,29 +9,44 @@
         android:id="@+id/playerNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/dark_principal_text"
+        android:textColorHint="@color/dark_secondary_text"
+        android:backgroundTint="@color/dark_principal_text"
         android:hint="Nombre del jugador" />
 
     <EditText
         android:id="@+id/playerPositionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/dark_principal_text"
+        android:textColorHint="@color/dark_secondary_text"
+        android:backgroundTint="@color/dark_principal_text"
         android:hint="Posición" />
 
     <EditText
         android:id="@+id/playerNumberEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/dark_principal_text"
+        android:textColorHint="@color/dark_secondary_text"
+        android:backgroundTint="@color/dark_principal_text"
+        android:inputType="number"
         android:hint="Número" />
 
     <EditText
         android:id="@+id/playerNotesEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/dark_principal_text"
+        android:textColorHint="@color/dark_secondary_text"
+        android:backgroundTint="@color/dark_principal_text"
         android:hint="Notas" />
 
     <Button
         android:id="@+id/addPlayerButtonDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/gold"
+        android:textColor="@color/dark_principal_text"
         android:text="Añadir Jugador" />
 </LinearLayout>

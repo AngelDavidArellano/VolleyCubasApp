@@ -23,11 +23,11 @@
         android:layout_height="wrap_content"
         android:text="Generar equipos"
         android:textSize="24sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/light_principal_text"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"/>
 
     <TextView
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nº Equipos"
-        android:textColor="@color/white"
+        android:textColor="@color/light_secondary_text"
         android:textSize="20sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toBottomOf="@id/tvHeader"
@@ -56,7 +56,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_remove_square"
-            app:tint="@color/white"
+            app:tint="@color/light_icons_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:text="2"
             android:textSize="35sp"
-            android:textColor="@color/white"
+            android:textColor="@color/light_secondary_text"
             android:gravity="center"
             android:fontFamily="@font/tripsans"
             app:layout_constraintStart_toEndOf="@id/btnDecreaseTeams"
@@ -80,7 +80,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_add_square"
-            app:tint="@color/white"
+            app:tint="@color/light_icons_color"
             app:layout_constraintStart_toEndOf="@id/tvTeamCount"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/gold"
         android:text="Generar equipos"
-        android:textColor="@color/black"
+        android:textColor="@color/dark_principal_text"
         android:fontFamily="@font/tripsans"
         android:paddingVertical="8dp"
         android:paddingHorizontal="16dp"
@@ -105,7 +105,7 @@
         android:id="@+id/line_division1"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#434343"
+        android:background="@color/section_divider"
         app:layout_constraintTop_toBottomOf="@id/teamCountContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Jugadores"
-        android:textColor="@color/white"
+        android:textColor="@color/light_secondary_text"
         android:textSize="20sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toBottomOf="@id/line_division1"
@@ -134,7 +134,32 @@
         app:layout_constraintBottom_toBottomOf="@id/tvPlayers"
         app:layout_constraintStart_toEndOf="@id/tvPlayers"
         android:layout_marginStart="15dp"
-        app:tint="#FFFFFF" />
+        app:tint="@color/light_icons_color" />
+
+    <TextView
+        android:id="@+id/tvNoPlayers"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Añade jugadores pulsando aquí"
+        android:textColor="@color/light_secondary_text"
+        android:textSize="15sp"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/tvPlayers"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="15dp"
+        />
+
+    <ImageView
+        android:id="@+id/ivNoPlayers"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/drawed_arrow"
+        app:layout_constraintBottom_toTopOf="@id/tvNoPlayers"
+        app:layout_constraintTop_toTopOf="@id/tvNoPlayers"
+        android:layout_marginStart="-25dp"
+        app:layout_constraintStart_toEndOf="@id/tvNoPlayers"
+        app:tint="@color/light_icons_color" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlayers"
@@ -152,7 +177,7 @@
         android:id="@+id/line_division2"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#434343"
+        android:background="@color/section_divider"
         app:layout_constraintTop_toBottomOf="@id/rvPlayers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -165,10 +190,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Equipos"
-        android:textColor="@color/white"
+        android:textColor="@color/light_secondary_text"
         android:textSize="20sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toBottomOf="@id/line_division2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        android:id="@+id/tvNoTeams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aquí aparecerán tus equipos"
+        android:textColor="@color/light_secondary_text"
+        android:textSize="15sp"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/tvTeams"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="20dp"
         />
