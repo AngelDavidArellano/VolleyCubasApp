@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Equipo 1"
-        android:textColor="@color/white"
+        android:textColor="@color/light_principal_text"
         android:textSize="18sp"
         android:textStyle="bold"
         android:fontFamily="@font/tripsans"
@@ -24,7 +24,7 @@
     <View
         android:layout_width="75dp"
         android:layout_height="1dp"
-        android:background="@color/white"
+        android:background="@color/light_principal_text"
         app:layout_constraintTop_toBottomOf="@id/tvTeamTitle"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Jugador 1\nJugador 2\nJugador 3"
-        android:textColor="@color/white"
+        android:textColor="@color/light_secondary_text"
         android:textSize="14sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toBottomOf="@id/tvTeamTitle"

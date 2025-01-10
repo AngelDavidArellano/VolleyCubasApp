@@ -21,7 +21,7 @@
             android:fontFamily="@font/tripsans"
             android:text="Partido / Entrenamiento"
             android:textSize="18sp"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/light_principal_text" />
 
         <TextView
             android:id="@+id/tvSummary"
@@ -30,7 +30,7 @@
             android:fontFamily="@font/tripsans"
             android:text="Asistencias"
             android:textSize="14sp"
-            android:textColor="#B0B0B0" />
+            android:textColor="@color/light_secondary_text" />
     </LinearLayout>
 
     <ImageView
@@ -38,6 +38,6 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_arrow"
-        app:tint="#FFFFFF" />
+        app:tint="@color/light_icons_color" />
 </LinearLayout>
 

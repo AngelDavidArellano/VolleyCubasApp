@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -57,6 +58,8 @@ public class StartMatchFragment extends Fragment {
         radioGroupSets = view.findViewById(R.id.radioGroupSets);
         btnStartMatch = view.findViewById(R.id.btnStartMatch);
 
+        radioGroupSets.setOnCheckedChangeListener((group, checkedId) -> updateRadioButtonTextColor(group));
+
         // Configurar botón "Comenzar Partido"
         btnStartMatch.setOnClickListener(v -> startMatch());
 
@@ -94,5 +97,20 @@ public class StartMatchFragment extends Fragment {
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Error al guardar partido: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private void updateRadioButtonTextColor(RadioGroup group) {
+        for (int i = 0; i < group.getChildCount(); i++) {
+            View child = group.getChildAt(i);
+            if (child instanceof RadioButton) {
+                RadioButton radioButton = (RadioButton) child;
+                // Comprobar si está seleccionado y aplicar el color correspondiente
+                if (radioButton.isChecked()) {
+                    radioButton.setTextColor(getResources().getColor(R.color.dark_principal_text));
+                } else {
+                    radioButton.setTextColor(getResources().getColor(R.color.light_principal_text));
+                }
+            }
+        }
     }
 }

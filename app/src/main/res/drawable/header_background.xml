@@ -4,7 +4,7 @@
     <!-- Fondo dorado -->
     <item>
         <shape android:shape="oval">
-            <solid android:color="#BD900E" />
+            <solid android:color="@color/gold" />
         </shape>
     </item>
 

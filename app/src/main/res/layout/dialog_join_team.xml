@@ -12,6 +12,9 @@
         android:layout_height="wrap_content"
         android:hint="Ingresa el código del equipo"
         android:inputType="number"
+        android:textColor="@color/dark_principal_text"
+        android:textColorHint="@color/dark_secondary_text"
+        android:backgroundTint="@color/dark_principal_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,6 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Unirse"
+        android:backgroundTint="@color/gold"
+        android:textColor="@color/dark_principal_text"
         app:layout_constraintTop_toBottomOf="@id/codeEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

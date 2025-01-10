@@ -23,11 +23,11 @@
         android:layout_height="wrap_content"
         android:text="Alineaciones"
         android:textSize="24sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/light_principal_text"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"/>
 
     <!-- Botones -->
@@ -36,8 +36,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Crear alineación"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/black"
+        android:backgroundTint="@color/components_bg"
+        android:textColor="@color/dark_principal_text"
         app:layout_constraintTop_toBottomOf="@id/tvHeader"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:text="Usar código"
         android:backgroundTint="@color/gold"
-        android:textColor="@color/black"
+        android:textColor="@color/dark_principal_text"
         app:layout_constraintTop_toBottomOf="@id/tvHeader"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />

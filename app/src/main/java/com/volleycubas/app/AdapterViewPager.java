@@ -87,6 +87,12 @@ public class AdapterViewPager extends FragmentStateAdapter {
     public void setMatchInProgress(boolean isMatchInProgress, Partido partido) {
         this.isMatchInProgress = isMatchInProgress;
         this.partidoActual = partido;
+
+        if (!isMatchInProgress) {
+            Fragment startMatchFragment = StartMatchFragment.newInstance(teamId);
+            replaceFragment(2, startMatchFragment); // 2 es la posición del fragmento
+        }
+
         notifyDataSetChanged();
     }
 

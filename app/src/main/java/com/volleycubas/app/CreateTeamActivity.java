@@ -152,7 +152,7 @@ public class CreateTeamActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
@@ -180,6 +180,10 @@ public class CreateTeamActivity extends AppCompatActivity {
                 Log.e("CreateTeamActivity", "Error al cargar imagen", e);
                 Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show();
+            // Opcional: establecer una imagen por defecto
+            teamImageView.setImageResource(R.drawable.ic_image_placeholder);
         }
     }
 
@@ -212,142 +216,6 @@ public class CreateTeamActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "ResizedImage", null);
         return Uri.parse(path);
-    }
-
-    private void uploadImageToFirebase(String teamId, byte[] imageData, OnCompleteListener<Uri> onCompleteListener) {
-        if (imageData == null) {
-            TaskCompletionSource<Uri> taskCompletionSource = new TaskCompletionSource<>();
-            taskCompletionSource.setResult(null);
-            taskCompletionSource.getTask().addOnCompleteListener(onCompleteListener);
-            return;
-        }
-
-        StorageReference storageRef = storage.getReference().child("teams/" + teamId + "/team_image.jpg");
-
-        UploadTask uploadTask = storageRef.putBytes(imageData);
-        uploadTask.continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                throw task.getException();
-            }
-            return storageRef.getDownloadUrl();
-        }).addOnCompleteListener(onCompleteListener);
-    }
-
-
-    private void createTeam() {
-        String teamName = teamNameEditText.getText().toString().trim();
-
-        if (teamName.isEmpty()) {
-            Toast.makeText(this, "Por favor, ingresa un nombre para el equipo", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Generar código único de seis caracteres (100000 a 999999)
-        int uniqueCode = 100000 + (int) (Math.random() * 900000);
-        String teamCode = String.valueOf(uniqueCode);
-
-        // Obtener el ID del entrenador autenticado
-        String trainerId = getTrainerId();
-
-        if (trainerId == null) {
-            Toast.makeText(this, "Error: No se pudo obtener el ID del entrenador", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String teamId = teamCode; // ID del equipo basado en el código
-
-        // Mostrar el indicador de carga
-        showLoadingIndicator();
-
-        new Thread(() -> {
-            try {
-                // Etapa 1: Recortar y redimensionar la imagen
-                runOnUiThread(() -> updateProgress(0, "Recortando y redimensionando la imagen..."));
-                Bitmap processedBitmap = resizeAndCompressImage(imageUri);
-
-                // Preparar los bytes de la imagen para subir
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                processedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageData = baos.toByteArray();
-
-                runOnUiThread(() -> updateProgress(33, "Preparando para subir la imagen..."));
-
-                // Etapa 2: Subir la imagen
-                uploadImageToFirebase(teamId, imageData, task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        uploadedImageUrl = task.getResult().toString();
-                    } else {
-                        uploadedImageUrl = null; // Usar una imagen por defecto si falla
-                    }
-
-                    runOnUiThread(() -> updateProgress(66, "Guardando los datos del equipo..."));
-
-                    // Etapa 3: Guardar datos del equipo en Firestore
-                    Team team = new Team();
-                    team.setId(teamId);
-                    team.setNombre(teamName);
-                    team.setUrl_imagen(uploadedImageUrl);
-                    team.setMejor_racha(0);
-                    team.setPuntos_a_favor(0);
-                    team.setPuntos_totales(0);
-                    team.setSets_a_favor(0);
-                    team.setSets_totales(0);
-                    team.setPartidos_jugados(0);
-                    team.setPartidos_ganados(0);
-
-                    firestore.collection("equipos").document(teamId)
-                            .set(team)
-                            .addOnSuccessListener(aVoid -> {
-                                firestore.collection("entrenadores").document(trainerId)
-                                        .update("equipos", FieldValue.arrayUnion(teamCode))
-                                        .addOnSuccessListener(aVoid1 -> {
-                                            runOnUiThread(() -> {
-                                                updateProgress(100, "¡Equipo creado con éxito!");
-                                                Toast.makeText(this, "Equipo creado con éxito", Toast.LENGTH_SHORT).show();
-                                                MainActivity.isDataLoaded = false;
-                                                finish();
-                                            });
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.e("CreateTeamActivity", "Error al agregar equipo al entrenador", e);
-                                            runOnUiThread(() -> {
-                                                hideLoadingIndicator();
-                                                Toast.makeText(this, "Error al agregar el equipo al entrenador", Toast.LENGTH_SHORT).show();
-                                            });
-                                        });
-                            })
-                            .addOnFailureListener(e -> {
-                                Log.e("CreateTeamActivity", "Error al crear equipo", e);
-                                runOnUiThread(() -> {
-                                    hideLoadingIndicator();
-                                    Toast.makeText(this, "Error al crear el equipo", Toast.LENGTH_SHORT).show();
-                                });
-                            });
-                });
-            } catch (IOException e) {
-                Log.e("CreateTeamActivity", "Error al procesar la imagen", e);
-                runOnUiThread(() -> {
-                    hideLoadingIndicator();
-                    Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
-                });
-            }
-        }).start();
-    }
-
-    private void updateProgress(int progress, String message) {
-        int currentProgress = loadingBar.getProgress();
-
-        // Animación suave del progreso
-        ValueAnimator animator = ValueAnimator.ofInt(currentProgress, progress);
-        animator.setDuration(500); // Duración de la animación
-        animator.addUpdateListener(animation -> {
-            int animatedValue = (int) animation.getAnimatedValue();
-            loadingBar.setProgress(animatedValue);
-        });
-        animator.start();
-
-        // Actualizar mensaje de progreso
-        loadingText.setText(message);
     }
 
     private Bitmap resizeAndCompressImage(Uri imageUri) throws IOException {
@@ -403,6 +271,149 @@ public class CreateTeamActivity extends AppCompatActivity {
 
         return resizedBitmap;
     }
+
+    private void uploadImageToFirebase(String teamId, byte[] imageData, OnCompleteListener<Uri> onCompleteListener) {
+        if (imageData == null) {
+            TaskCompletionSource<Uri> taskCompletionSource = new TaskCompletionSource<>();
+            taskCompletionSource.setResult(null);
+            taskCompletionSource.getTask().addOnCompleteListener(onCompleteListener);
+            return;
+        }
+
+        StorageReference storageRef = storage.getReference().child("teams/" + teamId + "/team_image.jpg");
+
+        UploadTask uploadTask = storageRef.putBytes(imageData);
+        uploadTask.continueWithTask(task -> {
+            if (!task.isSuccessful()) {
+                throw task.getException();
+            }
+            return storageRef.getDownloadUrl();
+        }).addOnCompleteListener(onCompleteListener);
+    }
+
+    private void createTeam() {
+        String teamName = teamNameEditText.getText().toString().trim();
+
+        if (teamName.isEmpty()) {
+            Toast.makeText(this, "Por favor, ingresa un nombre para el equipo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (imageUri == null) {
+            Toast.makeText(this, "Por favor, selecciona una imagen para el equipo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Generar código único de seis caracteres (100000 a 999999)
+        int uniqueCode = 100000 + (int) (Math.random() * 900000);
+        String teamCode = String.valueOf(uniqueCode);
+
+        // Obtener el ID del entrenador autenticado
+        String trainerId = getTrainerId();
+
+        if (trainerId == null) {
+            Toast.makeText(this, "Error: No se pudo obtener el ID del entrenador", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String teamId = teamCode; // ID del equipo basado en el código
+
+        // Mostrar el indicador de carga
+        showLoadingIndicator();
+
+        new Thread(() -> {
+            try {
+                // Etapa 1: Recortar y redimensionar la imagen
+                runOnUiThread(() -> updateProgress(0, "Recortando y redimensionando la imagen..."));
+                Bitmap processedBitmap = resizeAndCompressImage(imageUri);
+
+                // Preparar los bytes de la imagen para subir
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                processedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageData = baos.toByteArray();
+
+                runOnUiThread(() -> updateProgress(33, "Preparando para subir la imagen..."));
+
+                // Etapa 2: Subir la imagen
+                uploadImageToFirebase(teamId, imageData, task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        uploadedImageUrl = task.getResult().toString();
+                    } else {
+                        uploadedImageUrl = null; // Usar una imagen por defecto si falla
+                    }
+
+                    runOnUiThread(() -> updateProgress(66, "Guardando los datos del equipo..."));
+
+                    // Etapa 3: Guardar datos del equipo en Firestore
+                    Team team = new Team();
+                    team.setId(teamId);
+                    team.setNombre(teamName);
+                    team.setUrl_imagen(uploadedImageUrl);
+                    team.setMejor_racha(0);
+                    team.setPuntos_a_favor(0);
+                    team.setPuntos_totales(0);
+                    team.setSets_a_favor(0);
+                    team.setSets_totales(0);
+                    team.setPartidos_jugados(0);
+                    team.setPartidos_ganados(0);
+                    team.setRival_fecha_mejor_racha("No hay registros");
+
+                    firestore.collection("equipos").document(teamId)
+                            .set(team)
+                            .addOnSuccessListener(aVoid -> {
+                                firestore.collection("entrenadores").document(trainerId)
+                                        .update("equipos", FieldValue.arrayUnion(teamCode))
+                                        .addOnSuccessListener(aVoid1 -> {
+                                            runOnUiThread(() -> {
+                                                updateProgress(100, "¡Equipo creado con éxito!");
+                                                Toast.makeText(this, "Equipo creado con éxito", Toast.LENGTH_SHORT).show();
+                                                MainActivity.isDataLoaded = false;
+                                                finish();
+                                            });
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("CreateTeamActivity", "Error al agregar equipo al entrenador", e);
+                                            runOnUiThread(() -> {
+                                                hideLoadingIndicator();
+                                                Toast.makeText(this, "Error al agregar el equipo al entrenador", Toast.LENGTH_SHORT).show();
+                                            });
+                                        });
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("CreateTeamActivity", "Error al crear equipo", e);
+                                runOnUiThread(() -> {
+                                    hideLoadingIndicator();
+                                    Toast.makeText(this, "Error al crear el equipo", Toast.LENGTH_SHORT).show();
+                                });
+                            });
+                    });
+
+            } catch (IOException e) {
+                Log.e("CreateTeamActivity", "Error al procesar la imagen", e);
+                runOnUiThread(() -> {
+                    hideLoadingIndicator();
+                    Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+    }
+
+    private void updateProgress(int progress, String message) {
+        int currentProgress = loadingBar.getProgress();
+
+        // Animación suave del progreso
+        ValueAnimator animator = ValueAnimator.ofInt(currentProgress, progress);
+        animator.setDuration(500); // Duración de la animación
+        animator.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            loadingBar.setProgress(animatedValue);
+        });
+        animator.start();
+
+        // Actualizar mensaje de progreso
+        loadingText.setText(message);
+    }
+
 
     private String getTrainerId() {
         // Devuelve el UID del usuario autenticado actualmente

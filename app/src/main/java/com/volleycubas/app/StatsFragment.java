@@ -1,5 +1,6 @@
 package com.volleycubas.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,8 @@ public class StatsFragment extends Fragment {
     private static final String ARG_TEAM_ID = "teamId";
     private String teamId;
 
-    private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak;
+    private ImageView settingsBtn;
+    private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak, tvMaxStreak_data;
     private TextView tvVictories_amount, tvSetsWon_amount, tvPointsScored_amount;
     private ProgressBar progressVictories, progressSetsWon, progressAttendance, progressPointsScored;
 
@@ -57,14 +59,23 @@ public class StatsFragment extends Fragment {
         tvPointsScored = view.findViewById(R.id.tvPointsScored);
         tvPointsScored_amount = view.findViewById(R.id.tvPointsScored_amount);
         tvMaxStreak = view.findViewById(R.id.tvMaxStreak);
+        tvMaxStreak_data = view.findViewById(R.id.tvMaxStreak_data);
 
         progressVictories = view.findViewById(R.id.progressVictories);
         progressSetsWon = view.findViewById(R.id.progressSetsWon);
         progressAttendance = view.findViewById(R.id.progressAttendance);
         progressPointsScored = view.findViewById(R.id.progressPointsScored);
 
+        settingsBtn = view.findViewById(R.id.ivSettings);
+
         // Cargar datos del equipo
         loadTeamStats();
+
+        settingsBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), TeamSettingsActivity.class);
+            intent.putExtra("teamId", teamId);
+            startActivity(intent);
+        });
 
         return view;
     }
@@ -80,21 +91,32 @@ public class StatsFragment extends Fragment {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         // Estadísticas
-                        int setsAFavor = documentSnapshot.getLong("sets_a_favor").intValue();
-                        int setsTotales = documentSnapshot.getLong("sets_totales").intValue();
-                        int puntosAFavor = documentSnapshot.getLong("puntos_a_favor").intValue();
-                        int puntosTotales = documentSnapshot.getLong("puntos_totales").intValue();
-                        int mejorRacha = documentSnapshot.getLong("mejor_racha").intValue();
-                        int partidosJugados = documentSnapshot.getLong("partidos_jugados").intValue();
-                        int partidosGanados = documentSnapshot.getLong("partidos_ganados").intValue();
+                        int setsAFavor = documentSnapshot.contains("sets_a_favor") ?
+                                documentSnapshot.getLong("sets_a_favor").intValue() : 0;
+                        int setsTotales = documentSnapshot.contains("sets_totales") ?
+                                documentSnapshot.getLong("sets_totales").intValue() : 0;
+                        int puntosAFavor = documentSnapshot.contains("puntos_a_favor") ?
+                                documentSnapshot.getLong("puntos_a_favor").intValue() : 0;
+                        int puntosTotales = documentSnapshot.contains("puntos_totales") ?
+                                documentSnapshot.getLong("puntos_totales").intValue() : 0;
+                        int mejorRacha = documentSnapshot.contains("mejor_racha") ?
+                                documentSnapshot.getLong("mejor_racha").intValue() : 0;
+                        String mejorRachaData = documentSnapshot.contains("rival_fecha_mejor_racha") ?
+                                documentSnapshot.getString("rival_fecha_mejor_racha") : "";
+                        int partidosJugados = documentSnapshot.contains("partidos_jugados") ?
+                                documentSnapshot.getLong("partidos_jugados").intValue() : 0;
+                        int partidosGanados = documentSnapshot.contains("partidos_ganados") ?
+                                documentSnapshot.getLong("partidos_ganados").intValue() : 0;
 
                         // Datos del card
-                        String nombre = documentSnapshot.getString("nombre");
-                        String capitan = documentSnapshot.getString("capitan");
-                        String liga = documentSnapshot.getString("liga");
-                        int numeroJugadores = documentSnapshot.getLong("numero_jugadores").intValue();
-                        String temporadaCreacion = documentSnapshot.getString("temporada_creacion");
-                        String urlImagen = documentSnapshot.getString("url_imagen");
+                        String nombre = documentSnapshot.contains("nombre") ? documentSnapshot.getString("nombre") : "";
+                        String capitan = documentSnapshot.contains("capitan") ? documentSnapshot.getString("capitan") : "";
+                        String liga = documentSnapshot.contains("liga") ? documentSnapshot.getString("liga") : "";
+                        int numeroJugadores = documentSnapshot.contains("numero_jugadores") ?
+                                documentSnapshot.getLong("numero_jugadores").intValue() : 0;
+                        String temporadaCreacion = documentSnapshot.contains("temporada_creacion") ?
+                                documentSnapshot.getString("temporada_creacion") : "";
+                        String urlImagen = documentSnapshot.contains("url_imagen") ? documentSnapshot.getString("url_imagen") : "";
 
                         String entrenador = "Sin entrenador";
                         if (documentSnapshot.contains("entrenadores")) {
@@ -114,21 +136,29 @@ public class StatsFragment extends Fragment {
                         progressPointsScored.setProgress(puntosTotales == 0 ? 0 : (puntosAFavor * 100) / puntosTotales);
 
                         tvMaxStreak.setText(String.valueOf(mejorRacha));
+                        tvMaxStreak_data.setText(mejorRachaData);
 
                         tvVictories.setText(String.valueOf(partidosGanados));
                         tvVictories_amount.setText("de " + partidosJugados + " partidos");
                         progressVictories.setProgress(partidosJugados == 0 ? 0 : (partidosGanados * 100) / partidosJugados);
 
-                        tvAttendancePercentage.setText("95");
-                        progressAttendance.setProgress(95);
-
                         updateTeamCard(nombre, capitan, liga, numeroJugadores, entrenador, temporadaCreacion, urlImagen);
                     } else {
                         Log.e("StatsFragment", "No se encontró el documento del equipo.");
                     }
+
                 })
                 .addOnFailureListener(e -> Log.e("StatsFragment", "Error al cargar datos del equipo.", e));
+
+        db.collection("registros").document(teamId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    double porcentajeAcumulado = documentSnapshot.contains("porcentaje_acumulado") ?
+                            documentSnapshot.getDouble("porcentaje_acumulado") : 0.0;
+                    tvAttendancePercentage.setText(String.format("%.1f", porcentajeAcumulado));
+                    progressAttendance.setProgress((int) porcentajeAcumulado);
+                }).addOnFailureListener(e -> Log.e("StatsFragment", "Error al cargar porcentaje de asistencias del equipo.", e));
     }
+
 
     private void updateTeamCard(String nombre, String capitan, String liga, int numeroJugadores, String entrenador, String temporadaCreacion, String urlImagen) {
         Log.d("StatsFragment", "Intentando cargar team_card...");

@@ -1,0 +1,192 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_team_settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Configuración del equipo"
+        android:textColor="@color/light_principal_text"
+        android:fontFamily="@font/tripsans"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Primera categoría: Datos del equipo -->
+            <TextView
+                android:id="@+id/team_data_section_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Datos del equipo"
+                android:fontFamily="@font/tripsans"
+                android:textColor="@color/light_secondary_text"
+                android:textSize="18sp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/secction1_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/components_bg"
+                app:layout_constraintTop_toBottomOf="@id/team_data_section_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginVertical="10dp" />
+
+            <Button
+                android:id="@+id/change_team_image_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cambiar imagen del equipo"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/secction1_divider"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/change_team_name_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cambiar nombre del equipo"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/change_team_image_button"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/change_league_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cambiar liga"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/change_team_name_button"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/change_captain_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cambiar capitán"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/change_league_button"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/change_coach_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cambiar entrenador/es"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/change_captain_button"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/change_creation_season_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cambiar temporada de creación"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/change_coach_button"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Segunda categoría: Compartir equipo -->
+            <TextView
+                android:id="@+id/share_team_section_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Compartir equipo"
+                android:fontFamily="@font/tripsans"
+                android:textSize="18sp"
+                android:textColor="@color/light_secondary_text"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@id/change_creation_season_button"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/secction2_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/components_bg"
+                app:layout_constraintTop_toBottomOf="@id/share_team_section_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginVertical="10dp" />
+
+            <Button
+                android:id="@+id/export_team_data_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Exportar datos del equipo"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/secction2_divider"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/share_team_code_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compartir código del equipo"
+                android:textSize="15sp"
+                android:backgroundTint="@color/bg"
+                android:fontFamily="@font/tripsans"
+                android:gravity="left"
+                android:padding="8dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/export_team_data_button"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

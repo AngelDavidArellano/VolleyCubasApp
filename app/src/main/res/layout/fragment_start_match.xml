@@ -7,51 +7,29 @@
     android:background="@color/bg"
     android:padding="16dp">
 
-    <!-- Logo Izquierdo -->
-    <ImageView
-        android:id="@+id/teamLogoLeft"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/logo_cubas_voley"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Nombre del Equipo -->
-    <TextView
-        android:id="@+id/tvTeamName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nombre del equipo"
-        android:textSize="20sp"
-        android:textColor="#FFFFFF"
-        android:fontFamily="@font/tripsans"
-        app:layout_constraintStart_toEndOf="@id/teamLogoLeft"
-        app:layout_constraintEnd_toStartOf="@id/teamLogoRight"
-        app:layout_constraintTop_toTopOf="@id/teamLogoLeft"
-        app:layout_constraintHorizontal_bias="0.5" />
-
-    <!-- Logo Derecho -->
-    <ImageView
-        android:id="@+id/teamLogoRight"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/logo_cubas_voley"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <!-- Título -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nuevo Partido"
+        android:text="Empezar partido"
         android:textSize="24sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/light_principal_text"
         android:fontFamily="@font/tripsans"
-        app:layout_constraintTop_toBottomOf="@id/teamLogoLeft"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Imagen -->
+    <ImageView
+        android:id="@+id/owl_mascot"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/owl_mascot_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <!-- Campo Rival -->
     <TextView
@@ -59,8 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rival:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:textColor="@color/light_secondary_text"
+        app:layout_constraintTop_toBottomOf="@id/owl_mascot"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
 
@@ -68,7 +46,8 @@
         android:id="@+id/etRival"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/components_bg"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tvRival"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fase:"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/light_secondary_text"
         app:layout_constraintTop_toBottomOf="@id/etRival"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
@@ -89,7 +68,8 @@
         android:id="@+id/etFase"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/components_bg"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tvFase"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sets:"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/light_secondary_text"
         app:layout_constraintTop_toBottomOf="@id/etFase"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
@@ -119,26 +99,39 @@
 
         <RadioButton
             android:id="@+id/rbBestOf3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/custom_radio_selector_option"
+            android:button="@color/transparent"
+            android:textAlignment="center"
             android:text="Mejor de 3"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/white"
+            android:layout_width="125dp"
+            android:layout_height="45dp" />
 
         <RadioButton
             android:id="@+id/rbBestOf5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/custom_radio_selector_option"
+            android:button="@color/transparent"
+            android:textAlignment="center"
             android:text="Mejor de 5"
-            android:textColor="#FFFFFF"
-            android:layout_marginStart="16dp" />
+            android:textColor="@color/white"
+            android:layout_width="125dp"
+            android:layout_height="45dp" />
     </RadioGroup>
 
     <!-- Botón Comenzar Partido -->
+
     <Button
         android:id="@+id/btnStartMatch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/gold"
         android:text="Comenzar Partido"
+        android:textColor="@color/dark_principal_text"
+        android:fontFamily="@font/tripsans"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/radioGroupSets"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

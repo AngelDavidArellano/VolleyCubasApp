@@ -34,6 +34,8 @@ public class GenerateTeamsActivity extends AppCompatActivity {
 
     private List<String> players = new ArrayList<>();
     private List<List<String>> generatedTeams;
+    private ImageView ivNoPlayers;
+    private TextView tvNoPlayers;
 
     private String teamId;
 
@@ -67,12 +69,15 @@ public class GenerateTeamsActivity extends AppCompatActivity {
         // Configurar RecyclerView con la lista de jugadores
         Log.d("GenerateTeamsActivity", "Lista de jugadores para RecyclerView: " + players);
 
-        PlayerAdapter playerAdapter = new PlayerAdapter(players);
+        PlayerAdapter playerAdapter = new PlayerAdapter(players, this);
         rvPlayers.setLayoutManager(new LinearLayoutManager(this));
         rvPlayers.setAdapter(playerAdapter);
 
         // Configurar RecyclerView de equipos
         rvTeams.setLayoutManager(new GridLayoutManager(this, 2));
+
+        ivNoPlayers = findViewById(R.id.ivNoPlayers);
+        tvNoPlayers = findViewById(R.id.tvNoPlayers);
 
         btnDecreaseTeams.setOnClickListener(v -> {
             if (teamCount > 2) {
@@ -116,42 +121,16 @@ public class GenerateTeamsActivity extends AppCompatActivity {
         }
     }
 
-    private void loadPlayersFromFirestore() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("equipos")
-                .document(teamId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        List<Map<String, Object>> jugadoresList = (List<Map<String, Object>>) documentSnapshot.get("jugadores");
-                        if (jugadoresList != null) {
-                            players.clear(); // Limpia la lista para evitar duplicados
-                            for (Map<String, Object> jugador : jugadoresList) {
-                                String nombre = (String) jugador.get("nombre");
-                                if (nombre != null && !nombre.isEmpty()) {
-                                    players.add(nombre);
-                                }
-                            }
-                        }
-
-                        // Configurar el adaptador
-                        PlayerAdapter playerAdapter = new PlayerAdapter(players);
-                        rvPlayers.setLayoutManager(new LinearLayoutManager(this));
-                        rvPlayers.setAdapter(playerAdapter);
-
-                        // Notificar cambios
-                        playerAdapter.notifyDataSetChanged();
-                    } else {
-                        players.clear();
-                        rvPlayers.setAdapter(new PlayerAdapter(players));
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    e.printStackTrace();
-                    players.clear();
-                    rvPlayers.setAdapter(new PlayerAdapter(players));
-                });
+    private void updateNoPlayersText() {
+        if (players.isEmpty()) {  // Si no hay jugadores, muestra el mensaje
+            ivNoPlayers.setVisibility(View.VISIBLE);
+            tvNoPlayers.setVisibility(View.VISIBLE);
+        } else {  // Si hay jugadores, oculta el mensaje
+            ivNoPlayers.setVisibility(View.GONE);
+            tvNoPlayers.setVisibility(View.GONE);
+        }
     }
+
 
     private void showAddPlayerBottomSheet() {
         // Crear el BottomSheetDialog
@@ -170,6 +149,7 @@ public class GenerateTeamsActivity extends AppCompatActivity {
                 // Añadir el jugador a la lista
                 players.add(playerName);
                 rvPlayers.getAdapter().notifyItemInserted(players.size() - 1);
+                updateNoPlayersText();
 
                 // Cerrar el BottomSheet
                 bottomSheetDialog.dismiss();
@@ -216,9 +196,11 @@ public class GenerateTeamsActivity extends AppCompatActivity {
     private static class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> {
 
         private final List<String> players;
+        private final GenerateTeamsActivity activity;
 
-        PlayerAdapter(List<String> players) {
+        PlayerAdapter(List<String> players, GenerateTeamsActivity activity) {
             this.players = players;
+            this.activity = activity;
         }
 
         @NonNull
@@ -238,6 +220,8 @@ public class GenerateTeamsActivity extends AppCompatActivity {
                 players.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, players.size());
+
+                activity.updateNoPlayersText();
             });
         }
 

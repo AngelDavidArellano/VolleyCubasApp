@@ -15,6 +15,7 @@ public class Team {
     private List<String> entrenadores;       // Lista de IDs de entrenadores
     private String capitan;
     private String liga;
+    private String rival_fecha_mejor_racha;
     private int mejor_racha;
     private int puntos_a_favor;
     private int puntos_totales;
@@ -124,6 +125,14 @@ public class Team {
         this.liga = liga;
     }
 
+    public String getRival_fecha_mejor_racha() {
+        return rival_fecha_mejor_racha;
+    }
+
+    public void setRival_fecha_mejor_racha(String rival_fecha_mejor_racha) {
+        this.rival_fecha_mejor_racha = rival_fecha_mejor_racha;
+    }
+
     public int getMejor_racha() {
         return mejor_racha;
     }
@@ -178,5 +187,31 @@ public class Team {
 
     public void setPartidos_ganados(int partidos_ganados) {
         this.partidos_ganados = partidos_ganados;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", numero_jugadores=" + numero_jugadores +
+                ", url_imagen='" + url_imagen + '\'' +
+                ", historial_partidos=" + historial_partidos +
+                ", jugadores=" + jugadores +
+                ", preparacion_partidos=" + preparacion_partidos +
+                ", alineaciones=" + alineaciones +
+                ", temporada_creacion='" + temporada_creacion + '\'' +
+                ", entrenadores=" + entrenadores +
+                ", capitan='" + capitan + '\'' +
+                ", liga='" + liga + '\'' +
+                ", rival_fecha_mejor_racha='" + rival_fecha_mejor_racha + '\'' +
+                ", mejor_racha=" + mejor_racha +
+                ", puntos_a_favor=" + puntos_a_favor +
+                ", puntos_totales=" + puntos_totales +
+                ", sets_a_favor=" + sets_a_favor +
+                ", sets_totales=" + sets_totales +
+                ", partidos_jugados=" + partidos_jugados +
+                ", partidos_ganados=" + partidos_ganados +
+                '}';
     }
 }

@@ -147,8 +147,9 @@ public class RotationPagerAdapter extends RecyclerView.Adapter<RotationPagerAdap
                                 draggedView.setY(newY);
 
                                 Map<String, Double> newPosition = new HashMap<>();
-                                newPosition.put("x", (double) ((newX / fieldView.getWidth()) * 10));
-                                newPosition.put("y", (double) ((newY / fieldView.getHeight()) * 10));
+                                newPosition.put("x", (double) (((newX + draggedView.getWidth() / 2) / fieldView.getWidth()) * 10));
+                                newPosition.put("y", (double) (((newY + draggedView.getHeight() / 2) / fieldView.getHeight()) * 10));
+
                                 rotation.put(draggedPlayerId, newPosition);
                             }
                         }

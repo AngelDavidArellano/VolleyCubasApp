@@ -75,6 +75,7 @@ public class LineupDetailActivity extends AppCompatActivity {
         Map<String, Object> updatedRotations = new HashMap<>();
         for (int i = 0; i < rotations.size(); i++) {
             updatedRotations.put(String.valueOf(i), rotations.get(i));
+            Log.d("New positions", String.valueOf(i) + ":" + rotations.get(i));
         }
 
         // Guardar las posiciones actualizadas en Firestore

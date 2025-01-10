@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class PlayerDetailsActivity extends AppCompatActivity {
 
-    private EditText etPlayerName, etPlayerNumber, etPlayerPosition, etPlayerNotes;
+    private EditText etPlayerName, etPlayerNumber, etPlayerPosition, etPlayerNotes, etNumeroMVPs;
     private Button btnEditPlayer, btnDeletePlayer;
     private ImageView btnBack;
 
@@ -35,6 +35,7 @@ public class PlayerDetailsActivity extends AppCompatActivity {
         etPlayerNumber = findViewById(R.id.etPlayerNumber);
         etPlayerPosition = findViewById(R.id.etPlayerPosition);
         etPlayerNotes = findViewById(R.id.etPlayerNotes);
+        etNumeroMVPs = findViewById(R.id.etNumeroMVPs);
         btnEditPlayer = findViewById(R.id.btnEditPlayer);
         btnDeletePlayer = findViewById(R.id.btnDeletePlayer);
         btnBack = findViewById(R.id.back_button);
@@ -58,6 +59,7 @@ public class PlayerDetailsActivity extends AppCompatActivity {
         etPlayerNumber.setText(String.valueOf(jugador.getNumero()));
         etPlayerPosition.setText(jugador.getPosicion());
         etPlayerNotes.setText(jugador.getNotas());
+        etNumeroMVPs.setText(String.valueOf(jugador.getNumeroMVPs()));
 
         // Configurar botón de volver atrás
         btnBack.setOnClickListener(v -> finish());

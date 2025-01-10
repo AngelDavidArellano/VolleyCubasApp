@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Nombre del jugador"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/light_principal_text"
         android:fontFamily="@font/tripsans"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,8 +36,8 @@
             android:drawableStart="@drawable/ic_check_person"
             android:textAlignment="textEnd"
             android:text="Si"
-            android:drawableTint="@color/white"
-            android:textColor="@color/white"
+            android:drawableTint="@color/light_icons_color"
+            android:textColor="@color/light_principal_text"
             android:layout_width="75dp"
             android:layout_height="45dp" />
 
@@ -49,8 +49,8 @@
             android:drawableStart="@drawable/ic_cross_person"
             android:textAlignment="textEnd"
             android:text="No"
-            android:drawableTint="@color/white"
-            android:textColor="@color/white"
+            android:drawableTint="@color/light_icons_color"
+            android:textColor="@color/light_principal_text"
             android:layout_width="75dp"
             android:layout_height="45dp" />
     </RadioGroup>

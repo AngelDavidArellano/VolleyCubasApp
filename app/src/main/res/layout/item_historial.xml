@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp"
+    android:background="@color/bg"
     android:gravity="center_vertical">
 
     <!-- Línea de color -->
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:text="Nombre del equipo"
             android:textSize="18sp"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/light_principal_text" />
 
         <TextView
             android:id="@+id/tv_fecha"
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Resultado"
             android:textSize="14sp"
-            android:textColor="#B0B0B0" />
+            android:textColor="@color/light_secondary_text" />
     </LinearLayout>
 
     <ImageView
@@ -43,5 +44,5 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_arrow"
-        app:tint="#FFFFFF" />
+        app:tint="@color/light_icons_color" />
 </LinearLayout>

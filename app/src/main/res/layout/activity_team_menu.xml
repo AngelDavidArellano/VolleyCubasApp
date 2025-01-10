@@ -29,6 +29,7 @@
         android:layout_height="70dp"
         android:background="@drawable/bg_bottom_navigation"
         app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/icon_selector"
         app:itemActiveIndicatorStyle="@null"
         app:labelVisibilityMode="unlabeled"
         app:itemIconSize="25dp"
@@ -61,5 +62,6 @@
         app:layout_constraintBottom_toBottomOf="@id/fabCenterButton"
         app:layout_constraintStart_toStartOf="@id/fabCenterButton"
         app:layout_constraintEnd_toEndOf="@id/fabCenterButton"
-        android:elevation="8dp"/>
+        android:elevation="8dp"
+        app:tint="@color/dark_icons_color" />
 </androidx.constraintlayout.widget.ConstraintLayout>
