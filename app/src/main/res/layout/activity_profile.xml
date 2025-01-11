@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:padding="16dp"
+    tools:context=".ProfileActivity">
+
+    <!-- Botón de regreso -->
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Perfil de entrenador"
+        android:textSize="24sp"
+        android:textColor="@color/light_principal_text"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp" />
+
+    <!-- Foto de perfil -->
+    <ImageView
+        android:id="@+id/profileBg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/circle_background"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_profile"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        app:shapeAppearanceOverlay="@style/RoundedCornerTeamImage" />
+
+    <!-- Nombre y rol -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre y Apellidos"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/light_principal_text"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/profile_picture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/tvRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entrenador"
+        android:textSize="14sp"
+        android:fontFamily="@font/tripsans"
+        android:textColor="@color/light_secondary_text"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp" />
+
+    <!-- Email -->
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nombreap@volleycubasapp.com"
+        android:textSize="14sp"
+        android:fontFamily="@font/tripsans"
+        android:textColor="@color/light_secondary_text"
+        app:layout_constraintTop_toBottomOf="@id/tvRole"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp" />
+
+    <!-- Divider -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/light_secondary_text"
+        app:layout_constraintTop_toBottomOf="@id/tvEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Botones de opciones -->
+    <LinearLayout
+        android:id="@+id/options_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:layout_marginBottom="15dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_wrench"
+                app:tint="@color/light_icons_color" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Gestionar equipos"
+                android:fontFamily="@font/tripsans"
+                android:textSize="16sp"
+                android:textColor="@color/light_principal_text"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:layout_marginBottom="15dp">
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_moon"
+                app:tint="@color/light_icons_color" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Modo oscuro"
+                android:fontFamily="@font/tripsans"
+                android:textSize="16sp"
+                android:textColor="@color/light_principal_text"
+                android:layout_marginStart="10dp" />
+
+            <Switch
+                android:id="@+id/switch_dark_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumbTint="@color/gold"
+                android:checked="true"
+                android:trackTint="@color/light_secondary_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:layout_marginBottom="15dp">
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_instagram"
+                app:tint="@color/light_icons_color" />
+
+            <TextView
+                android:id="@+id/tvInstagram"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Instagram del club"
+                android:fontFamily="@font/tripsans"
+                android:textSize="16sp"
+                android:textColor="@color/light_principal_text"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Botón cerrar sesión -->
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Cerrar sesión"
+        android:textSize="16sp"
+        android:textColor="@color/dark_principal_text"
+        android:backgroundTint="@color/light_secondary_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

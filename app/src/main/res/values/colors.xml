@@ -5,6 +5,7 @@
 
     <!-- Colores fondo, componentes y secundario -->
     <color name="bg">#0C0C0C</color>
+    <color name="bg_90">#E60C0C0C</color>
     <color name="components_bg">#E0E0E0</color>
     <color name="light_icons_color">#E0E0E0</color>
     <color name="dark_icons_color">#0C0C0C</color>

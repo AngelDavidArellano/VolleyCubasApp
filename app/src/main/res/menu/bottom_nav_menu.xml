@@ -10,23 +10,23 @@
     <item
         android:id="@+id/navigation_history"
         android:icon="@drawable/ic_history"
-        android:title="Historial"
+        android:title="Historial partidos"
         app:showAsAction="ifRoom"
         app:iconTint="@color/icon_selector"/>
     <item
         android:id="@+id/navigation_start_match"
-        android:title="Comenzar"
+        android:title="Partido"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/navigation_lineup"
         android:icon="@drawable/ic_whistle"
-        android:title="Alineaciones"
+        android:title="Entrenamiento"
         app:showAsAction="ifRoom"
         app:iconTint="@color/icon_selector"/>
     <item
         android:id="@+id/navigation_preparation"
         android:icon="@drawable/ic_team_info"
-        android:title="Preparación"
+        android:title="Info &amp; Stats"
         app:showAsAction="ifRoom"
         app:iconTint="@color/icon_selector"/>
 </menu>

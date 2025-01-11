@@ -79,6 +79,8 @@ public class GenerateTeamsActivity extends AppCompatActivity {
         ivNoPlayers = findViewById(R.id.ivNoPlayers);
         tvNoPlayers = findViewById(R.id.tvNoPlayers);
 
+        updateNoPlayersText();
+
         btnDecreaseTeams.setOnClickListener(v -> {
             if (teamCount > 2) {
                 teamCount--;

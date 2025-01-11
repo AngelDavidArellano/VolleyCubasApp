@@ -103,6 +103,7 @@
             android:layout_height="20dp"
             android:background="@drawable/status_indicator_green"
             app:tint="@color/black"
+            android:layout_marginEnd="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_next_match"
             app:layout_constraintBottom_toBottomOf="@id/tv_next_match"

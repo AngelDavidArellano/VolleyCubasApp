@@ -6,17 +6,21 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.common.reflect.TypeToken;
@@ -40,6 +44,8 @@ public class PartidoEnCursoFragment extends Fragment {
 
     private String teamId, teamName;
     private Partido partido;
+
+    private GestureDetector gestureDetector;
 
     private ImageView undoButton, posesionTeamA, posesionTeamB;
 
@@ -222,8 +228,10 @@ public class PartidoEnCursoFragment extends Fragment {
 
         undoButton.setOnClickListener(v -> {
             if (!historialAcciones.isEmpty()) {
+                // Eliminar la última acción del historial
                 Accion ultimaAccion = historialAcciones.remove(historialAcciones.size() - 1);
 
+                // Manejar la acción según el tipo
                 switch (ultimaAccion) {
                     case PUNTO_A:
                         partido.eliminarUltimoPunto();
@@ -241,30 +249,32 @@ public class PartidoEnCursoFragment extends Fragment {
                         rotarJugadoresInvertdo();
                         pointsTeamA--;
                         partido.eliminarUltimoPunto();
-                        posesionSaque = false;
+                        posesionSaque = false; // Actualiza la posesión de saque
                         scoreTeamA.setText(String.format("%02d", pointsTeamA));
                         break;
 
                     case TIMEOUT_A:
                         timeoutsTeamA--;
-                        timeoutButtonA.setText(timeoutsTeamA);
+                        timeoutButtonA.setText(String.valueOf(timeoutsTeamA));
                         partido.eliminarUltimoTimeout();
                         break;
 
                     case TIMEOUT_B:
                         timeoutsTeamB--;
-                        timeoutButtonB.setText(timeoutsTeamB);
+                        timeoutButtonB.setText(String.valueOf(timeoutsTeamB));
                         partido.eliminarUltimoTimeout();
                         break;
                 }
 
-                actualizarIndicadorSaque();
-                guardarPartido();
-                guardarHistorialEnSharedPreferences();
+                // Actualizar UI y guardar el estado
+                actualizarIndicadorSaque(); // Actualiza el indicador de saque
+                guardarPartido(); // Guarda el estado del partido
+                guardarHistorialEnSharedPreferences(); // Guarda el historial actualizado
             } else {
                 Log.d("Undo", "No hay acciones para deshacer");
             }
         });
+
 
         notas.addTextChangedListener(new TextWatcher() {
             @Override
@@ -314,8 +324,51 @@ public class PartidoEnCursoFragment extends Fragment {
             mostrarSeleccionJugador(player6, player6_name);
             return true;
         });
+
+        gestureDetector = new GestureDetector(requireContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                // Detecta si el gesto es un deslizamiento hacia abajo
+                if (e1.getY() - e2.getY() < -100 && Math.abs(velocityY) > 100) { // Umbral para swipe down
+                    Log.d("SwipeDown", "Deslizamiento hacia abajo detectado");
+                    manejarDeslizamientoHaciaAbajo();
+                    return true;
+                }
+                // Detecta si el gesto es un deslizamiento hacia arriba
+                if (e1.getY() - e2.getY() > 100 && Math.abs(velocityY) > 100) { // Umbral para swipe up
+                    Log.d("SwipeUp", "Deslizamiento hacia arriba detectado");
+                    manejarDeslizamientoHaciaArriba();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        ConstraintLayout layoutCourt = view.findViewById(R.id.layout_court);
+        layoutCourt.setOnTouchListener((v, event) -> {
+            boolean result = gestureDetector.onTouchEvent(event);
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.performClick(); // Llama a performClick para respetar la accesibilidad
+            }
+            return result;
+        });
+
+        // Sobrescribe performClick para evitar advertencias
+        layoutCourt.setOnClickListener(v -> {
+            // Acción opcional si se hace un clic normal en el layout
+            Log.d("LayoutCourt", "performClick llamado");
+        });
     }
 
+    private void manejarDeslizamientoHaciaArriba() {
+        rotarJugadoresInvertdo();
+        Log.d("SwipeUp", "Acción ejecutada tras el deslizamiento hacia arriba");
+    }
+
+    private void manejarDeslizamientoHaciaAbajo() {
+        rotarJugadores();
+        Log.d("SwipeDown", "Acción ejecutada tras el deslizamiento hacia abajo");
+    }
 
     @Nullable
     @Override

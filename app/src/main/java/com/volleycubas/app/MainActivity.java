@@ -35,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private TextView welcomeText, announcementTitle, announcementContent;
     private View loadingOverlay;
-    private ImageView loadingIndicator;
+    private ImageView loadingIndicator, profilePhoto;
     private RecyclerView teamsRecyclerView;
     private TeamAdapter teamAdapter;
     private List<Team> teamList = new ArrayList<>();
+
+    private String trainerID, nombreEntrenador, apellidosEntrenador, email, profilePhotoUrl;
 
     public static boolean isDataLoaded = false;
     private boolean isLoadingInitialized = false;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        trainerID = FirebaseAuth.getInstance().getUid();
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         cargarAnuncioPrincipal();
+        getprofilePhotoUrl();
         isDataLoaded = true;
 
         // Botón para crear o unirse a un equipo
@@ -99,6 +103,17 @@ public class MainActivity extends AppCompatActivity {
         CardView cardHorarios = findViewById(R.id.card_horarios);
         cardHorarios.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, NextGamesActivity.class);
+            startActivity(intent);
+        });
+
+        profilePhoto = findViewById(R.id.profilePhoto);
+
+        profilePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            intent.putExtra("trainerID", trainerID);
+            intent.putExtra("profilePhotoUrl", profilePhotoUrl);
+            intent.putExtra("nombreCompleto", nombreEntrenador + " " + apellidosEntrenador);
+            intent.putExtra("email", email);
             startActivity(intent);
         });
     }
@@ -154,8 +169,10 @@ public class MainActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        String nombre = documentSnapshot.getString("nombre");
-                        welcomeText.setText("Bienvenido " + (nombre != null ? nombre : "") + "!");
+                        nombreEntrenador = documentSnapshot.getString("nombre");
+                        apellidosEntrenador = documentSnapshot.getString("apellidos");
+                        email = documentSnapshot.getString("email");
+                        welcomeText.setText("Bienvenido " + (nombreEntrenador != null ? nombreEntrenador : "") + "!");
                     } else {
                         welcomeText.setText("Bienvenid@!");
                     }
@@ -183,6 +200,27 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     welcomeText.setText("Error al cargar nombre.");
                     Toast.makeText(this, "Error al obtener el nombre: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void getprofilePhotoUrl() {
+        firestore.collection("entrenadores").document(trainerID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        profilePhotoUrl = documentSnapshot.getString("profilePhotoUrl");
+                        Glide.with(MainActivity.this)
+                                .load(profilePhotoUrl) // URL de la imagen
+                                .override(500, 500) // Limitar tamaño de renderizado
+                                .placeholder(R.drawable.ic_profile) // Placeholder mientras carga
+                                .error(R.drawable.ic_profile) // Imagen de error
+                                .into(profilePhoto); // Cargar en el ImageView
+                    } else {
+                        Log.e("Error de autenticación", "No se encuentra el usuario en la BD");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Error de autenticación", "No se encuentra el usuario en la BD");
                 });
     }
 
@@ -248,7 +286,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("MainActivity", "Error al cargar equipos desde Firestore: " + e.getMessage());
                 });
     }
-
 
     private void mostrarOpcionesEquipo() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);

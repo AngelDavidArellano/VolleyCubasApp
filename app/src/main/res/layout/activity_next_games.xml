@@ -39,8 +39,20 @@
         tools:listitem="@layout/item_next_games"
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintBottom_toTopOf="@id/empty_space"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
+
+    <include
+        android:id="@+id/empty_space"
+        layout="@layout/empty_space"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@id/nextGamesRecyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="15dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
