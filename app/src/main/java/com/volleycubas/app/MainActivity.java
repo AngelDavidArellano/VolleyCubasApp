@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    public static boolean isLoadingInitialized = false;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
     private TextView welcomeText, announcementTitle, announcementContent;
@@ -39,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView teamsRecyclerView;
     private TeamAdapter teamAdapter;
     private List<Team> teamList = new ArrayList<>();
+    private List<String> teamListNames = new ArrayList<>();
+    private List<String> teamListCodes = new ArrayList<>();
 
     private String trainerID, nombreEntrenador, apellidosEntrenador, email, profilePhotoUrl;
 
     public static boolean isDataLoaded = false;
-    private boolean isLoadingInitialized = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +115,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("profilePhotoUrl", profilePhotoUrl);
             intent.putExtra("nombreCompleto", nombreEntrenador + " " + apellidosEntrenador);
             intent.putExtra("email", email);
+            intent.putStringArrayListExtra("listaEquiposNombres", new ArrayList<>(teamListNames));
+            intent.putStringArrayListExtra("listaEquiposCodigos", new ArrayList<>(teamListCodes));
             startActivity(intent);
         });
     }
+
 
     @Override
     protected void onDestroy() {
@@ -212,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                         Glide.with(MainActivity.this)
                                 .load(profilePhotoUrl) // URL de la imagen
                                 .override(500, 500) // Limitar tamaño de renderizado
-                                .placeholder(R.drawable.ic_profile) // Placeholder mientras carga
+                                .placeholder(R.drawable.ic_loading) // Placeholder mientras carga
                                 .error(R.drawable.ic_profile) // Imagen de error
                                 .into(profilePhoto); // Cargar en el ImageView
                     } else {
@@ -259,9 +263,13 @@ public class MainActivity extends AppCompatActivity {
                                             // Una vez se han procesado todos los IDs, organiza el orden
                                             if (teamMap.size() == teamIds.size()) {
                                                 teamList.clear();
+                                                teamListNames.clear();
+                                                teamListCodes.clear();
                                                 for (String id : teamIds) {
                                                     if (teamMap.containsKey(id)) {
                                                         teamList.add(teamMap.get(id));
+                                                        teamListCodes.add(teamMap.get(id).getId());
+                                                        teamListNames.add(teamMap.get(id).getNombre());
                                                     }
                                                 }
                                                 teamAdapter.notifyDataSetChanged();

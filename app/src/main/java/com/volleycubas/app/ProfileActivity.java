@@ -1,23 +1,33 @@
 package com.volleycubas.app;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
     private String trainerID, nombreApellidosEntrenador, email, profilePhotoUrl;
+    private ArrayList<String> teamListNames, teamListCodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +41,22 @@ public class ProfileActivity extends AppCompatActivity {
         email = getIntent().getStringExtra("email");
         profilePhotoUrl = getIntent().getStringExtra("profilePhotoUrl");
 
+        teamListNames = getIntent().getStringArrayListExtra("listaEquiposNombres");
+        teamListCodes = getIntent().getStringArrayListExtra("listaEquiposCodigos");
+
+        if (teamListNames != null && teamListCodes != null) {
+            int i = 0;
+            for (String name : teamListNames) {
+                Log.d("Equipo recibido", name + " (" + teamListCodes.get(i) + ")");
+                i++;
+            }
+        }
+
         // Configurar vistas
         ImageView profilePicture = findViewById(R.id.profile_picture);
         TextView tvName = findViewById(R.id.tvName);
         TextView tvEmail = findViewById(R.id.tvEmail);
+        TextView tvManageTeams = findViewById(R.id.tvManageTeams);
         TextView tvInstagram = findViewById(R.id.tvInstagram);
         Button logout = findViewById(R.id.btn_logout);
         Switch switchDarkMode = findViewById(R.id.switch_dark_mode);
@@ -61,6 +83,37 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        tvManageTeams.setOnClickListener(v -> {
+            if (teamListNames != null && teamListCodes != null) {
+                // Crear un AlertDialog con RecyclerView
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ProfileActivity.this);
+                builder.setTitle("Gestionar equipos");
+
+                // Crear una vista para el RecyclerView
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_manage_teams, null);
+                RecyclerView recyclerView = dialogView.findViewById(R.id.recyclerViewTeams);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+                // Configurar el adaptador personalizado
+                TeamManageAdapter adapter = new TeamManageAdapter(this, teamListNames, teamListCodes, trainerID);
+                recyclerView.setAdapter(adapter);
+
+                builder.setView(dialogView);
+                builder.setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss());
+
+                builder.create().show();
+            } else {
+                // Mostrar mensaje si no hay equipos
+                new androidx.appcompat.app.AlertDialog.Builder(ProfileActivity.this)
+                        .setTitle("Sin equipos")
+                        .setMessage("No hay equipos asociados a este entrenador.")
+                        .setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
+        });
+
+
 
         // Listener para el texto de Instagram
         tvInstagram.setOnClickListener(v -> {

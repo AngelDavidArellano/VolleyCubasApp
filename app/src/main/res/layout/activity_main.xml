@@ -33,8 +33,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/ic_profile"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/profileBg"
+        app:layout_constraintBottom_toBottomOf="@id/profileBg"
+        app:layout_constraintStart_toStartOf="@id/profileBg"
+        app:layout_constraintEnd_toEndOf="@id/profileBg"
         android:layout_margin="16dp"
         app:shapeAppearanceOverlay="@style/RoundedCornerTeamImage" />
 

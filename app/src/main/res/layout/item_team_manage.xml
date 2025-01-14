@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Texto del nombre del equipo -->
+    <TextView
+        android:id="@+id/tvTeamName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:text="Team Name"
+        android:textSize="16sp"
+        android:textColor="#000" />
+
+    <!-- Botón de eliminar -->
+    <ImageView
+        android:id="@+id/btnDeleteTeam"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_delete"
+        android:contentDescription="Eliminar equipo"
+        android:padding="8dp"
+        app:tint="@color/red" />
+</LinearLayout>
