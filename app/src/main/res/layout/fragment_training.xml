@@ -367,10 +367,59 @@
 
                 <!-- Card 5 -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardWorkouts"
                     android:layout_width="0dp"
                     android:layout_height="175dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_columnWeight="1"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/components_bg">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        >
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_whistle_outlined"
+                            app:tint="@color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Preparar entrenamientos"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/tripsans"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Guarda o prepara tus entrenamientos"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/tripsans"
+
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 6 -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardExercises"
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
                     android:layout_columnWeight="1"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="4dp"
@@ -393,7 +442,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Preparar entrenamientos"
+                            android:text="Preparar ejercicios"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:fontFamily="@font/tripsans"
@@ -403,7 +452,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Guarda o prepara tus entrenamientos"
+                            android:text="Crea o visualiza ejercicis para tus entrenamientos"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:fontFamily="@font/tripsans"

@@ -1,0 +1,90 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/bg"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entrenamientos"
+        android:textSize="24sp"
+        android:textColor="@color/light_principal_text"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"/>
+
+    <!-- Botones -->
+    <Button
+        android:id="@+id/btnCreateLineup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear entrenamiento"
+        android:backgroundTint="@color/components_bg"
+        android:textColor="@color/dark_principal_text"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnUseCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Usar código"
+        android:backgroundTint="@color/gold"
+        android:textColor="@color/dark_principal_text"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEntrenamientos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnCreateLineup"
+        tools:listitem="@layout/item_entrenamientos"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Animación cargando datos -->
+    <View
+        android:id="@+id/loadingOverlay_players"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/bg"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/rvLineups"
+        app:layout_constraintEnd_toEndOf="@id/rvLineups"
+        app:layout_constraintTop_toTopOf="@id/rvLineups"
+        app:layout_constraintBottom_toBottomOf="@id/rvLineups" />
+
+    <!-- Indicador de carga -->
+    <ImageView
+        android:id="@+id/loadingGif_players"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_start_match"
+        app:tint="@color/white"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/rvLineups"
+        app:layout_constraintEnd_toEndOf="@id/rvLineups"
+        app:layout_constraintTop_toTopOf="@id/rvLineups"
+        android:layout_marginTop="75dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
