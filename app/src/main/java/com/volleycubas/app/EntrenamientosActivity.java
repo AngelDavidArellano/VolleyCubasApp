@@ -52,27 +52,41 @@ public class EntrenamientosActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Entrenamiento> entrenamientos = new ArrayList<>();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        // Obtener los valores del documento
+                        String id = doc.getId();
+                        String creador = doc.getString("creador");
+                        String titulo = doc.getString("titulo");
+                        String tipo = doc.getString("tipo");
+                        String descripcion = doc.getString("descripcion");
+                        String fechaCreacion = doc.getString("fechaCreacion");
+                        List<String> ejercicios = (List<String>) doc.get("ejercicios"); // Convertir la lista
+
+                        // Crear un objeto Entrenamiento con los valores obtenidos
                         Entrenamiento entrenamiento = new Entrenamiento(
-                                doc.getId(),
-                                doc.getString("creador"),
-                                doc.getString("titulo"),
-                                doc.getString("tipo")
+                                id,
+                                creador,
+                                titulo,
+                                tipo,
+                                descripcion,
+                                fechaCreacion,
+                                ejercicios
                         );
+
                         entrenamientos.add(entrenamiento);
                     }
 
+                    // Configurar el adaptador con los entrenamientos obtenidos
                     adapter = new EntrenamientosAdapter(entrenamientos, entrenamiento -> {
-                        // Navegar a DetalleEntrenamientoActivity
-                        /*Intent intent = new Intent(this, DetalleEntrenamientoActivity.class);
-                        intent.putExtra("entrenamiento_id", entrenamiento.getId());
-                        startActivity(intent);*/
-                        Toast.makeText(this, "Entrenamiento pulsado: "+ entrenamiento.getTitulo(), Toast.LENGTH_SHORT).show();
+                        // Acción al seleccionar un entrenamiento
+                        Toast.makeText(this, "Entrenamiento pulsado: " + entrenamiento.getTitulo(), Toast.LENGTH_SHORT).show();
                     });
 
                     recyclerView.setAdapter(adapter);
                 })
                 .addOnFailureListener(e -> {
+                    // Manejar el error
                     Toast.makeText(this, "Error al cargar entrenamientos", Toast.LENGTH_SHORT).show();
                 });
     }
+
 }

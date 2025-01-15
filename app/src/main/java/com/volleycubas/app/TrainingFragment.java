@@ -97,6 +97,12 @@ public class TrainingFragment extends Fragment {
             startActivity(intent);
         });
 
+        CardView cardExercises = view.findViewById(R.id.cardExercises);
+        cardExercises.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), EjerciciosActivity.class);
+            startActivity(intent);
+        });
+
         return view;
     }
 
