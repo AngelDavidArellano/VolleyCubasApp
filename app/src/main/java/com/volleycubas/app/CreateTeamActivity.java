@@ -343,6 +343,7 @@ public class CreateTeamActivity extends AppCompatActivity {
                     }
 
                     runOnUiThread(() -> updateProgress(66, "Guardando los datos del equipo..."));
+                    long currentTimestamp = System.currentTimeMillis();
 
                     // Etapa 3: Guardar datos del equipo en Firestore
                     Team team = new Team();
@@ -357,6 +358,8 @@ public class CreateTeamActivity extends AppCompatActivity {
                     team.setPartidos_jugados(0);
                     team.setPartidos_ganados(0);
                     team.setRival_fecha_mejor_racha("No hay registros");
+                    team.setTimestamp(currentTimestamp);
+
 
                     firestore.collection("equipos").document(teamId)
                             .set(team)

@@ -23,6 +23,8 @@ public class Team {
     private int sets_totales;
     private int partidos_jugados;
     private int partidos_ganados;
+    private long timestamp; // Marca de tiempo de la última actualización
+
 
     // Constructor vacío requerido por Firestore
     public Team() {
@@ -189,6 +191,15 @@ public class Team {
         this.partidos_ganados = partidos_ganados;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
     @Override
     public String toString() {
         return "Team{" +
@@ -212,6 +223,8 @@ public class Team {
                 ", sets_totales=" + sets_totales +
                 ", partidos_jugados=" + partidos_jugados +
                 ", partidos_ganados=" + partidos_ganados +
+                ", timestamp=" + timestamp +
                 '}';
     }
+
 }

@@ -1,6 +1,9 @@
 package com.volleycubas.app;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +18,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+
+import java.io.File;
+
 
 public class StatsFragment extends Fragment {
 
@@ -142,7 +152,7 @@ public class StatsFragment extends Fragment {
                         tvVictories_amount.setText("de " + partidosJugados + " partidos");
                         progressVictories.setProgress(partidosJugados == 0 ? 0 : (partidosGanados * 100) / partidosJugados);
 
-                        updateTeamCard(nombre, capitan, liga, numeroJugadores, entrenador, temporadaCreacion, urlImagen);
+                        updateTeamCard(nombre, capitan, liga, numeroJugadores, entrenador, temporadaCreacion, urlImagen, documentSnapshot.contains("timestamp") ? documentSnapshot.getLong("timestamp") : 0L);
                     } else {
                         Log.e("StatsFragment", "No se encontró el documento del equipo.");
                     }
@@ -160,7 +170,7 @@ public class StatsFragment extends Fragment {
     }
 
 
-    private void updateTeamCard(String nombre, String capitan, String liga, int numeroJugadores, String entrenador, String temporadaCreacion, String urlImagen) {
+    private void updateTeamCard(String nombre, String capitan, String liga, int numeroJugadores, String entrenador, String temporadaCreacion, String urlImagen, long timestamp) {
         Log.d("StatsFragment", "Intentando cargar team_card...");
         View teamCard = getView().findViewById(R.id.team_card);
 
@@ -189,15 +199,72 @@ public class StatsFragment extends Fragment {
         tvCaptain.setText(capitan != null ? capitan : "Sin capitán");
         tvCoach.setText(entrenador != null ? entrenador : "Sin entrenador");
 
-        if (urlImagen != null && !urlImagen.isEmpty()) {
-            Glide.with(this)
-                    .load(urlImagen)
-                    .placeholder(R.drawable.ic_image_placeholder) // Imagen de carga
-                    .error(R.drawable.ic_image_placeholder) // Imagen de error
-                    .into(ivTeamImage);
-        } else {
-            ivTeamImage.setImageResource(R.drawable.ic_image_placeholder); // Imagen por defecto
+        File directory = new File(requireContext().getFilesDir(), "img/team_images");
+        if (!directory.exists()) {
+            directory.mkdirs();
         }
+        File localFile = new File(directory, teamId + "_team.png");
+
+        if (localFile.exists() && !isImageOutdated(localFile, timestamp)) {
+            Log.d("StatsFragment", "Cargando imagen del equipo desde almacenamiento local.");
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            ivTeamImage.setImageBitmap(bitmap);
+        } else if (urlImagen != null && !urlImagen.isEmpty()) {
+            Log.d("StatsFragment", "Descargando imagen del equipo desde URL: " + urlImagen);
+            Glide.with(this)
+                    .asBitmap()
+                    .load(urlImagen)
+                    .placeholder(R.drawable.ic_image_placeholder)
+                    .error(R.drawable.ic_image_placeholder)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            Log.d("StatsFragment", "Imagen del equipo descargada con éxito.");
+                            ivTeamImage.setImageBitmap(resource);
+                            saveTeamImageLocally(resource, localFile, timestamp);
+                        }
+
+                        @Override
+                        public void onLoadCleared(Drawable placeholder) {
+                            // No hacer nada
+                        }
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            super.onLoadFailed(errorDrawable);
+                            Log.e("StatsFragment", "Error al descargar la imagen del equipo con Glide.");
+                        }
+                    });
+        } else {
+            Log.w("StatsFragment", "URL de imagen de equipo nulo o vacío. Usando imagen predeterminada.");
+            ivTeamImage.setImageResource(R.drawable.ic_image_placeholder);
+        }
+    }
+
+    private void saveTeamImageLocally(Bitmap bitmap, File file, long timestamp) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+            File timestampFile = new File(file.getParent(), teamId + "_timestamp.txt");
+            try (FileOutputStream tsFos = new FileOutputStream(timestampFile)) {
+                tsFos.write(String.valueOf(timestamp).getBytes());
+            }
+        } catch (IOException e) {
+            Log.e("StatsFragment", "Error guardando imagen del equipo localmente.", e);
+        }
+    }
+
+    private boolean isImageOutdated(File file, long serverTimestamp) {
+        File timestampFile = new File(file.getParent(), teamId + "_timestamp.txt");
+        if (timestampFile.exists()) {
+            try {
+                long localTimestamp = Long.parseLong(new String(java.nio.file.Files.readAllBytes(timestampFile.toPath())));
+                return serverTimestamp > localTimestamp;
+            } catch (IOException | NumberFormatException e) {
+                Log.e("StatsFragment", "Error leyendo timestamp local.", e);
+            }
+        }
+        return true;
     }
 
 }

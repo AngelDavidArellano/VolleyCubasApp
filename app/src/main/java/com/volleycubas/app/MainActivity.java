@@ -1,6 +1,9 @@
 package com.volleycubas.app;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,18 +16,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
         profilePhoto = findViewById(R.id.profilePhoto);
 
+        loadProfileImage();
+
         profilePhoto.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             intent.putExtra("trainerID", trainerID);
@@ -131,9 +143,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && !isLoadingInitialized || !isDataLoaded) {
             cargarEquiposDesdeFirestore(currentUser.getUid());
+            loadProfileImage();
             isLoadingInitialized = true;
         }
     }
@@ -213,12 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         profilePhotoUrl = documentSnapshot.getString("profilePhotoUrl");
-                        Glide.with(MainActivity.this)
-                                .load(profilePhotoUrl) // URL de la imagen
-                                .override(500, 500) // Limitar tamaño de renderizado
-                                .placeholder(R.drawable.ic_loading) // Placeholder mientras carga
-                                .error(R.drawable.ic_profile) // Imagen de error
-                                .into(profilePhoto); // Cargar en el ImageView
+
                     } else {
                         Log.e("Error de autenticación", "No se encuentra el usuario en la BD");
                     }
@@ -272,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
                                                         teamListNames.add(teamMap.get(id).getNombre());
                                                     }
                                                 }
+                                                loadTeamImages(teamList);
                                                 teamAdapter.notifyDataSetChanged();
                                             }
 
@@ -360,5 +370,145 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error al buscar equipo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void loadProfileImage() {
+        File directory = new File(getFilesDir(), "img/profile_photos");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        File localFile = new File(directory, trainerID + "_profile.png");
+
+        if (localFile.exists() && !isImageOutdated(localFile)) {
+            // Cargar desde almacenamiento local
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            profilePhoto.setImageBitmap(bitmap);
+        } else {
+            // Descargar desde Firebase
+            firestore.collection("entrenadores").document(trainerID)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            profilePhotoUrl = documentSnapshot.getString("profilePhotoUrl");
+                            long serverTimestamp = documentSnapshot.getLong("timestamp");
+
+                            if (profilePhotoUrl != null) {
+                                Glide.with(this)
+                                        .asBitmap()
+                                        .load(profilePhotoUrl)
+                                        .placeholder(R.drawable.ic_loading)
+                                        .error(R.drawable.ic_profile)
+                                        .into(new CustomTarget<Bitmap>() {
+                                            @Override
+                                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                                profilePhoto.setImageBitmap(resource);
+                                                saveImageLocally(resource, localFile, serverTimestamp);
+                                            }
+
+                                            @Override
+                                            public void onLoadCleared(@Nullable Drawable placeholder) {}
+                                        });
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("MainActivity", "Error cargando imagen de perfil", e));
+        }
+    }
+
+    private void saveImageLocally(Bitmap bitmap, File file, long timestamp) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            // Cambiar el formato a PNG para preservar transparencia
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+            // Guardar el timestamp asociado
+            File timestampFile = new File(file.getParent(), trainerID + "_profile_timestamp.txt");
+            try (FileOutputStream tsFos = new FileOutputStream(timestampFile)) {
+                tsFos.write(String.valueOf(timestamp).getBytes());
+            }
+        } catch (IOException e) {
+            Log.e("MainActivity", "Error guardando imagen localmente", e);
+        }
+    }
+
+    private boolean isImageOutdated(File file) {
+        File timestampFile = new File(file.getParent(), trainerID + "_profile_timestamp.txt");
+        if (timestampFile.exists()) {
+            try {
+                long localTimestamp = Long.parseLong(new String(java.nio.file.Files.readAllBytes(timestampFile.toPath())));
+                firestore.collection("entrenadores").document(trainerID)
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            long serverTimestamp = documentSnapshot.getLong("timestamp");
+                            if (serverTimestamp > localTimestamp) {
+                                file.delete();
+                                timestampFile.delete();
+                            }
+                        });
+                return false;
+            } catch (IOException | NumberFormatException e) {
+                Log.e("MainActivity", "Error leyendo timestamp local", e);
+            }
+        }
+        return true;
+    }
+
+    private void loadTeamImages(List<Team> teams) {
+        File directory = new File(getFilesDir(), "img/team_images");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        for (Team team : teams) {
+            String teamId = team.getId();
+            String imageUrl = team.getUrl_imagen();
+            File localFile = new File(directory, teamId + "_team.png");
+
+            if (localFile.exists() && !isImageOutdated(localFile, team.getTimestamp())) {
+                Log.d("MainActivity", "Imagen del equipo " + teamId + " cargada desde almacenamiento local");
+            } else if (imageUrl != null && !imageUrl.isEmpty()) {
+                Glide.with(this)
+                        .asBitmap()
+                        .load(imageUrl)
+                        .placeholder(R.drawable.ic_image_placeholder)
+                        .error(R.drawable.ic_image_placeholder)
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                saveTeamImageLocally(resource, localFile, team.getTimestamp());
+                            }
+
+                            @Override
+                            public void onLoadCleared(Drawable placeholder) {
+                                // No hacer nada
+                            }
+                        });
+            }
+        }
+    }
+
+    private void saveTeamImageLocally(Bitmap bitmap, File file, long timestamp) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+            File timestampFile = new File(file.getParent(), file.getName().replace("_team.png", "_timestamp.txt"));
+            try (FileOutputStream tsFos = new FileOutputStream(timestampFile)) {
+                tsFos.write(String.valueOf(timestamp).getBytes());
+            }
+        } catch (IOException e) {
+            Log.e("MainActivity", "Error guardando imagen del equipo localmente", e);
+        }
+    }
+
+    private boolean isImageOutdated(File file, long serverTimestamp) {
+        File timestampFile = new File(file.getParent(), file.getName().replace("_team.png", "_timestamp.txt"));
+        if (timestampFile.exists()) {
+            try {
+                long localTimestamp = Long.parseLong(new String(java.nio.file.Files.readAllBytes(timestampFile.toPath())));
+                return serverTimestamp > localTimestamp;
+            } catch (IOException | NumberFormatException e) {
+                Log.e("MainActivity", "Error leyendo timestamp local", e);
+            }
+        }
+        return true;
     }
 }
