@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,8 +43,11 @@ public class EjerciciosActivity extends AppCompatActivity {
         // Acción para agregar un nuevo ejercicio
         addExerciseButton.setOnClickListener(v -> {
             // Aquí puedes agregar un Intent para ir a CrearEjercicioActivity
-            Toast.makeText(this, "Agregar ejercicio clicado", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, CreateEjercicioActivity.class);
+            startActivity(intent);
         });
+
+        findViewById(R.id.back_button).setOnClickListener(v -> onBackPressed());
 
         // Escuchar cambios en el buscador para filtrar ejercicios
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -74,8 +78,9 @@ public class EjerciciosActivity extends AppCompatActivity {
                         String creador = doc.getString("creador");
                         String titulo = doc.getString("titulo");
                         String tipo = doc.getString("tipo");
-                        String urlImagen = doc.getString("urlImagen");
+                        String urlImagen = doc.getString("url_imagen");
                         String descripcion = doc.getString("descripcion");
+                        Long timestamp = System.currentTimeMillis();
 
                         // Crear un objeto Ejercicio con los valores obtenidos
                         Ejercicio ejercicio = new Ejercicio(
@@ -84,7 +89,8 @@ public class EjerciciosActivity extends AppCompatActivity {
                                 titulo,
                                 tipo,
                                 urlImagen,
-                                descripcion
+                                descripcion,
+                                timestamp
                         );
 
                         ejerciciosList.add(ejercicio);

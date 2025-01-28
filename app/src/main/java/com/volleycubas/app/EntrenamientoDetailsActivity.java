@@ -1,5 +1,6 @@
 package com.volleycubas.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -23,7 +24,7 @@ public class EntrenamientoDetailsActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private List<Ejercicio> ejerciciosList = new ArrayList<>();
     private EjerciciosAdapter adapter;
-    private ImageView backButton;
+    private ImageView backButton, shareButton;
 
     private static final String TAG = "EntrenamientoDetails";
 
@@ -39,6 +40,7 @@ public class EntrenamientoDetailsActivity extends AppCompatActivity {
         tvTrainingType = findViewById(R.id.tvTrainingType);
         tvTrainingDescription = findViewById(R.id.tvTrainingDescription);
         rvExercises = findViewById(R.id.rvExercises);
+        shareButton = findViewById(R.id.share_button);
         backButton = findViewById(R.id.back_button);
 
         rvExercises.setLayoutManager(new LinearLayoutManager(this));
@@ -74,6 +76,19 @@ public class EntrenamientoDetailsActivity extends AppCompatActivity {
 
         // Cargar la lista de ejercicios
         fetchEjercicios(ejerciciosIds);
+
+        shareButton.setOnClickListener(v -> {
+            // Texto predeterminado que incluirá el teamId
+            String mensaje = "\uD83C\uDF89 ¡Añade mi entrenamiento '" + titulo + "' a tu equipo en VolleyCubasApp! \uD83C\uDFD0\n\uD83D\uDC49 Código de entrenamiento: \uD83D\uDD25" + id + " \uD83D\uDCAA\uD83C\uDFFC\n";
+
+            // Crear un Intent para compartir
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, mensaje);
+
+            // Iniciar el selector de aplicaciones para compartir
+            startActivity(Intent.createChooser(intent, "Compartir código del entrenamiento"));
+        });
     }
 
     private void fetchEjercicios(List<String> ejerciciosIds) {
@@ -99,8 +114,9 @@ public class EntrenamientoDetailsActivity extends AppCompatActivity {
                                 doc.getString("creador"),
                                 doc.getString("titulo"),
                                 doc.getString("tipo"),
-                                doc.getString("urlImagen"),
-                                doc.getString("descripcion")
+                                doc.getString("url_imagen"),
+                                doc.getString("descripcion"),
+                                doc.getLong("timestamp")
                         );
                         Log.d(TAG, "Ejercicio añadido: " + ejercicio.getTitulo());
                         ejerciciosList.add(ejercicio);

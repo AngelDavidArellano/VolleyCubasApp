@@ -40,6 +40,7 @@ public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.GameViewHold
     @Override
     public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
         Map<String, Object> match = matches.get(position);
+
         String fecha = (String) match.get("fecha");
         String rival = (String) match.get("rival");
         String local = (String) match.get("equipo_local");
@@ -47,21 +48,48 @@ public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.GameViewHold
         String ubicacion = (String) match.get("localizacion");
         String pista = (String) match.get("pista");
 
-        if (rival.equals("DESCANSA")){
+        if (rival != null && rival.equals("DESCANSA")) {
             holder.tvNextGame.setText(local + " (" + rival + ")");
         } else {
-            holder.tvNextGame.setText(rival != null ? local + "  vs  " + rival : "Rival desconocido");
+            holder.tvNextGame.setText((local != null && rival != null) ? local + "  vs  " + rival : "Rival desconocido");
         }
-        
-        holder.tvFecha.setText(fecha != null ? fecha : "Fecha desconocida");
-        holder.tvTime.setText(hora != null ? hora : "Hora desconocida");
-        holder.tvPlace.setText(ubicacion != null ? ubicacion + " - " + pista : "Ubicación desconocida");
 
-        String fecha_hora_partido = fecha + " " + hora;
+        String fecha_hora_partido = (fecha != null && hora != null) ? fecha + " " + hora : null;
+
+        noMatchPosibility(holder, fecha_hora_partido);
+
+        // Comprobar si cualquier dato es "Aplazado", "APLAZADO" o "aplazado"
+        if (esAplazado(fecha) || esAplazado(hora) || esAplazado(ubicacion) || esAplazado(pista)) {
+            holder.tvFecha.setText("APLAZADO");
+
+            // Ocultar los datos de hora y ubicación
+            holder.tvTime.setVisibility(View.GONE);
+            holder.ivTime.setVisibility(View.GONE);
+            holder.ivPlace.setVisibility(View.GONE);
+            holder.tvPlace.setVisibility(View.GONE);
+        } else {
+            // Restablecer los valores si no está aplazado
+            holder.tvFecha.setText(fecha != null ? fecha : "Fecha desconocida");
+            holder.tvTime.setText(hora != null ? hora : "Hora desconocida");
+            holder.tvPlace.setText(ubicacion != null ? ubicacion + " - " + pista : "Ubicación desconocida");
+
+            // Asegurar que los iconos sean visibles
+            holder.ivTime.setVisibility(View.VISIBLE);
+            holder.tvTime.setVisibility(View.VISIBLE);
+            holder.ivPlace.setVisibility(View.VISIBLE);
+            holder.tvPlace.setVisibility(View.VISIBLE);
+
+            noMatchPosibility(holder, fecha_hora_partido);
+        }
+
+
         // Actualizar el estado del partido
         updateMatchStatus(holder, fecha_hora_partido);
-        noMatchPosibility(holder, fecha_hora_partido);
     }
+    private boolean esAplazado(String texto) {
+        return texto != null && texto.equalsIgnoreCase("Aplazado");
+    }
+
 
     @Override
     public int getItemCount() {
@@ -135,9 +163,20 @@ public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.GameViewHold
         animatorSet.start();
     }
 
-    private void noMatchPosibility (GameViewHolder holder, String matchDateTime){
-        Log.d("Fecha y hora", matchDateTime);
-        if (matchDateTime.equals("null null")){
+    private void noMatchPosibility(GameViewHolder holder, String matchDateTime) {
+        // Evitar NullPointerException en logs
+        Log.d("Fecha y hora", matchDateTime != null ? matchDateTime : "NULL");
+
+        // Restablecer visibilidad antes de ocultar
+        holder.ivTime.setVisibility(View.VISIBLE);
+        holder.tvTime.setVisibility(View.VISIBLE);
+        holder.ivPlace.setVisibility(View.VISIBLE);
+        holder.tvPlace.setVisibility(View.VISIBLE);
+        holder.ivFecha.setVisibility(View.VISIBLE);
+        holder.tvFecha.setVisibility(View.VISIBLE);
+
+        // Si la fecha y hora son "null null", ocultar los datos
+        if (matchDateTime == null || matchDateTime.equals("null null")) {
             holder.ivTime.setVisibility(View.GONE);
             holder.tvTime.setVisibility(View.GONE);
             holder.ivPlace.setVisibility(View.GONE);
@@ -146,6 +185,7 @@ public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.GameViewHold
             holder.tvFecha.setVisibility(View.GONE);
         }
     }
+
 
 
     static class GameViewHolder extends RecyclerView.ViewHolder {

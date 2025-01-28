@@ -94,6 +94,7 @@ public class TrainingFragment extends Fragment {
         CardView cardWorkouts = view.findViewById(R.id.cardWorkouts);
         cardWorkouts.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), EntrenamientosActivity.class);
+            intent.putExtra("teamId", teamId);
             startActivity(intent);
         });
 
@@ -196,11 +197,15 @@ public class TrainingFragment extends Fragment {
         String hora = (String) match.get("hora");
         String localizacion = (String) match.get("localizacion");
         String pista = (String) match.get("pista");
-
         tvNextMatchTeam.setText(rival != null ? rival : "Sin rival");
-        tvNextMatchDate.setText(fecha != null ? fecha : "--/--/----");
-        tvNextMatchTime.setText(hora != null ? hora : "--:--");
-        tvNextMatchLocation.setText(localizacion != null ? localizacion + (pista != null ? " - " + pista : "") : "Localización no disponible");
+
+        tvNextMatchDate.setText(fecha != null && !fecha.equalsIgnoreCase("aplazado") ? fecha : "--/--/----");
+
+        tvNextMatchTime.setText(hora != null && !hora.equalsIgnoreCase("aplazado") ? hora : "--:--");
+
+        tvNextMatchLocation.setText(localizacion != null && !localizacion.equalsIgnoreCase("aplazado")
+                ? localizacion + (pista != null ? " - " + pista : "")
+                : "Localización no disponible");
 
         // Calcular días y horas restantes
         if (fecha != null) {
@@ -246,6 +251,10 @@ public class TrainingFragment extends Fragment {
             }
         } else {
             tvDaysRemaining.setText("No disponible");
+        }
+
+        if (fecha != null && fecha.equalsIgnoreCase("aplazado")) {
+            tvDaysRemaining.setText("Esperando nueva fecha");
         }
     }
 

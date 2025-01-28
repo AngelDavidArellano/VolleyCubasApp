@@ -1,6 +1,10 @@
 package com.volleycubas.app;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class EjerciciosAdapter extends RecyclerView.Adapter<EjerciciosAdapter.EjercicioViewHolder> {
@@ -47,15 +57,24 @@ public class EjerciciosAdapter extends RecyclerView.Adapter<EjerciciosAdapter.Ej
         holder.creator.setText("Creador/a: " + ejercicio.getCreador());
         holder.type.setText("Tipo: " + ejercicio.getTipo());
 
-        // Cargar la imagen con Glide (si la URL está disponible)
-        /*if (ejercicio.getUrlImagen() != null && !ejercicio.getUrlImagen().isEmpty()) {
-            Glide.with(holder.itemView.getContext())
-                    .load(ejercicio.getUrlImagen())
-                    .placeholder(R.drawable.ic_image_placeholder) // Imagen por defecto
-                    .into(holder.image);
+        // Manejo de imágenes
+        File directory = new File(holder.itemView.getContext().getFilesDir(), "img/exercises_images");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        File localFile = new File(directory, ejercicio.getId() + "_exercise.png");
+
+        if (localFile.exists() && !isImageOutdated(localFile, ejercicio.getTimestamp())) {
+            Log.d("EjerciciosAdapter", "Imagen local está actualizada: " + localFile.getAbsolutePath());
+            ejercicio.setUrlImagen(localFile.getAbsolutePath()); // Actualizar la URL localmente
+        } else if (ejercicio.getUrlImagen() != null && !ejercicio.getUrlImagen().isEmpty()) {
+            Log.d("EjerciciosAdapter", "Descargando imagen desde URL: " + ejercicio.getUrlImagen());
+            downloadImage(ejercicio.getUrlImagen(), localFile, ejercicio);
         } else {
-            holder.image.setImageResource(R.drawable.ic_image_placeholder); // Imagen por defecto
-        }*/
+            Log.w("EjerciciosAdapter", "El ejercicio no tiene URL de imagen válida.");
+        }
+
+
 
         // Manejar el clic en el ítem
         holder.itemView.setOnClickListener(v -> {
@@ -64,9 +83,54 @@ public class EjerciciosAdapter extends RecyclerView.Adapter<EjerciciosAdapter.Ej
             intent.putExtra("creador", ejercicio.getCreador());
             intent.putExtra("tipo", ejercicio.getTipo());
             intent.putExtra("descripcion", ejercicio.getDescripcion());
-            intent.putExtra("urlImagen", ejercicio.getUrlImagen());
+            intent.putExtra("url_imagen", ejercicio.getUrlImagen());
             holder.itemView.getContext().startActivity(intent);
         });
+    }
+
+    private void downloadImage(String url, File localFile, Ejercicio ejercicio) {
+        new Thread(() -> {
+            try {
+                java.net.URL imageUrl = new java.net.URL(url);
+                Bitmap bitmap = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+
+                // Guardar imagen localmente
+                saveExerciseImageLocally(bitmap, localFile, ejercicio.getTimestamp());
+
+                // Actualizar la URL local en el objeto ejercicio
+                ejercicio.setUrlImagen(localFile.getAbsolutePath());
+
+                Log.d("EjerciciosAdapter", "Imagen descargada y guardada: " + localFile.getAbsolutePath());
+            } catch (Exception e) {
+                Log.e("EjerciciosAdapter", "Error al descargar la imagen desde URL: " + url, e);
+            }
+        }).start();
+    }
+
+    private void saveExerciseImageLocally(Bitmap bitmap, File file, long timestamp) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+            File timestampFile = new File(file.getParent(), file.getName().replace("_exercise.png", "_timestamp.txt"));
+            try (FileOutputStream tsFos = new FileOutputStream(timestampFile)) {
+                tsFos.write(String.valueOf(timestamp).getBytes());
+            }
+        } catch (IOException e) {
+            Log.e("EjerciciosAdapter", "Error guardando imagen del ejercicio localmente.", e);
+        }
+    }
+
+    private boolean isImageOutdated(File file, long serverTimestamp) {
+        File timestampFile = new File(file.getParent(), file.getName().replace("_exercise.png", "_timestamp.txt"));
+        if (timestampFile.exists()) {
+            try {
+                long localTimestamp = Long.parseLong(new String(java.nio.file.Files.readAllBytes(timestampFile.toPath())));
+                return serverTimestamp > localTimestamp;
+            } catch (IOException | NumberFormatException e) {
+                Log.e("EjerciciosAdapter", "Error leyendo timestamp local.", e);
+            }
+        }
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.volleycubas.app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,13 +35,15 @@ public class EjercicioDetailsActivity extends AppCompatActivity {
         String creador = getIntent().getStringExtra("creador");
         String tipo = getIntent().getStringExtra("tipo");
         String descripcion = getIntent().getStringExtra("descripcion");
-        String urlImagen = getIntent().getStringExtra("urlImagen");
+        String urlImagen = getIntent().getStringExtra("url_imagen");
 
         // Configurar los datos en la vista
         tvExerciseTitle.setText(titulo);
         tvExerciseCreator.setText("Creador/a: " + creador);
         tvExerciseType.setText("Tipo: " + tipo);
         tvExerciseDescription.setText(descripcion);
+
+        Log.d("URL ejercicio:", urlImagen != null ? urlImagen : "URL vacía");
 
         // Cargar la imagen con Glide
         if (urlImagen != null && !urlImagen.isEmpty()) {

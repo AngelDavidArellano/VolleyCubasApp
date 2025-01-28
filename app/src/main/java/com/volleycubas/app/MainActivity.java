@@ -42,6 +42,12 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     public static boolean isLoadingInitialized = false;
+
+    private int clickCount = 0;
+    private long lastClickTime = 0;
+    private static final int CLICK_THRESHOLD = 5;
+    private static final long CLICK_RESET_TIME = 1000; // Tiempo límite para considerar clicks consecutivos (ms)
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
     private TextView welcomeText, announcementTitle, announcementContent;
@@ -131,6 +137,24 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("listaEquiposCodigos", new ArrayList<>(teamListCodes));
             startActivity(intent);
         });
+
+        ImageView logoCubasVoley = findViewById(R.id.logoCubasVoley);
+        logoCubasVoley.setOnClickListener(v -> {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastClickTime < CLICK_RESET_TIME) {
+                clickCount++;
+                if (clickCount >= CLICK_THRESHOLD) {
+                    // Acción al alcanzar el umbral
+                    clickCount = 0; // Resetear contador
+                    Intent intent = new Intent(MainActivity.this, HiddenActivity.class); // Reemplaza con tu actividad
+                    startActivity(intent);
+                }
+            } else {
+                clickCount = 1; // Reinicia el contador si el tiempo es demasiado largo
+            }
+            lastClickTime = currentTime;
+        });
+
     }
 
 

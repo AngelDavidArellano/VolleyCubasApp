@@ -7,16 +7,18 @@ public class Ejercicio {
     private String tipo;
     private String urlImagen; // URL de la imagen
     private String descripcion; // Descripción del ejercicio
+    private long timestamp; // Timestamp de la última actualización de la imagen
 
     public Ejercicio() {}
 
-    public Ejercicio(String id, String creador, String titulo, String tipo, String urlImagen, String descripcion) {
+    public Ejercicio(String id, String creador, String titulo, String tipo, String urlImagen, String descripcion, long timestamp) {
         this.id = id;
         this.creador = creador;
         this.titulo = titulo;
         this.tipo = tipo;
         this.urlImagen = urlImagen;
         this.descripcion = descripcion;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -65,5 +67,26 @@ public class Ejercicio {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Ejercicio{" +
+                "id='" + id + '\'' +
+                ", creador='" + creador + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", urlImagen='" + urlImagen + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }
