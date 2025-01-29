@@ -1,0 +1,90 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="15dp">
+
+        <EditText
+            android:id="@+id/edit_preparacion_titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tripsans"
+            android:hint="Título del partido"
+            android:inputType="text"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:background="@android:color/transparent"/>
+
+        <EditText
+            android:id="@+id/edit_preparacion_fecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tripsans"
+            android:layout_below="@id/edit_preparacion_titulo"
+            android:layout_marginTop="5dp"
+            android:hint="(dd/MM/yyyy)"
+            android:inputType="date"
+            android:textSize="15sp"
+            android:background="@android:color/transparent"/>
+
+        <TextView
+            android:id="@+id/tv_preparacion_sets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tripsans"
+            android:layout_below="@id/edit_preparacion_fecha"
+            android:text="Sets"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"/>
+
+        <ImageView
+            android:id="@+id/iv_addSets"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_add"
+            android:layout_toEndOf="@id/tv_preparacion_sets"
+            android:layout_below="@id/edit_preparacion_fecha"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            app:tint="@color/dark_icons_color" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_preparacion_sets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_add_set_prep"
+            tools:itemCount="3"
+            android:layout_below="@id/tv_preparacion_sets"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tv_preparacion_notas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tripsans"
+            android:layout_below="@id/rv_preparacion_sets"
+            android:text="Notas"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:id="@+id/edit_preparacion_notas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tripsans"
+            android:layout_below="@id/tv_preparacion_notas"
+            android:layout_marginTop="8dp"
+            android:hint="Notas opcionales"
+            android:inputType="textMultiLine"
+            android:background="@android:color/transparent"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+</ScrollView>

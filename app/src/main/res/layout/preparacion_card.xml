@@ -1,0 +1,57 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_preparacion"
+    android:layout_width="150dp"
+    android:layout_height="175dp"
+    android:layout_gravity="center"
+    android:layout_margin="15dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/components_bg"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/preparacion_titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Título preparación"
+            android:textColor="@color/dark_principal_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/preparacion_notas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_secondary_text"
+            android:text="El equipo rival tiene un ataque fuerte en la zona central."
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/preparacion_fecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="18/01/2025"
+            android:textColor="@color/dark_secondary_text"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

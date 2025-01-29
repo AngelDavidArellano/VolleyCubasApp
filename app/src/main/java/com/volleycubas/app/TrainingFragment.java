@@ -91,6 +91,15 @@ public class TrainingFragment extends Fragment {
             startActivity(intent);
         });
 
+        CardView cardMatchPlanner = view.findViewById(R.id.cardMatchPlanner);
+        cardMatchPlanner.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), PreparacionPartidosActivity.class);
+            intent.putParcelableArrayListExtra("jugadores", new ArrayList<>(jugadoresList));
+            intent.putExtra("teamId", teamId);
+            Log.d("TrainingFragment", "Jugadores enviados: " + jugadoresList.toString());
+            startActivity(intent);
+        });
+
         CardView cardWorkouts = view.findViewById(R.id.cardWorkouts);
         cardWorkouts.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), EntrenamientosActivity.class);

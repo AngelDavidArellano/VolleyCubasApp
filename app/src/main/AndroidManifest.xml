@@ -17,6 +17,9 @@
         android:theme="@style/Theme.VolleyCubasApp"
         tools:targetApi="31">
         <activity
+            android:name=".PreparacionPartidosActivity"
+            android:exported="false" />
+        <activity
             android:name=".HiddenActivity"
             android:exported="false" />
         <activity
