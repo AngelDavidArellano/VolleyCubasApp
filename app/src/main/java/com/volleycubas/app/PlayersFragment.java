@@ -300,8 +300,14 @@ public class PlayersFragment extends Fragment {
                         List<String> fechas = (List<String>) documentSnapshot.get("fechas");
 
                         if (fechas != null && !fechas.isEmpty()) {
+                            // Convertir fechas del formato "12/12/2024" a "12-12-2024"
+                            List<String> fechasFormateadas = new ArrayList<>();
+                            for (String fecha : fechas) {
+                                fechasFormateadas.add(fecha.replace("/", "-"));
+                            }
+
                             // Llamar al método para cargar los datos
-                            cargarDatosDeFechas(fechas, teamId);
+                            cargarDatosDeFechas(fechasFormateadas, teamId);
                         } else {
                             Toast.makeText(getContext(), "No hay fechas disponibles.", Toast.LENGTH_SHORT).show();
                         }
@@ -314,6 +320,7 @@ public class PlayersFragment extends Fragment {
                     Toast.makeText(getContext(), "Error al cargar registros.", Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     private void cargarDatosDeFechas(List<String> fechas, String teamId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -362,11 +369,25 @@ public class PlayersFragment extends Fragment {
             String jugadorId = entry.getKey();
             List<Asistencia> registros = entry.getValue();
 
-            Log.d("Asistencias", "Jugador ID: " + jugadorId);
-            for (Asistencia asistencia : registros) {
-                Log.d("Asistencias", "Fecha: " + asistencia.getFecha() + ", Asistencia: " + asistencia.getAsistencia() + ", Tipo: " + asistencia.getTipo());
+            // Separador visual en el Log para cada jugador
+            Log.d("Asistencias", "-------------------------------------");
+            Log.d("Asistencias", "📌 Jugador ID: " + jugadorId);
+            Log.d("Asistencias", "Número de registros: " + registros.size());
+
+            if (registros.isEmpty()) {
+                Log.d("Asistencias", "❌ No hay registros de asistencia.");
+            } else {
+                for (Asistencia asistencia : registros) {
+                    // Si asistencia es null, se marca automáticamente como "No asistió"
+                    boolean asistenciaConfirmada = asistencia.getAsistencia() != null ? asistencia.getAsistencia() : false;
+
+                    Log.d("Asistencias", "📅 Fecha: " + asistencia.getFecha() +
+                            " | Asistió: " + (asistenciaConfirmada ? "✅ Sí" : "❌ No") +
+                            " | Tipo: " + asistencia.getTipo());
+                }
             }
         }
+        Log.d("Asistencias", "=====================================");
     }
 
 }
