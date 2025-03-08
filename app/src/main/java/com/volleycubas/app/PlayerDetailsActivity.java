@@ -178,8 +178,12 @@ public class PlayerDetailsActivity extends AppCompatActivity {
         db.collection("equipos").document(teamId)
                 .update("jugadores", FieldValue.arrayRemove(jugador.toMap()))
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Jugador eliminado con éxito.", Toast.LENGTH_SHORT).show();
-                    finish(); // Cerrar actividad y volver al fragment
+                    db.collection("equipos").document(teamId)
+                            .update("numero_jugadores", FieldValue.increment(-1))
+                            .addOnSuccessListener(aVoid2 -> {
+                                Toast.makeText(this, "Jugador eliminado con éxito.", Toast.LENGTH_SHORT).show();
+                                finish(); // Cerrar actividad y volver al fragment
+                            });
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error al eliminar jugador: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
