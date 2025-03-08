@@ -570,7 +570,7 @@ public class TeamSettingsActivity extends AppCompatActivity {
 
             Log.d("Excel", "Archivo guardado correctamente.");
             isWorkbookSaved = true; // Actualizamos el flag
-            runOnUiThread(() -> Toast.makeText(this, "Datos exportados en: " + exportFile.getAbsolutePath(), Toast.LENGTH_LONG).show());
+            runOnUiThread(() -> Toast.makeText(this, "Datos exportados -> Downloads -> VolleyCubasApp -> " + exportFile.getName(), Toast.LENGTH_LONG).show());
         } catch (Exception e) {
             Log.e("SAVE_ERROR", "Error al guardar el archivo", e);
             runOnUiThread(() -> Toast.makeText(this, "Error al guardar el archivo: " + e.getMessage(), Toast.LENGTH_SHORT).show());

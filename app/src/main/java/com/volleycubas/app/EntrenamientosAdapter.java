@@ -1,14 +1,20 @@
 package com.volleycubas.app;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +23,17 @@ public class EntrenamientosAdapter extends RecyclerView.Adapter<EntrenamientosAd
 
     private List<Entrenamiento> entrenamientos;
     private OnItemClickListener listener;
+    private String teamId;
+
 
     public interface OnItemClickListener {
         void onItemClick(Entrenamiento entrenamiento);
     }
 
-    public EntrenamientosAdapter(List<Entrenamiento> entrenamientos, OnItemClickListener listener) {
+    public EntrenamientosAdapter(List<Entrenamiento> entrenamientos, OnItemClickListener listener, String teamId) {
         this.entrenamientos = entrenamientos;
         this.listener = listener;
+        this.teamId = teamId;
     }
 
     @NonNull
@@ -54,6 +63,11 @@ public class EntrenamientosAdapter extends RecyclerView.Adapter<EntrenamientosAd
             intent.putStringArrayListExtra("ejercicios", new ArrayList<>(entrenamiento.getEjercicios()));
             holder.itemView.getContext().startActivity(intent);
         });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            mostrarDialogoConfirmacion(holder.itemView.getContext(), position, entrenamiento.getId());
+            return true;
+        });
     }
 
     @Override
@@ -70,5 +84,28 @@ public class EntrenamientosAdapter extends RecyclerView.Adapter<EntrenamientosAd
             creator = itemView.findViewById(R.id.tvEntrenamientoCreator);
             type = itemView.findViewById(R.id.tvEntrenamientoType);
         }
+    }
+
+    private void mostrarDialogoConfirmacion(Context context, int position, String entrenamientoId) {
+        new AlertDialog.Builder(context)
+                .setTitle("Eliminar entrenamiento")
+                .setMessage("¿Quieres eliminar este entrenamiento del equipo?")
+                .setPositiveButton("Eliminar", (dialog, which) -> eliminarEntrenamientoDelEquipo(position, entrenamientoId))
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    // Método para eliminar solo el ID del array de entrenamientos en Firestore
+    private void eliminarEntrenamientoDelEquipo(int position, String entrenamientoId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("equipos").document(teamId)
+                .update("entrenamientos", FieldValue.arrayRemove(entrenamientoId))
+                .addOnSuccessListener(aVoid -> {
+                    entrenamientos.remove(position);
+                    notifyItemRemoved(position);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("EntrenamientosAdapter", "Error al eliminar entrenamiento del equipo: " + e.getMessage());
+                });
     }
 }

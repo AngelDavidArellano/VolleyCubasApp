@@ -1,10 +1,14 @@
 package com.volleycubas.app;
 
+import android.content.ClipboardManager;
+import android.content.ClipData;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,8 +29,10 @@ import java.util.Map;
 
 public class HiddenActivity extends AppCompatActivity {
 
-    private EditText editTextJson;
-    private Button buttonUpload;
+    private EditText editTextJson, editTextTitle, editTextContent;
+    private ImageView iconCopyTitle, iconCopyContent;
+    private Button buttonUploadJson, buttonUploadDocument;
+
     private FirebaseFirestore firestore;
 
     @Override
@@ -36,11 +42,17 @@ public class HiddenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hidden);
 
         editTextJson = findViewById(R.id.editTextJSON);
-        buttonUpload = findViewById(R.id.buttonUploadJSON);
+        editTextTitle = findViewById(R.id.editTextTitle);
+        editTextContent = findViewById(R.id.editTextContent);
+        buttonUploadJson = findViewById(R.id.buttonUploadJSON);
+        buttonUploadDocument = findViewById(R.id.buttonUploadDocument);
         firestore = FirebaseFirestore.getInstance();
         FirebaseFirestore.setLoggingEnabled(true); // Habilita logs de Firebase
 
-        buttonUpload.setOnClickListener(new View.OnClickListener() {
+        iconCopyTitle = findViewById(R.id.iconCopyTitle);
+        iconCopyContent = findViewById(R.id.iconCopyContent);
+
+        buttonUploadJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String jsonInput = editTextJson.getText().toString();
@@ -58,6 +70,54 @@ public class HiddenActivity extends AppCompatActivity {
                 }
             }
         });
+
+        buttonUploadDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String titulo = editTextTitle.getText().toString().trim();
+                String contenido = editTextContent.getText().toString().trim();
+
+                if (TextUtils.isEmpty(titulo) || TextUtils.isEmpty(contenido)) {
+                    Toast.makeText(HiddenActivity.this, "Por favor, ingrese un título y contenido", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                uploadAnnouncementToFirestore(titulo, contenido);
+            }
+        });
+
+        // 🔥 Icono para copiar el título al portapapeles
+        iconCopyTitle.setOnClickListener(v -> copyToClipboard("Titulo", "¡Nuevos horarios publicados!"));
+
+        // 🔥 Icono para copiar el contenido al portapapeles
+        iconCopyContent.setOnClickListener(v -> copyToClipboard("Contenido", "Consulta los próximos partidos de tus equipos en el apartado 'Próximo partido'"));
+    }
+
+    private void uploadAnnouncementToFirestore(String titulo, String contenido) {
+        Map<String, Object> anuncioData = new HashMap<>();
+        anuncioData.put("titulo", titulo);
+        anuncioData.put("contenido", contenido);
+
+        firestore.collection("anuncios").document("anuncio_principal").set(anuncioData)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(HiddenActivity.this, "Anuncio actualizado correctamente", Toast.LENGTH_SHORT).show();
+                    editTextTitle.setText("");
+                    editTextContent.setText("");
+                })
+                .addOnFailureListener(e -> Toast.makeText(HiddenActivity.this, "Error al actualizar el anuncio: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void copyToClipboard(String label, String text) {
+        if (TextUtils.isEmpty(text)) {
+            Toast.makeText(this, label + " está vacío", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(label, text);
+        clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(this, label + " copiado al portapapeles", Toast.LENGTH_SHORT).show();
     }
 
     private void uploadJsonToFirestore(JSONObject jsonObject) {

@@ -46,7 +46,7 @@ public class LineupsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LineupDetailActivity.class);
             intent.putExtra("lineupId", alineacion.getId());
             startActivity(intent);
-        });
+        }, teamId);
 
         rvLineups.setAdapter(adapter);
 

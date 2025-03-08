@@ -2,17 +2,21 @@ package com.volleycubas.app;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +27,17 @@ public class PlayerDetailsActivity extends AppCompatActivity {
 
     private EditText etPlayerName, etPlayerNumber, etPlayerPosition, etPlayerNotes, etNumeroMVPs;
     private Button btnEditPlayer, btnDeletePlayer;
-    private ImageView btnBack;
+    private ImageView btnBack, ivEditButton, player_shirt;
+    private RecyclerView recyclerAsistencias;
 
     private FirebaseFirestore db;
     private String teamId;
     private Jugador jugador;
+    private AsistenciasJugadorAdapter asistenciasJugadorAdapter;
+    private boolean isEditing = false;
+
+
+    private List<Asistencia> asistenciasList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,14 @@ public class PlayerDetailsActivity extends AppCompatActivity {
         btnEditPlayer = findViewById(R.id.btnEditPlayer);
         btnDeletePlayer = findViewById(R.id.btnDeletePlayer);
         btnBack = findViewById(R.id.back_button);
+        ivEditButton = findViewById(R.id.iv_edit_button);
+        recyclerAsistencias = findViewById(R.id.recyclerAsistencias);
+
+        player_shirt = findViewById(R.id.player_shirt);
+
+        setEditable(false);
+        btnEditPlayer.setVisibility(View.GONE);
+        btnDeletePlayer.setVisibility(View.GONE);
 
         // Obtener datos del intent
         teamId = getIntent().getStringExtra("teamId");
@@ -58,15 +76,31 @@ public class PlayerDetailsActivity extends AppCompatActivity {
         // Inicializar Firebase Firestore
         db = FirebaseFirestore.getInstance();
 
+        if (removeAccents(jugador.getPosicion()).equalsIgnoreCase("libero")) {
+            player_shirt.setImageResource(R.drawable.camiseta_cubas_libero_outlined);
+        } else {
+            player_shirt.setImageResource(R.drawable.camiseta_cubas_outlined);
+        }
+
         // Llenar campos con los datos del jugador
         etPlayerName.setText(jugador.getNombre());
         etPlayerNumber.setText(String.valueOf(jugador.getNumero()));
         etPlayerPosition.setText(jugador.getPosicion());
-        etPlayerNotes.setText(jugador.getNotas());
+
+        if (jugador.getNotas().equals("") || jugador.getNotas() == null){
+            etPlayerNotes.setHint("No se han encontrado notas");
+            etPlayerNotes.setText("");
+
+        } else {
+            etPlayerNotes.setText(jugador.getNotas());
+
+        }
         etNumeroMVPs.setText(String.valueOf(jugador.getNumeroMVPs()));
 
         // Configurar botón de volver atrás
         btnBack.setOnClickListener(v -> finish());
+
+        ivEditButton.setOnClickListener(v -> toggleEditMode());
 
         // Configurar botón de editar
         btnEditPlayer.setOnClickListener(v -> updatePlayer());
@@ -74,8 +108,26 @@ public class PlayerDetailsActivity extends AppCompatActivity {
         // Configurar botón de eliminar
         btnDeletePlayer.setOnClickListener(v -> deletePlayer());
 
-
+        asistenciasList = new ArrayList<>();
+        recyclerAsistencias = findViewById(R.id.recyclerAsistencias);
+        recyclerAsistencias.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        asistenciasJugadorAdapter = new AsistenciasJugadorAdapter(asistenciasList);
+        recyclerAsistencias.setAdapter(asistenciasJugadorAdapter);
         cargarAsistenciasJugador();
+    }
+
+    private void toggleEditMode() {
+        isEditing = !isEditing;
+        setEditable(isEditing);
+        btnEditPlayer.setVisibility(isEditing ? View.VISIBLE : View.GONE);
+        btnDeletePlayer.setVisibility(isEditing ? View.VISIBLE : View.GONE);
+    }
+
+    private void setEditable(boolean editable) {
+        etPlayerName.setEnabled(editable);
+        etPlayerNumber.setEnabled(editable);
+        etPlayerPosition.setEnabled(editable);
+        etPlayerNotes.setEnabled(editable);
     }
 
     private void updatePlayer() {
@@ -134,11 +186,9 @@ public class PlayerDetailsActivity extends AppCompatActivity {
 
     private void cargarAsistenciasJugador() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, List<Asistencia>> asistenciasPorJugador = new HashMap<>();
-        AtomicInteger totalFechas = new AtomicInteger();  // Contador de fechas totales a procesar
-        int[] fechasProcesadas = {0}; // Contador de fechas ya procesadas
+        asistenciasList.clear(); // Limpiar lista antes de cargar nuevos datos
 
-        Log.d("Asistencias", "🔄 Iniciando carga de asistencias para el jugador: " + jugador.getNombre());
+        Log.d("Asistencias", "🔄 Cargando asistencias para el jugador: " + jugador.getNombre());
 
         db.collection("registros").document(teamId).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -156,8 +206,6 @@ public class PlayerDetailsActivity extends AppCompatActivity {
 
                     Log.d("Asistencias", "📅 Fechas encontradas: " + fechas.toString());
 
-                    totalFechas.set(fechas.size()); // Guardamos cuántas fechas hay
-
                     for (String fecha : fechas) {
                         String fechaFormateada = fecha.replace("/", "-");
                         Log.d("Asistencias", "🔎 Buscando asistencias en la fecha: " + fechaFormateada);
@@ -174,15 +222,10 @@ public class PlayerDetailsActivity extends AppCompatActivity {
                                         if (jugadoresAsistencia != null) {
                                             for (Map<String, Object> jugadorData : jugadoresAsistencia) {
                                                 String jugadorId = (String) jugadorData.get("id");
-
                                                 if (jugadorId.equals(jugador.getId())) {
                                                     Boolean asistencia = (Boolean) jugadorData.get("asistencia");
                                                     Asistencia registroAsistencia = new Asistencia(fechaFormateada, asistencia, tipo);
-
-                                                    if (!asistenciasPorJugador.containsKey(jugadorId)) {
-                                                        asistenciasPorJugador.put(jugadorId, new ArrayList<>());
-                                                    }
-                                                    asistenciasPorJugador.get(jugadorId).add(registroAsistencia);
+                                                    asistenciasList.add(registroAsistencia);
 
                                                     Log.d("Asistencias", "✅ Asistencia añadida -> Fecha: " + fechaFormateada +
                                                             " | Asistió: " + (asistencia != null ? (asistencia ? "✅ Sí" : "❌ No") : "❌ No") +
@@ -191,49 +234,22 @@ public class PlayerDetailsActivity extends AppCompatActivity {
                                             }
                                         }
                                     }
+                                    asistenciasList.sort((a1, a2) -> a2.getFecha().compareTo(a1.getFecha()));
 
-                                    // Incrementamos el número de fechas procesadas
-                                    fechasProcesadas[0]++;
-
-                                    // Solo imprimimos cuando TODAS las fechas hayan sido procesadas
-                                    if (fechasProcesadas[0] == totalFechas.get()) {
-                                        if (asistenciasPorJugador.containsKey(jugador.getId())) {
-                                            imprimirAsistenciasOrdenadas(asistenciasPorJugador.get(jugador.getId()));
-                                        } else {
-                                            Log.d("Asistencias", "⚠️ No se encontraron asistencias para el jugador " + jugador.getNombre());
-                                        }
-                                    }
+                                    // Actualizar RecyclerView tras obtener los datos
+                                    asistenciasJugadorAdapter.notifyDataSetChanged();
                                 })
-                                .addOnFailureListener(e -> {
-                                    Log.e("Firebase", "⚠️ Error al obtener registros de la fecha: " + fechaFormateada, e);
-                                    fechasProcesadas[0]++; // Asegurar que el contador siga avanzando
-                                });
+                                .addOnFailureListener(e -> Log.e("Firebase", "⚠️ Error al obtener registros de la fecha: " + fechaFormateada, e));
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firebase", "⚠️ Error al acceder a los registros del equipo", e));
     }
 
-
-    private void imprimirAsistenciasOrdenadas(List<Asistencia> asistencias) {
-        if (asistencias == null || asistencias.isEmpty()) {
-            Log.d("Asistencias", "❌ No hay registros de asistencia para este jugador.");
-            return;
+    public static String removeAccents(String input) {
+        if (input == null) {
+            return null;
         }
-
-        // Ordenar por fecha (suponiendo formato "dd-MM-yyyy")
-        asistencias.sort((a1, a2) -> a1.getFecha().compareTo(a2.getFecha()));
-
-        Log.d("Asistencias", "-------------------------------------");
-        Log.d("Asistencias", "📌 Asistencias de " + jugador.getNombre() + " (Ordenadas por fecha)");
-
-        for (Asistencia asistencia : asistencias) {
-            boolean asistenciaConfirmada = asistencia.getAsistencia() != null ? asistencia.getAsistencia() : false;
-            Log.d("Asistencias", "📅 Fecha: " + asistencia.getFecha() +
-                    " | Asistió: " + (asistenciaConfirmada ? "✅ Sí" : "❌ No") +
-                    " | Tipo: " + asistencia.getTipo());
-        }
-        Log.d("Asistencias", "=====================================");
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return normalized.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
     }
-
-
 }

@@ -1,21 +1,175 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?android:attr/windowBackground">
 
-    <EditText
-        android:id="@+id/editTextJSON"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:hint="Ingrese el JSON aquí"
-        android:gravity="top"
-        android:inputType="textMultiLine" />
-
-    <Button
-        android:id="@+id/buttonUploadJSON"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Subir a Firebase" />
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- Título Principal -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mantenimiento de Datos"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="12dp"/>
+
+        <!-- Separador -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Sección: Ingreso de JSON -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Añadir horarios"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/editTextJSON"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:hint="Ingrese el JSON aquí..."
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:background="@android:drawable/edit_text"
+            android:padding="8dp"/>
+
+        <!-- Botón para Subir JSON -->
+        <Button
+            android:id="@+id/buttonUploadJSON"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subir JSON a Firebase"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_marginTop="12dp"/>
+
+        <!-- Separador -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Sección: Ingreso de Título y Contenido -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualizar tablón de anuncios"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"/>
+
+        <!-- EditText para el Título con Icono -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Título del tablón"
+                android:inputType="text"
+                android:background="@android:drawable/edit_text"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingEnd="40dp"/>
+
+            <ImageView
+                android:id="@+id/iconCopyTitle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_copy"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                app:tint="@android:color/darker_gray" />
+        </RelativeLayout>
+
+        <!-- EditText para el Contenido con Icono -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextContent"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:hint="Contenido del anuncio..."
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:background="@android:drawable/edit_text"
+                android:padding="8dp"
+                android:paddingEnd="40dp"/>
+
+            <ImageView
+                android:id="@+id/iconCopyContent"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_copy"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                app:tint="@android:color/darker_gray" />
+        </RelativeLayout>
+
+        <!-- Botón para Subir Documento -->
+        <Button
+            android:id="@+id/buttonUploadDocument"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subir cambios a Firebase"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_marginTop="12dp"/>
+
+        <!-- Separador para futuras funcionalidades -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Sección para futuras funcionalidades -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Otras Funcionalidades"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="8dp"/>
+
+        <!-- Placeholder para nuevas funcionalidades -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(Próximamente)"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:paddingBottom="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

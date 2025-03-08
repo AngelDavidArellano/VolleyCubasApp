@@ -1,6 +1,9 @@
 package com.volleycubas.app;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -40,6 +46,11 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
         holder.bind(partido);
 
         holder.itemView.setOnClickListener(v -> MatchDetailsActivity.start(v.getContext(), partido, teamId));
+
+        holder.itemView.setOnLongClickListener(v -> {
+            mostrarDialogoConfirmacion(holder.itemView.getContext(), position, partido);
+            return true;
+        });
     }
 
 
@@ -73,6 +84,25 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
 
             itemView.setOnClickListener(v -> onPartidoClickListener.onPartidoClick(partido));
         }
+    }
 
+    private void mostrarDialogoConfirmacion(Context context, int position, Partido partido) {
+        new AlertDialog.Builder(context)
+                .setTitle("Eliminar partido")
+                .setMessage("¿Estás seguro de que deseas eliminar este partido?")
+                .setPositiveButton("Eliminar", (dialog, which) -> eliminarPartido(position, partido))
+                .setNegativeButton("Cancelar", null) // No hace nada si se cancela
+                .show();
+    }
+
+    private void eliminarPartido(int position, Partido partido) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("equipos").document(teamId)
+                .update("historial_partidos", FieldValue.arrayRemove(partido.toMap()))
+                .addOnSuccessListener(aVoid -> {
+                    historialPartidos.remove(position);
+                    notifyItemRemoved(position);
+                })
+                .addOnFailureListener(e -> Log.e("HistorialAdapter", "Error al eliminar partido: " + e.getMessage()));
     }
 }

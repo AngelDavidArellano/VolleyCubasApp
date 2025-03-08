@@ -79,6 +79,18 @@
         android:layout_marginStart="15dp"
         app:tint="@color/light_icons_color" />
 
+    <TextView
+        android:id="@+id/rvNoAssistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No se han encontrado registros"
+        android:textSize="16sp"
+        android:textColor="@color/light_secondary_text"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectedDate"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
     <!-- RecyclerView para asistencias -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAssistance"

@@ -118,7 +118,7 @@ public class EntrenamientosActivity extends AppCompatActivity {
                                     adapter = new EntrenamientosAdapter(entrenamientos, entrenamiento -> {
                                         // Acción al seleccionar un entrenamiento
                                         Toast.makeText(this, "Entrenamiento pulsado: " + entrenamiento.getTitulo(), Toast.LENGTH_SHORT).show();
-                                    });
+                                    }, teamId);
 
                                     recyclerView.setAdapter(adapter);
                                 })

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int clickCount = 0;
     private long lastClickTime = 0;
-    private static final int CLICK_THRESHOLD = 5;
+    private static final int CLICK_THRESHOLD = 7;
     private static final long CLICK_RESET_TIME = 1000; // Tiempo límite para considerar clicks consecutivos (ms)
 
     private FirebaseAuth mAuth;
