@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 
 import java.io.File;
+import java.util.Map;
 
 
 public class StatsFragment extends Fragment {
@@ -35,7 +36,7 @@ public class StatsFragment extends Fragment {
     private String teamId;
 
     private ImageView settingsBtn;
-    private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak, tvMaxStreak_data;
+    private TextView tvVictories, tvSetsWon, tvAttendancePercentage, tvPointsScored, tvMaxStreak, tvMaxStreak_data, tvMVPPlayerName;
     private TextView tvVictories_amount, tvSetsWon_amount, tvPointsScored_amount;
     private ProgressBar progressVictories, progressSetsWon, progressAttendance, progressPointsScored;
 
@@ -70,6 +71,7 @@ public class StatsFragment extends Fragment {
         tvPointsScored_amount = view.findViewById(R.id.tvPointsScored_amount);
         tvMaxStreak = view.findViewById(R.id.tvMaxStreak);
         tvMaxStreak_data = view.findViewById(R.id.tvMaxStreak_data);
+        tvMVPPlayerName = view.findViewById(R.id.tvMVPPlayerName);
 
         progressVictories = view.findViewById(R.id.progressVictories);
         progressSetsWon = view.findViewById(R.id.progressSetsWon);
@@ -118,6 +120,7 @@ public class StatsFragment extends Fragment {
                         int partidosGanados = documentSnapshot.contains("partidos_ganados") ?
                                 documentSnapshot.getLong("partidos_ganados").intValue() : 0;
 
+
                         // Datos del card
                         String nombre = documentSnapshot.contains("nombre") ? documentSnapshot.getString("nombre") : "";
                         String capitan = documentSnapshot.contains("capitan") ? documentSnapshot.getString("capitan") : "";
@@ -135,6 +138,40 @@ public class StatsFragment extends Fragment {
                                 entrenador = String.join(", ", entrenadores); // Combinar los nombres
                             }
                         }
+
+                        if (!documentSnapshot.contains("jugadores")) {
+                            tvMVPPlayerName.setText("No disponible");
+                            return;
+                        }
+
+                        List<Map<String, Object>> jugadores = (List<Map<String, Object>>) documentSnapshot.get("jugadores");
+                        if (jugadores == null || jugadores.isEmpty()) {
+                            tvMVPPlayerName.setText("No disponible");
+                            return;
+                        }
+
+                        String bestPlayer = "No disponible";
+                        int maxMVPs = 0;
+                        boolean isTie = false;
+
+                        for (Map<String, Object> jugador : jugadores) {
+                            int mvpCount = jugador.containsKey("numeroMVPs") ? ((Long) jugador.get("numeroMVPs")).intValue() : 0;
+                            String playerName = jugador.containsKey("nombre") ? (String) jugador.get("nombre") : "";
+
+                            if (mvpCount > maxMVPs) {
+                                maxMVPs = mvpCount;
+                                bestPlayer = playerName;
+                                isTie = false;
+                            } else if (mvpCount == maxMVPs && maxMVPs > 0) {
+                                isTie = true;
+                            }
+                        }
+
+                        if (isTie || maxMVPs == 0) {
+                            bestPlayer = "No disponible";
+                        }
+
+                        tvMVPPlayerName.setText(bestPlayer);
 
                         // Actualizar estadísticas
                         tvSetsWon.setText(String.valueOf(setsAFavor));
