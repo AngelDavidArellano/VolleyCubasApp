@@ -131,6 +131,23 @@
                 app:tint="@android:color/darker_gray" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/predefined_horarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horarios publicados"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/predefined_actualizacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nueva actualización"
+            android:textSize="16sp"
+            android:textStyle="italic"/>
+
         <!-- Botón para Subir Documento -->
         <Button
             android:id="@+id/buttonUploadDocument"

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import java.util.Map;
 public class HiddenActivity extends AppCompatActivity {
 
     private EditText editTextJson, editTextTitle, editTextContent;
+    private TextView predefined_horarios, predefined_actualizacion;
     private ImageView iconCopyTitle, iconCopyContent;
     private Button buttonUploadJson, buttonUploadDocument;
 
@@ -51,6 +53,9 @@ public class HiddenActivity extends AppCompatActivity {
 
         iconCopyTitle = findViewById(R.id.iconCopyTitle);
         iconCopyContent = findViewById(R.id.iconCopyContent);
+
+        predefined_horarios = findViewById(R.id.predefined_horarios);
+        predefined_actualizacion = findViewById(R.id.predefined_actualizacion);
 
         buttonUploadJson.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,11 +91,33 @@ public class HiddenActivity extends AppCompatActivity {
             }
         });
 
+
         // 🔥 Icono para copiar el título al portapapeles
-        iconCopyTitle.setOnClickListener(v -> copyToClipboard("Titulo", "¡Nuevos horarios publicados!"));
+        iconCopyTitle.setOnClickListener(v -> copyToClipboard(String.valueOf(editTextTitle.getText()), String.valueOf(editTextContent.getText())));
 
         // 🔥 Icono para copiar el contenido al portapapeles
         iconCopyContent.setOnClickListener(v -> copyToClipboard("Contenido", "Consulta los próximos partidos de tus equipos en el apartado 'Próximo partido'"));
+
+        predefined_horarios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String titulo = "¡Nuevos horarios publicados!";
+                String contenido = "Consulta los próximos partidos de tus equipos en el apartado 'Próximo partido'";
+
+                editTextTitle.setText(titulo);
+                editTextContent.setText(contenido);
+            }
+        });
+        predefined_actualizacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String titulo = "¡Actualización disponible!";
+                String contenido = "Puedes descargar la nueva versión acercando la tarjeta de acceso o pulsando AQUÍ";
+
+                editTextTitle.setText(titulo);
+                editTextContent.setText(contenido);
+            }
+        });
     }
 
     private void uploadAnnouncementToFirestore(String titulo, String contenido) {

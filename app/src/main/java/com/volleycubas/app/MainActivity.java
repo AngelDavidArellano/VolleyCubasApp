@@ -6,6 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -232,8 +237,36 @@ public class MainActivity extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         String titulo = documentSnapshot.getString("titulo");
                         String contenido = documentSnapshot.getString("contenido");
+
+                        if (contenido.contains("AQUÍ") && titulo.toLowerCase().contains("actualización")) {
+                            SpannableString spannable = new SpannableString(contenido);
+
+                            ClickableSpan clickableSpan = new ClickableSpan() {
+                                @Override
+                                public void onClick(View widget) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/drive/u/1/folders/1KfZiETWGpEoFdh4CMOLVslPOrYNz5Nde"));
+                                    widget.getContext().startActivity(intent);
+                                }
+
+                                @Override
+                                public void updateDrawState(TextPaint ds) {
+                                    super.updateDrawState(ds);
+                                    ds.setUnderlineText(true); // Subrayado opcional
+                                }
+                            };
+
+                            int startIndex = contenido.indexOf("AQUÍ");
+                            if (startIndex != -1) {
+                                spannable.setSpan(clickableSpan, startIndex, startIndex + 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            }
+                            announcementContent.setText(spannable);
+                            announcementContent.setMovementMethod(LinkMovementMethod.getInstance());
+                        } else {
+                            // Mostrar texto plano sin hipervínculo
+                            announcementContent.setText(contenido);
+                        }
                         announcementTitle.setText(titulo);
-                        announcementContent.setText(contenido);
+
                     } else {
                         announcementTitle.setText("¿Tienes todo listo?");
                         announcementContent.setText("Recuerda preparar el partido del fin de semana");
