@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private TextView tvVersion;
 
     private String trainerID, nombreApellidosEntrenador, email, profilePhotoUrl;
     private ArrayList<String> teamListNames, teamListCodes;
@@ -53,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         nombreApellidosEntrenador = getIntent().getStringExtra("nombreCompleto");
         email = getIntent().getStringExtra("email");
         profilePhotoUrl = getIntent().getStringExtra("profilePhotoUrl");
+        tvVersion = findViewById(R.id.tvVersion);
 
         teamListNames = getIntent().getStringArrayListExtra("listaEquiposNombres");
         teamListCodes = getIntent().getStringArrayListExtra("listaEquiposCodigos");
@@ -64,6 +68,16 @@ public class ProfileActivity extends AppCompatActivity {
                 i++;
             }
         }
+
+        String versionName = "No se puede obtener la versión";
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        tvVersion.setText("Versión actual: " + versionName);
+
 
         // Configurar vistas
         ImageView profilePicture = findViewById(R.id.profile_picture);

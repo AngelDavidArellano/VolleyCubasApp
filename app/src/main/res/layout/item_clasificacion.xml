@@ -1,0 +1,81 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="#F5F5F5">
+
+    <TextView
+        android:id="@+id/txtPosicion"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtEquipo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Equipo"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/txtPJ"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="PJ"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtSetsFavor"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="SF"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtSetsContra"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="SC"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtGanados"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="PG"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtPerdidos"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="PP"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtPtsDiferencia"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="PD"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+</LinearLayout>

@@ -265,6 +265,18 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Versión actual: 1.0.0"
+        android:fontFamily="@font/tripsans"
+        android:textSize="12sp"
+        android:textColor="@color/dark_secondary_text"
+        app:layout_constraintBottom_toTopOf="@id/btn_logout"
+        android:layout_marginBottom="5dp"/>
+
     <!-- Botón cerrar sesión -->
     <Button
         android:id="@+id/btn_logout"

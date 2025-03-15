@@ -155,7 +155,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@id/toolsText"
-        android:weightSum="2">
+        android:weightSum="3">
 
         <!-- CardView de Horarios -->
         <androidx.cardview.widget.CardView
@@ -221,14 +221,59 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_shuffle"
                     android:contentDescription="Icono de Crear Equipos"
+                    android:src="@drawable/ic_shuffle"
                     app:tint="@color/dark_icons_color" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/tripsans"
                     android:text="Generar Equipos"
+                    android:textColor="@color/dark_principal_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/tripsans"
+                    android:text="Crea equipos aleatorios para tus entrenamientos."
+                    android:textColor="@color/dark_principal_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- CardView de Clasificaciones -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_clasificaciones"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/components_bg">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_clock"
+                    android:contentDescription="Icono de Horarios"
+                    app:tint="@color/dark_icons_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clasificaciones"
                     android:textColor="@color/dark_principal_text"
                     android:textSize="16sp"
                     android:fontFamily="@font/tripsans"
@@ -238,7 +283,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Crea equipos aleatorios para tus entrenamientos."
+                    android:text="Visualiza los horarios de los partidos del club."
                     android:textColor="@color/dark_principal_text"
                     android:textSize="12sp"
                     android:fontFamily="@font/tripsans"

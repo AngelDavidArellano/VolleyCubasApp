@@ -1,10 +1,12 @@
 package com.volleycubas.app;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -25,6 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,6 +49,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     public static boolean isLoadingInitialized = false;
@@ -73,6 +85,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         trainerID = FirebaseAuth.getInstance().getUid();
+
+        actualizarTokenFCM(trainerID);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -125,6 +153,12 @@ public class MainActivity extends AppCompatActivity {
         CardView cardHorarios = findViewById(R.id.card_horarios);
         cardHorarios.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, NextGamesActivity.class);
+            startActivity(intent);
+        });
+
+        CardView cardClasificaciones = findViewById(R.id.card_clasificaciones);
+        cardClasificaciones.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ClasificacionesActivity.class);
             startActivity(intent);
         });
 
@@ -567,5 +601,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    private void actualizarTokenFCM(String userId) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM", "No se pudo obtener el token", task.getException());
+                        return;
+                    }
+
+                    String newToken = task.getResult();
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                    db.collection("tokens").document(userId)
+                            .set(Collections.singletonMap("token", newToken))
+                            .addOnSuccessListener(aVoid -> Log.d("FCM", "Token actualizado en Firestore"))
+                            .addOnFailureListener(e -> Log.w("FCM", "Error al actualizar token", e));
+                });
     }
 }
