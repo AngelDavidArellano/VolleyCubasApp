@@ -21,8 +21,15 @@
         <item name="android:weekNumberColor">@color/gold</item>
         <item name="android:headerYearTextAppearance">@color/white</item>
     </style>
+
     <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="SpinnerItemStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
 
 </resources>

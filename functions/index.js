@@ -61,21 +61,24 @@ exports.getClasificacion = functions.https.onRequest(async (req, res) => {
             }
         });
 
-        // Extraer y formatear los datos de clasificación
+        const ligaNombre = response.data.competicion + " (" + response.data.division + ")"
+
         const clasificacion = response.data.clasificacion.map(equipo => ({
-            id: equipo.id,
-            equipo: equipo.nombre.trim(),
-            puntos: parseInt(equipo.puntos),
-            jugados: parseInt(equipo.jugados),
-            ganados: parseInt(equipo.ganados),
-            perdidos: parseInt(equipo.perdidos),
-            sets_a_favor: parseInt(equipo.sets_a_favor),
-            sets_en_contra: parseInt(equipo.sets_en_contra),
-            puntos_a_favor: parseInt(equipo.puntos_a_favor),
-            puntos_en_contra: parseInt(equipo.puntos_en_contra)
-        }));
+                    id: equipo.id,
+                    equipo: equipo.nombre.trim(),
+                    puntos: parseInt(equipo.puntos),
+                    jugados: parseInt(equipo.jugados),
+                    ganados: parseInt(equipo.ganados),
+                    perdidos: parseInt(equipo.perdidos),
+                    sets_a_favor: parseInt(equipo.sets_a_favor),
+                    sets_en_contra: parseInt(equipo.sets_en_contra),
+                    puntos_a_favor: parseInt(equipo.puntos_a_favor),
+                    puntos_en_contra: parseInt(equipo.puntos_en_contra),
+                    ligaNombre: ligaNombre
+                }));
 
         res.json(clasificacion);
+
     } catch (error) {
         console.error("❌ Error al obtener la clasificación:", error);
         res.status(500).json({ error: "Error al obtener los datos de la API" });

@@ -11,6 +11,7 @@ public class Clasificacion {
     private int sets_en_contra;
     private int puntos_a_favor;
     private int puntos_en_contra;
+    private String ligaNombre;
 
     public String getId() {
         return id;
@@ -51,4 +52,9 @@ public class Clasificacion {
     public int getPuntosEnContra() {
         return puntos_en_contra;
     }
+
+    public String getLigaNombre() {
+        return ligaNombre;
+    }
+
 }

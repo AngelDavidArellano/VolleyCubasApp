@@ -157,11 +157,13 @@
         app:layout_constraintTop_toBottomOf="@id/toolsText"
         android:weightSum="3">
 
+        <!--ANTES EL  layout_height = 150dp-->
+
         <!-- CardView de Horarios -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_horarios"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="125dp"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             app:cardCornerRadius="15dp"
@@ -172,7 +174,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:gravity="center">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -184,21 +187,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Horarios"
-                    android:textColor="@color/dark_principal_text"
-                    android:textSize="16sp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/tripsans"
+                    android:text="Consultar Horarios"
+                    android:textColor="@color/dark_principal_text"
+                    android:textSize="13sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="8dp" />
+                    android:textAlignment="center"/>
 
-                <TextView
+                <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Visualiza los horarios de los partidos del club."
                     android:textColor="@color/dark_principal_text"
                     android:textSize="12sp"
                     android:fontFamily="@font/tripsans"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginTop="4dp" />-->
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -206,7 +210,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_crear_equipos"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="125dp"
             android:layout_weight="1"
             app:cardCornerRadius="15dp"
             app:cardElevation="4dp"
@@ -216,7 +220,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:gravity="center">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -232,17 +237,18 @@
                     android:fontFamily="@font/tripsans"
                     android:text="Generar Equipos"
                     android:textColor="@color/dark_principal_text"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
 
-                <TextView
+                <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/tripsans"
                     android:text="Crea equipos aleatorios para tus entrenamientos."
                     android:textColor="@color/dark_principal_text"
-                    android:textSize="12sp" />
+                    android:textSize="12sp" />-->
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -250,7 +256,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_clasificaciones"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="125dp"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             app:cardCornerRadius="15dp"
@@ -261,33 +267,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:gravity="center">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_clock"
-                    android:contentDescription="Icono de Horarios"
+                    android:src="@drawable/ic_podium"
+                    android:contentDescription="Icono de clasificaciones"
                     app:tint="@color/dark_icons_color" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Clasificaciones"
+                    android:text="Consultar Clasificaciones"
                     android:textColor="@color/dark_principal_text"
-                    android:textSize="16sp"
+                    android:textSize="13sp"
                     android:fontFamily="@font/tripsans"
                     android:textStyle="bold"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:textAlignment="center"/>
 
-                <TextView
+                <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Visualiza los horarios de los partidos del club."
                     android:textColor="@color/dark_principal_text"
                     android:textSize="12sp"
                     android:fontFamily="@font/tripsans"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginTop="4dp" />-->
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

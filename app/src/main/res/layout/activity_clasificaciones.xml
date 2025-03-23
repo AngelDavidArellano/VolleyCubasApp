@@ -1,29 +1,124 @@
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:paddingVertical="16dp"
+    android:background="@color/bg">
 
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="16dp"
+        />
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clasificación"
+        android:textSize="28sp"
+        android:textColor="@color/light_principal_text"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvLeagueName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre de la liga (división)"
+        android:textSize="15sp"
+        android:textColor="@color/light_principal_text"
+        android:fontFamily="@font/tripsans"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Spinner de Ligas -->
     <Spinner
         android:id="@+id/spinnerLigas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
         android:padding="8dp"
-        android:spinnerMode="dropdown"/>
+        android:textAlignment="center"
+        android:backgroundTint="@color/bg"
+        android:spinnerMode="dropdown"
+        app:layout_constraintTop_toBottomOf="@id/tvLeagueName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="18dp"/>
 
+    <ImageView
+        android:id="@+id/triangle_icon"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@drawable/ic_triangle"
+        android:rotation="180"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/spinnerLigas"
+        app:layout_constraintBottom_toBottomOf="@id/spinnerLigas"
+        android:layout_marginEnd="50dp"
+        app:tint="@color/light_icons_color" />
+
+    <!-- Divider -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_secondary_text"
+        app:layout_constraintTop_toBottomOf="@id/spinnerLigas"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="16dp"/>
+
+    <!-- Título de Clasificación -->
     <include
-        android:id="@+id/empty_space"
-        layout="@layout/item_clasificacion"
+        android:id="@+id/clasificacion_titulo"
+        layout="@layout/item_clasificacion_titulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
+    <!-- indicador de carga -->
+    <ImageView
+        android:id="@+id/loadingGif_main"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="@id/clasificacion_titulo"
+        app:layout_constraintEnd_toEndOf="@id/clasificacion_titulo"
+        app:layout_constraintTop_toTopOf="@id/clasificacion_titulo"
+        android:layout_marginTop="75dp"
+        android:src="@drawable/ic_start_match"
+        app:tint="@color/white" />
 
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerClasificacion"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"/>
-</LinearLayout>
+        android:layout_height="0dp"
+        tools:listitem="@layout/item_clasificacion"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/clasificacion_titulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

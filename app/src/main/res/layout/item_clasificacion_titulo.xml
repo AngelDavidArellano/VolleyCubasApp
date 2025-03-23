@@ -1,0 +1,74 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="@color/bg">
+
+    <TextView
+        android:id="@+id/txtEquipo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Equipo"
+        android:textSize="16sp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/light_secondary_text"
+        />
+
+    <TextView
+        android:id="@+id/txtPJ"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="PJ"
+        android:textSize="16sp"
+        android:textColor="@color/light_secondary_text"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtSetsFavor"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="SF"
+        android:textSize="16sp"
+        android:textColor="@color/light_secondary_text"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtSetsContra"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="SC"
+        android:textSize="16sp"
+        android:textColor="@color/light_secondary_text"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtGanados"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="PG"
+        android:textSize="16sp"
+        android:textColor="@color/light_secondary_text"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtPerdidos"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="PP"
+        android:textSize="16sp"
+        android:textColor="@color/light_secondary_text"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtPtsDiferencia"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="DP"
+        android:textSize="16sp"
+        android:textColor="@color/light_secondary_text"
+        android:gravity="center"/>
+</LinearLayout>
