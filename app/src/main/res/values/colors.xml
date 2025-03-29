@@ -6,10 +6,19 @@
     <!-- Colores fondo, componentes y secundario -->
     <color name="bg">#0C0C0C</color>
     <color name="bg_90">#E60C0C0C</color>
+
+    <color name="bg_light">#F8F5F1</color>
+    <color name="bg_90_light">#E6F8F5F1</color>
+
     <color name="components_bg">#E0E0E0</color>
+    <color name="components_bg_light">#FFFFFF</color>
+
     <color name="light_icons_color">#E0E0E0</color>
     <color name="dark_icons_color">#0C0C0C</color>
+
     <color name="gold">#BD900E</color>
+    <color name="gold_light">#E1CD97</color>
+
 
     <!-- Colores estadisticas, historial... -->
     <color name="blue">#406FCC</color>
@@ -30,7 +39,7 @@
 
     <!-- Colores textos -->
     <color name="dark_principal_text">#000000</color>
-    <color name="dark_secondary_text">#666666</color>
+    <color name="dark_secondary_text">#4E4E4E</color>
     <color name="light_principal_text">#E0E0E0</color>
     <color name="light_secondary_text">#D3D3D3</color>
 

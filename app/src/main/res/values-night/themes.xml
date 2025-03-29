@@ -1,7 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.VolleyCubasApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="colorPrimary">@color/bg</item>
+        <item name="colorSecondary">@color/gold</item>
+
+        <item name="cardBackgroundColor">@color/components_bg</item>
+        <item name="textAppearanceBody1">@color/light_principal_text</item> //Color texto principal
+        <item name="textAppearanceBody2">@color/light_secondary_text</item> //Color texto secundario
+
+        <item name="background">@color/bg</item>
+
+        <item name="iconTint">@color/light_icons_color</item>
+        <item name="backgroundColor">#191919</item> //calendario fondo
+
+
+
     </style>
 </resources>

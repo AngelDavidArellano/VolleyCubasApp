@@ -26,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         trainerID = FirebaseAuth.getInstance().getUid();
 
         actualizarTokenFCM(trainerID);
@@ -206,9 +208,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null && !isLoadingInitialized || !isDataLoaded) {
+        if (currentUser != null && (!isLoadingInitialized || !isDataLoaded)) {
             cargarEquiposDesdeFirestore(currentUser.getUid());
             loadProfileImage();
             isLoadingInitialized = true;

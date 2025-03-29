@@ -2,8 +2,16 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.VolleyCubasApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/bg</item>
-        <item name="colorSecondary">@color/gold</item>
+        <item name="colorPrimary">@color/bg_light</item>
+        <item name="colorSecondary">@color/gold_light</item>
+
+        <item name="cardBackgroundColor">@color/components_bg_light</item>
+        <item name="textAppearanceBody1">@color/dark_principal_text</item> //Color texto principal
+        <item name="textAppearanceBody2">@color/dark_secondary_text</item> //Color texto secundario
+        <item name="background">@color/bg_light</item>
+
+        <item name="iconTint">@color/dark_icons_color</item>
+        <item name="backgroundColor">@color/components_bg_light</item> //calendario fondo
 
 
     </style>

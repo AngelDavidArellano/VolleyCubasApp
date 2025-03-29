@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -192,23 +193,25 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        switchDarkMode.setChecked(true); // Asegurar que siempre esté en modo oscuro
-        switchDarkMode.setEnabled(false); // Deshabilitar el cambio de estado
+        SharedPreferences prefs = getSharedPreferences("config", MODE_PRIVATE);
+        boolean modoOscuro = prefs.getBoolean("modo_oscuro", true);
+        switchDarkMode.setChecked(modoOscuro);
 
-        tvDarkMode.setOnClickListener(v ->
-                Toast.makeText(this, "No disponible: Modo claro en desarrollo", Toast.LENGTH_SHORT).show()
-        );
-        // Listener para el switch de modo oscuro
-        /*switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Cambiar el tema de la aplicación (modo oscuro/claro)
-            if (isChecked) {
-                // Activar modo oscuro
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                // Desactivar modo oscuro
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-        });*/
+        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = getSharedPreferences("config", MODE_PRIVATE).edit();
+            editor.putBoolean("modo_oscuro", isChecked);
+            editor.apply();
+
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+            );
+
+            MainActivity.isLoadingInitialized = false;
+            MainActivity.isDataLoaded = false;
+
+            recreate();
+        });
+
 
         // Botón de regreso
         ImageView backButton = findViewById(R.id.back_button);

@@ -11,19 +11,19 @@
     </style>
 
     <style name="CalenderViewCustom" parent="Theme.AppCompat">
-        <item name="colorAccent">@color/gold</item>
-        <item name="colorPrimary">@color/bg</item>
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorPrimary">?attr/background</item>
+        <item name="android:textColorPrimary">?attr/textAppearanceBody1</item>
     </style>
 
     <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:weekNumberColor">@color/gold</item>
-        <item name="android:headerYearTextAppearance">@color/white</item>
+        <item name="android:textColor">?attr/textAppearanceBody1</item>
+        <item name="android:weekNumberColor">?attr/colorSecondary</item>
+        <item name="android:headerYearTextAppearance">?attr/textAppearanceBody1</item>
     </style>
 
     <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?attr/textAppearanceBody1</item>
     </style>
 
     <style name="SpinnerItemStyle">
