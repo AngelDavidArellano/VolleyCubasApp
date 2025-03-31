@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="?attr/background"
     tools:context=".MainActivity">
 
     <!-- Logo del Club (arriba a la derecha) -->
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bienvenid@!"
-        android:textColor="@color/light_principal_text"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="20sp"
         android:textStyle="bold"
         android:fontFamily="@font/tripsans"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Club Voleibol Cubas"
-        android:textColor="@color/light_principal_text"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="27sp"
         android:textStyle="bold"
         android:fontFamily="@font/tripsans"
@@ -80,7 +80,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="15dp"
+        android:elevation="1dp"
+        />
 
     <!-- LinearLayout para textos -->
     <LinearLayout
@@ -94,7 +96,8 @@
         app:layout_constraintBottom_toBottomOf="@id/announcementBackground"
         android:layout_marginStart="18dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="12dp"
+        android:elevation="5dp">
 
         <!-- Texto del título -->
         <TextView
@@ -118,7 +121,7 @@
             android:textColor="@color/dark_principal_text"
             android:textSize="12sp"
             android:textAlignment="center"
-            android:fontFamily="@font/tripsans" />
+            android:fontFamily="@font/tripsans"/>
     </LinearLayout>
 
     <!-- Imagen de la mascota -->
@@ -130,14 +133,16 @@
         android:layout_marginEnd="-10dp"
         android:src="@drawable/owl_mascot"
         app:layout_constraintBottom_toBottomOf="@id/announcementBackground"
-        app:layout_constraintEnd_toEndOf="@id/announcementBackground" />
+        app:layout_constraintEnd_toEndOf="@id/announcementBackground"
+        android:elevation="5dp"
+        />
 
     <TextView
         android:id="@+id/toolsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Herramientas"
-        android:textColor="@color/light_secondary_text"
+        android:textColor="?attr/textAppearanceBody2"
         android:textSize="20sp"
         android:textStyle="bold"
         android:fontFamily="@font/tripsans"
@@ -149,7 +154,7 @@
     <LinearLayout
         android:id="@+id/layout_tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="135dp"
         android:orientation="horizontal"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -168,7 +173,7 @@
             android:layout_marginEnd="8dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/components_bg">
+            app:cardBackgroundColor="?attr/cardBackgroundColor">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -214,7 +219,7 @@
             android:layout_weight="1"
             app:cardCornerRadius="15dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/components_bg">
+            app:cardBackgroundColor="?attr/cardBackgroundColor">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -261,7 +266,7 @@
             android:layout_marginStart="8dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/components_bg">
+            app:cardBackgroundColor="?attr/cardBackgroundColor">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -309,7 +314,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mis equipos"
-        android:textColor="@color/light_secondary_text"
+        android:textColor="?attr/textAppearanceBody2"
         android:textSize="20sp"
         android:textStyle="bold"
         android:fontFamily="@font/tripsans"
@@ -328,7 +333,7 @@
         app:layout_constraintBottom_toBottomOf="@id/teamsText"
         app:layout_constraintStart_toEndOf="@id/teamsText"
         android:layout_marginStart="15dp"
-        app:tint="@color/light_secondary_text" />
+        app:tint="?attr/textAppearanceBody2" />
 
     <!-- RecyclerView para mostrar equipos -->
     <androidx.recyclerview.widget.RecyclerView
@@ -340,7 +345,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="12dp"
+        />
 
     <!-- ANIMACION CARGANDO DATOS -->
     <View
