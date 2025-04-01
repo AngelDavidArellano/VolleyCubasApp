@@ -2,6 +2,8 @@ package com.volleycubas.app;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,9 @@ public class PreparacionPartidosActivity extends AppCompatActivity {
     private GridLayout preparacionContainer;
     private View cardView, editorView;
     private SetPreparacionAdapter setAdapter;
+    private EditText searchEditText;
+    private List<PreparacionPartido> filteredList = new ArrayList<>();
+
     private FirebaseFirestore db;
     private List<Map<String, List<String>>> listaSets = new ArrayList<>();
     private List<PreparacionPartido> listaPreparaciones = new ArrayList<>();
@@ -49,8 +54,24 @@ public class PreparacionPartidosActivity extends AppCompatActivity {
         jugadoresList = getIntent().getParcelableArrayListExtra("jugadores");
         teamId = getIntent().getStringExtra("teamId");
 
+        searchEditText = findViewById(R.id.searchEditText);
+
         ImageView addPrepButton = findViewById(R.id.addPrepButton);
         addPrepButton.setOnClickListener(v -> agregarNuevaPreparacion());
+
+        // Escuchar cambios en el buscador para filtrar ejercicios
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterExercises(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         cargarPreparaciones();
     }
@@ -72,15 +93,14 @@ public class PreparacionPartidosActivity extends AppCompatActivity {
                             );
                             listaPreparaciones.add(preparacion);
                         }
-                        actualizarUI();
+                        actualizarUI(listaPreparaciones); // en cargarPreparaciones
                     }
                 });
     }
 
-    private void actualizarUI() {
-        preparacionContainer.removeAllViews(); // Limpia las vistas anteriores
-
-        for (PreparacionPartido preparacion : listaPreparaciones) {
+    private void actualizarUI(List<PreparacionPartido> lista) {
+        preparacionContainer.removeAllViews();
+        for (PreparacionPartido preparacion : lista) {
             View cardView = LayoutInflater.from(this).inflate(R.layout.preparacion_card, preparacionContainer, false);
 
             TextView tituloView = cardView.findViewById(R.id.preparacion_titulo);
@@ -100,6 +120,7 @@ public class PreparacionPartidosActivity extends AppCompatActivity {
             preparacionContainer.addView(cardView);
         }
     }
+
 
     private void agregarNuevoSet() {
         Map<String, List<String>> nuevoSet = new HashMap<>();
@@ -227,7 +248,7 @@ public class PreparacionPartidosActivity extends AppCompatActivity {
                 .update("preparacion_partidos", listaPreparaciones)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("ActualizarPreparacion", "Actualización en Firebase exitosa.");
-                    actualizarUI();
+                    actualizarUI(listaPreparaciones); // en cargarPreparaciones
                 })
                 .addOnFailureListener(e -> Log.e("ActualizarPreparacion", "Error al actualizar Firebase", e));
     }
@@ -260,7 +281,7 @@ public class PreparacionPartidosActivity extends AppCompatActivity {
                 .update("preparacion_partidos", listaPreparaciones)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("GuardarNuevaPreparacion", "Preparación guardada en Firebase correctamente.");
-                    actualizarUI();
+                    actualizarUI(listaPreparaciones); // en cargarPreparaciones
                 })
                 .addOnFailureListener(e -> Log.e("GuardarNuevaPreparacion", "Error al guardar en Firebase", e));
     }
@@ -276,11 +297,22 @@ public class PreparacionPartidosActivity extends AppCompatActivity {
                             .update("preparacion_partidos", listaPreparaciones)
                             .addOnSuccessListener(aVoid -> {
                                 Log.d("EliminarPreparacion", "Preparación eliminada en Firebase correctamente.");
-                                actualizarUI();
+                                actualizarUI(listaPreparaciones); // en cargarPreparaciones
                             })
                             .addOnFailureListener(e -> Log.e("EliminarPreparacion", "Error al eliminar en Firebase", e));
                 })
                 .setNegativeButton("CANCELAR", null)
                 .show();
     }
+
+    private void filterExercises(String query) {
+        filteredList.clear();
+        for (PreparacionPartido prep : listaPreparaciones) {
+            if (prep.getTitulo().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(prep);
+            }
+        }
+        actualizarUI(filteredList); // 👈 Usamos la lista filtrada
+    }
+
 }

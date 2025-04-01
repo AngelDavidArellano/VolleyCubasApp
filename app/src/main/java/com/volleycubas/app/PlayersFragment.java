@@ -80,7 +80,7 @@ public class PlayersFragment extends Fragment {
 
         // Configurar RecyclerView
         playersRecyclerView = view.findViewById(R.id.playersRecyclerView);
-        playerAdapter = new PlayerAdapter(jugadoresList, jugador -> {
+        playerAdapter = new PlayerAdapter(filteredJugadoresList, jugador -> {
             // Abrir PlayerDetailsActivity al hacer clic en un jugador
             Intent intent = new Intent(getContext(), PlayerDetailsActivity.class);
             intent.putExtra("jugador", (Parcelable) jugador);
