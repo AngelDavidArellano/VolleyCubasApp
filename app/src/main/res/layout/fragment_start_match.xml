@@ -50,8 +50,7 @@
         android:textColor="?attr/iconTint"
         app:layout_constraintTop_toBottomOf="@id/tvRival"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Campo Fase -->
     <TextView
@@ -72,8 +71,8 @@
         android:textColor="?attr/iconTint"
         app:layout_constraintTop_toBottomOf="@id/tvFase"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <!-- Texto Sets -->
     <TextView
@@ -85,6 +84,7 @@
         app:layout_constraintTop_toBottomOf="@id/etFase"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
+
 
     <!-- Opciones Sets -->
     <RadioGroup

@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,6 +57,9 @@ public class PartidoEnCursoFragment extends Fragment {
             player4, player4_name, player5, player5_name, player6, player6_name;
 
     private EditText notas;
+
+    private CheckBox checkRotar3;
+    private int rachaSaque = 0;
 
     private int pointsTeamA = 0;
     private int pointsTeamB = 0;
@@ -131,6 +135,8 @@ public class PartidoEnCursoFragment extends Fragment {
         player6 = view.findViewById(R.id.player6);
         player6_name = view.findViewById(R.id.player6_name);
 
+        checkRotar3 = view.findViewById(R.id.checkRotar3); // Asegúrate de que el ID es correcto
+
         llenarArrayListJugadoresView();
         guardarPosicionesIniciales();
 
@@ -154,8 +160,18 @@ public class PartidoEnCursoFragment extends Fragment {
                 posesionSaque = true;
                 historialAcciones.add(Accion.ROTACION);
                 rotarJugadores();
+
+                rachaSaque = 1;
             } else {
                 historialAcciones.add(Accion.PUNTO_A);
+
+                if (checkRotar3 != null && checkRotar3.isChecked()) {
+                    rachaSaque++;
+                    if (rachaSaque == 4 || (rachaSaque > 4 && (rachaSaque - 1) % 3 == 0)) {
+                        historialAcciones.add(Accion.ROTACION);
+                        rotarJugadores();
+                    }
+                }
             }
             actualizarIndicadorSaque();
             partido.agregarPuntoAFavor();
@@ -171,6 +187,8 @@ public class PartidoEnCursoFragment extends Fragment {
 
             pointsTeamB++;
             posesionSaque = false;
+
+            rachaSaque = 0;
 
             actualizarIndicadorSaque();
             partido.agregarPuntoEnContra();
@@ -540,11 +558,15 @@ public class PartidoEnCursoFragment extends Fragment {
             return;
         }
 
+        // Ordenar por número antes de mostrar
+        jugadoresList.sort((j1, j2) -> Integer.compare(j1.getNumero(), j2.getNumero()));
+
         // Crear una lista de nombres para mostrar en el Dialog
         String[] nombresJugadores = new String[jugadoresList.size()];
         for (int i = 0; i < jugadoresList.size(); i++) {
             nombresJugadores[i] = jugadoresList.get(i).getNumero() + " - " + jugadoresList.get(i).getNombre();
         }
+
 
         new AlertDialog.Builder(requireContext())
                 .setTitle("Seleccionar Jugador")
@@ -900,6 +922,8 @@ public class PartidoEnCursoFragment extends Fragment {
     }
 
     private void eliminarHistorialEnSharedPreferences() {
+        if (!isAdded()) return; // ✅ Previene el crash
+
         SharedPreferences prefs = requireContext().getSharedPreferences(teamId+"_historial_partido", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
