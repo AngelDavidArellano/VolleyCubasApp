@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg">
+    android:background="?attr/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="Estadísticas"
             android:textSize="24sp"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:fontFamily="@font/tripsans"
             android:layout_marginTop="8dp" />
 

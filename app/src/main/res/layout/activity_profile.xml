@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="?attr/background"
     android:padding="16dp"
     tools:context=".ProfileActivity">
 
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:text="Perfil de entrenador"
         android:textSize="24sp"
-        android:textColor="@color/light_principal_text"
+        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/back_button"
@@ -63,7 +63,7 @@
         android:text="Nombre y Apellidos"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/light_principal_text"
+        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toBottomOf="@id/profile_picture"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +77,7 @@
         android:text="Entrenador"
         android:textSize="14sp"
         android:fontFamily="@font/tripsans"
-        android:textColor="@color/light_secondary_text"
+        android:textColor="?attr/textAppearanceBody2"
         app:layout_constraintTop_toBottomOf="@id/tvName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,7 @@
         android:text="nombreap@volleycubasapp.com"
         android:textSize="14sp"
         android:fontFamily="@font/tripsans"
-        android:textColor="@color/light_secondary_text"
+        android:textColor="?attr/textAppearanceBody2"
         app:layout_constraintTop_toBottomOf="@id/tvRole"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +102,7 @@
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/light_secondary_text"
+        android:background="?attr/textAppearanceBody2"
         app:layout_constraintTop_toBottomOf="@id/tvEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -142,7 +142,7 @@
                 android:text="Gestionar equipos"
                 android:fontFamily="@font/tripsans"
                 android:textSize="16sp"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_marginStart="10dp" />
         </LinearLayout>
 
@@ -169,7 +169,7 @@
                 android:text="Modo oscuro"
                 android:fontFamily="@font/tripsans"
                 android:textSize="16sp"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_marginStart="10dp" />
 
             <Switch
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:thumbTint="@color/gold"
                 android:checked="true"
-                android:trackTint="@color/light_secondary_text" />
+                android:trackTint="?attr/textAppearanceBody2" />
         </LinearLayout>
 
         <LinearLayout
@@ -204,7 +204,7 @@
                 android:text="Instagram del club"
                 android:fontFamily="@font/tripsans"
                 android:textSize="16sp"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_marginStart="10dp" />
         </LinearLayout>
 
@@ -232,7 +232,7 @@
                 android:text="Preguntas / Reportar errores"
                 android:fontFamily="@font/tripsans"
                 android:textSize="16sp"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_marginStart="10dp" />
         </LinearLayout>
 
@@ -260,7 +260,7 @@
                 android:text="Resultados y clasificación"
                 android:fontFamily="@font/tripsans"
                 android:textSize="16sp"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:layout_marginStart="10dp" />
         </LinearLayout>
     </LinearLayout>
@@ -285,7 +285,7 @@
         android:text="Cerrar sesión"
         android:textSize="16sp"
         android:textColor="@color/dark_principal_text"
-        android:backgroundTint="@color/light_secondary_text"
+        android:backgroundTint="?attr/textAppearanceBody2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

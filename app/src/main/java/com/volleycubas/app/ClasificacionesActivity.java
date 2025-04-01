@@ -53,7 +53,7 @@ public class ClasificacionesActivity extends AppCompatActivity {
 
     private void iniciarRotacion() {
         ObjectAnimator rotacion = ObjectAnimator.ofFloat(loadingGifMain, "rotation", 0f, 360f);
-        rotacion.setDuration(100); // 15 segundos
+        rotacion.setDuration(1500); // tiempo
         rotacion.setRepeatCount(ValueAnimator.INFINITE); // Repite la animación infinitamente
         rotacion.setInterpolator(new android.view.animation.LinearInterpolator()); // Rotación suave
         rotacion.start();
@@ -96,7 +96,13 @@ public class ClasificacionesActivity extends AppCompatActivity {
     }
 
     private void obtenerClasificacion(String grupoId) {
-        RetrofitClient.getApiService().getClasificacion(grupoId).enqueue(new Callback<List<Clasificacion>>() {
+        boolean esMostoles = grupoId.equals("mostoles_senior1") || grupoId.equals("mostoles_senior2");
+
+        Call<List<Clasificacion>> call = esMostoles
+                ? RetrofitClient.getApiService().getClasificacionMostoles(grupoId)
+                : RetrofitClient.getApiService().getClasificacion(grupoId);
+
+        call.enqueue(new Callback<List<Clasificacion>>() {
             @Override
             public void onResponse(Call<List<Clasificacion>> call, Response<List<Clasificacion>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -116,4 +122,5 @@ public class ClasificacionesActivity extends AppCompatActivity {
             }
         });
     }
+
 }

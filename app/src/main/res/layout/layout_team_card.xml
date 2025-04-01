@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/bg">
+    app:cardBackgroundColor="?attr/background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Senior Oro"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:fontFamily="@font/tripsans"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Creado en la temporada 24/25"
-            android:textColor="@color/light_secondary_text"
+            android:textColor="?attr/textAppearanceBody2"
             android:fontFamily="@font/tripsans"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/teamName"
@@ -62,7 +62,7 @@
             android:layout_marginTop="25dp"
             android:text="Liga"
             android:fontFamily="@font/tripsans"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/teamSeason"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:text="Liga Municipal de Móstoles"
             android:fontFamily="@font/tripsans"
-            android:textColor="@color/light_secondary_text"
+            android:textColor="?attr/textAppearanceBody2"
             app:layout_constraintTop_toBottomOf="@id/teamLeagueLabel"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -85,7 +85,7 @@
             android:text="Jugadores"
             android:fontFamily="@font/tripsans"
             android:textSize="18dp"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="@id/teamLeagueLabel"
             app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:text="15"
             android:fontFamily="@font/tripsans"
-            android:textColor="@color/light_secondary_text"
+            android:textColor="?attr/textAppearanceBody2"
             app:layout_constraintTop_toBottomOf="@id/teamPlayersCountLabel"
             app:layout_constraintStart_toStartOf="@id/teamPlayersCountLabel" />
 
@@ -109,7 +109,7 @@
             android:text="Capitán"
             android:fontFamily="@font/tripsans"
             android:textSize="18dp"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/teamLeague"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:text="Jesús Navas"
             android:fontFamily="@font/tripsans"
-            android:textColor="@color/light_secondary_text"
+            android:textColor="?attr/textAppearanceBody2"
             app:layout_constraintTop_toBottomOf="@id/teamCaptainLabel"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -132,7 +132,7 @@
             android:text="Entrenador"
             android:fontFamily="@font/tripsans"
             android:textSize="18dp"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="@id/teamCaptainLabel"
             app:layout_constraintStart_toStartOf="@id/teamPlayersCount"/>
@@ -144,7 +144,7 @@
             android:maxWidth="115dp"
             android:text="Pablo"
             android:fontFamily="@font/tripsans"
-            android:textColor="@color/light_secondary_text"
+            android:textColor="?attr/textAppearanceBody2"
             app:layout_constraintTop_toBottomOf="@id/teamCoachLabel"
             app:layout_constraintStart_toStartOf="@id/teamCoachLabel" />
 

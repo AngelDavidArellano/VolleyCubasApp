@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:textAlignment="center"
-        android:backgroundTint="@color/bg"
+        android:backgroundTint="?attr/background"
         android:spinnerMode="dropdown"
         app:layout_constraintTop_toBottomOf="@id/tvLeagueName"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/light_secondary_text"
+        android:background="?attr/textAppearanceBody2"
         app:layout_constraintTop_toBottomOf="@id/spinnerLigas"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +105,7 @@
         app:layout_constraintTop_toTopOf="@id/clasificacion_titulo"
         android:layout_marginTop="75dp"
         android:src="@drawable/ic_start_match"
-        app:tint="@color/white" />
+        app:tint="?attr/iconTint" />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

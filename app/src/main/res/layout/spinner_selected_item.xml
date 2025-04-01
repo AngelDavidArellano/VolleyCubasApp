@@ -6,5 +6,5 @@
     android:textSize="16sp"
     android:text="TEXTO"
     android:textAlignment="center"
-    android:textColor="@color/light_secondary_text"
+    android:textColor="?attr/textAppearanceBody2"
     android:background="?android:attr/selectableItemBackground"/>

@@ -15,4 +15,8 @@ public interface ApiService {
 
     @GET("getClasificacion")
     Call<List<Clasificacion>> getClasificacion(@Query("grupoId") String grupoId);
+
+    @GET("getClasificacionMostoles")
+    Call<List<Clasificacion>> getClasificacionMostoles(@Query("grupoId") String grupoId);
+
 }

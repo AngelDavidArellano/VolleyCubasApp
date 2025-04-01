@@ -6,7 +6,7 @@
         <shape android:shape="oval">
             <solid android:color="@color/components_bg" />
             <stroke android:width="3dp" />
-            <stroke android:color="@color/bg" />
+            <stroke android:color="?attr/background" />
         </shape>
     </item>
 

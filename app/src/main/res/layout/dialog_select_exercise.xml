@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/bg">
+    android:background="?attr/background">
 
     <!-- Barra de búsqueda -->
     <EditText
@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Buscar ejercicio"
-        android:textColor="@color/white"
+        android:textColor="?attr/iconTint"
         android:textColorHint="@color/light_gray_status"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="?attr/iconTint"
         android:padding="8dp"
         android:textSize="16sp"
         android:layout_marginBottom="16dp"/>

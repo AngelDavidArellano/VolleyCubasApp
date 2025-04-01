@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="?attr/background"
     android:padding="16dp"
     tools:context=".PreparacionPartidosActivity">
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Preparación Partidos"
         android:textSize="24sp"
-        android:textColor="@color/light_principal_text"
+        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/back_button"

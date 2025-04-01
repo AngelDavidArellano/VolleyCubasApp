@@ -353,7 +353,7 @@
         android:id="@+id/loadingOverlay_main"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/bg"
+        android:background="?attr/background"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/teamsRecyclerView"
         app:layout_constraintEnd_toEndOf="@id/teamsRecyclerView"
@@ -372,6 +372,6 @@
         app:layout_constraintTop_toTopOf="@id/teamsRecyclerView"
         android:layout_marginTop="75dp"
         android:src="@drawable/ic_start_match"
-        app:tint="@color/white" />
+        app:tint="?attr/iconTint" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

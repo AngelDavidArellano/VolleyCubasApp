@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bg"
+    android:background="?attr/background"
     android:padding="8dp">
 
     <!-- Nombre del jugador -->
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Nombre del jugador"
         android:textSize="16sp"
-        android:textColor="@color/light_principal_text"
+        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/tripsans"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +37,7 @@
             android:textAlignment="textEnd"
             android:text="Si"
             android:drawableTint="@color/light_icons_color"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:layout_width="75dp"
             android:layout_height="45dp" />
 
@@ -50,7 +50,7 @@
             android:textAlignment="textEnd"
             android:text="No"
             android:drawableTint="@color/light_icons_color"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:layout_width="75dp"
             android:layout_height="45dp" />
     </RadioGroup>
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:text="Presente"
         android:background="@drawable/btn_background_present"
-        android:textColor="@color/white"
+        android:textColor="?attr/iconTint"
         android:paddingVertical="4dp"
         android:paddingHorizontal="8dp"
         app:layout_constraintEnd_toStartOf="@id/btnAbsent"
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:text="Ausente"
         android:background="@drawable/btn_background_absent"
-        android:textColor="@color/white"
+        android:textColor="?attr/iconTint"
         android:paddingVertical="4dp"
         android:paddingHorizontal="8dp"
         app:layout_constraintEnd_toEndOf="parent"

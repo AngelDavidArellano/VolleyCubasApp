@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bg"
+    android:background="?attr/background"
     android:padding="16dp">
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="Entrenamientos"
         android:textSize="24sp"
-        android:textColor="@color/light_principal_text"
+        android:textColor="?attr/textAppearanceBody1"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/back_button"
@@ -68,7 +68,7 @@
         android:id="@+id/loadingOverlay_players"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/bg"
+        android:background="?attr/background"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/rvLineups"
         app:layout_constraintEnd_toEndOf="@id/rvLineups"
@@ -81,7 +81,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_start_match"
-        app:tint="@color/white"
+        app:tint="?attr/iconTint"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/rvLineups"
         app:layout_constraintEnd_toEndOf="@id/rvLineups"

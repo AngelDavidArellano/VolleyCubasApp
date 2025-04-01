@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:background="?attr/background">
 
     <!-- Terreno de Juego -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,9 +40,9 @@
             android:layout_height="wrap_content"
             android:text="Jugador"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
-            android:background="@color/bg_90"
+            android:background="?attr/background"
             app:layout_constraintTop_toBottomOf="@id/player4"
             app:layout_constraintStart_toStartOf="@id/player4"
             app:layout_constraintEnd_toEndOf="@id/player4"
@@ -69,9 +69,9 @@
             android:layout_height="wrap_content"
             android:text="Jugador"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
-            android:background="@color/bg_90"
+            android:background="?attr/background"
             app:layout_constraintTop_toBottomOf="@id/player3"
             app:layout_constraintStart_toStartOf="@id/player3"
             app:layout_constraintEnd_toEndOf="@id/player3"
@@ -97,9 +97,9 @@
             android:layout_height="wrap_content"
             android:text="Jugador"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
-            android:background="@color/bg_90"
+            android:background="?attr/background"
             app:layout_constraintTop_toBottomOf="@id/player2"
             app:layout_constraintStart_toStartOf="@id/player2"
             app:layout_constraintEnd_toEndOf="@id/player2"
@@ -124,9 +124,9 @@
             android:layout_height="wrap_content"
             android:text="Jugador"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
-            android:background="@color/bg_90"
+            android:background="?attr/background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.2"
@@ -153,9 +153,9 @@
             android:layout_height="wrap_content"
             android:text="Jugador"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
-            android:background="@color/bg_90"
+            android:background="?attr/background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -181,9 +181,9 @@
             android:layout_height="wrap_content"
             android:text="Jugador"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:textStyle="bold"
-            android:background="@color/bg_90"
+            android:background="?attr/background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.8"
@@ -210,7 +210,7 @@
             android:layout_height="25dp"
             android:text="Cadete Negro"
             android:textSize="18dp"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:fontFamily="@font/tripsans"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="@id/score_team_a"
@@ -228,7 +228,7 @@
             android:textSize="115sp"
             android:fontFamily="@font/pixeboy"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/team_a_name"
             app:layout_constraintStart_toStartOf="parent"
@@ -240,7 +240,7 @@
             android:layout_height="25dp"
             android:text="CUVA Aguacate"
             android:textSize="18dp"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:fontFamily="@font/tripsans"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="@id/score_team_b"
@@ -258,7 +258,7 @@
             android:textSize="115sp"
             android:fontFamily="@font/pixeboy"
             android:gravity="center"
-            android:textColor="@color/light_principal_text"
+            android:textColor="?attr/textAppearanceBody1"
             android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/team_b_name"
             app:layout_constraintEnd_toEndOf="parent"
@@ -284,10 +284,10 @@
                 android:text="0"
                 android:gravity="center"
                 android:layout_margin="5dp"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:textSize="25sp"
                 android:paddingEnd="10dp"
-                android:drawableTint="@color/white"
+                android:drawableTint="?attr/iconTint"
                 app:drawableEndCompat="@drawable/ic_timeout" />
 
             <TextView
@@ -300,7 +300,7 @@
                 android:text="0"
                 android:gravity="center"
                 android:layout_margin="5dp"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -311,7 +311,7 @@
             android:layout_height="20dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/ic_circle_arrow"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="?attr/iconTint"
             app:layout_constraintTop_toTopOf="@id/layout_left_buttons"
             app:layout_constraintBottom_toBottomOf="@id/layout_left_buttons"
             app:layout_constraintStart_toEndOf="@id/layout_left_buttons"
@@ -337,7 +337,7 @@
                 android:text="0"
                 android:layout_margin="5dp"
                 android:gravity="center"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:textSize="25sp" />
 
             <TextView
@@ -350,10 +350,10 @@
                 android:text="0"
                 android:layout_margin="5dp"
                 android:gravity="center"
-                android:textColor="@color/light_principal_text"
+                android:textColor="?attr/textAppearanceBody1"
                 android:textSize="25sp"
                 android:paddingStart="10dp"
-                android:drawableTint="@color/white"
+                android:drawableTint="?attr/iconTint"
                 app:drawableStartCompat="@drawable/ic_timeout"/>
         </LinearLayout>
 
@@ -366,7 +366,7 @@
             app:layout_constraintStart_toStartOf="@id/layout_left_buttons"
             app:layout_constraintEnd_toEndOf="@id/layout_left_buttons"
             android:src="@drawable/ic_start_match"
-            app:tint="@color/white"
+            app:tint="?attr/iconTint"
             />
 
         <ImageView
@@ -387,7 +387,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notas"
-        android:textColor="@color/light_secondary_text"
+        android:textColor="?attr/textAppearanceBody2"
         android:textSize="18sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toBottomOf="@id/layout_scores"
@@ -399,7 +399,7 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:textColor="@android:color/white"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="?attr/iconTint"
         android:textSize="18sp"
         android:fontFamily="@font/tripsans"
         app:layout_constraintTop_toBottomOf="@id/tv_notas_text"
@@ -425,7 +425,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Terminar set"
-            android:textColor="@color/light_principal_text" />
+            android:textColor="?attr/textAppearanceBody1" />
 
         <Button
             android:id="@+id/btn_finish_match"
@@ -433,7 +433,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Terminar partido"
-            android:textColor="@color/light_principal_text" />
+            android:textColor="?attr/textAppearanceBody1" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

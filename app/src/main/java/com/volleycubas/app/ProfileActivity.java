@@ -197,7 +197,18 @@ public class ProfileActivity extends AppCompatActivity {
         boolean modoOscuro = prefs.getBoolean("modo_oscuro", true);
         switchDarkMode.setChecked(modoOscuro);
 
+        // Listener para el switch de modo oscuro
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Toast.makeText(ProfileActivity.this, "Modo Claro en Desarrollo", Toast.LENGTH_SHORT).show();
+            } else {
+                switchDarkMode.setChecked(true);
+                Toast.makeText(ProfileActivity.this, "Modo Claro en Desarrollo", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        /*switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = getSharedPreferences("config", MODE_PRIVATE).edit();
             editor.putBoolean("modo_oscuro", isChecked);
             editor.apply();
@@ -210,7 +221,7 @@ public class ProfileActivity extends AppCompatActivity {
             MainActivity.isDataLoaded = false;
 
             recreate();
-        });
+        });*/
 
 
         // Botón de regreso
