@@ -57,7 +57,7 @@
         android:id="@+id/tvFase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fase:"
+        android:text="Fase actual:"
         android:textColor="?attr/textAppearanceBody2"
         app:layout_constraintTop_toBottomOf="@id/etRival"
         app:layout_constraintStart_toStartOf="parent"
