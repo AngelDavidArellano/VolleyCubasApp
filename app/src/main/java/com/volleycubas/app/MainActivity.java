@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private TextView welcomeText, announcementTitle, announcementContent;
     private View loadingOverlay;
-    private ImageView loadingIndicator, profilePhoto;
+    private ImageView loadingIndicator, profilePhoto, mascotImage;
     private RecyclerView teamsRecyclerView;
     private TeamAdapter teamAdapter;
     private List<Team> teamList = new ArrayList<>();
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.welcomeText);
         announcementTitle = findViewById(R.id.announcementTitle);
         announcementContent = findViewById(R.id.announcementContent);
+        mascotImage = findViewById(R.id.mascotImage);
         teamsRecyclerView = findViewById(R.id.teamsRecyclerView);
 
         loadingOverlay = findViewById(R.id.loadingOverlay_main);
@@ -274,6 +275,9 @@ public class MainActivity extends AppCompatActivity {
                         String contenido = documentSnapshot.getString("contenido");
 
                         if (contenido.contains("AQUÍ") && titulo.toLowerCase().contains("actualización")) {
+
+                            mascotImage.setImageResource(R.drawable.mascota_actualizacion);
+
                             SpannableString spannable = new SpannableString(contenido);
 
                             ClickableSpan clickableSpan = new ClickableSpan() {
@@ -296,6 +300,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                             announcementContent.setText(spannable);
                             announcementContent.setMovementMethod(LinkMovementMethod.getInstance());
+                        } else if (titulo.contains("horarios")) {
+                            mascotImage.setImageResource(R.drawable.mascota_horarios);
                         } else {
                             // Mostrar texto plano sin hipervínculo
                             announcementContent.setText(contenido);
